@@ -3,15 +3,21 @@ const db = require("../Database/connection.js");
 class FoodService {
 
     async FindAll() {
-        return new Promise((resolve, reject) => {
-            db.query("SELECT * FROM foods", (err, foods) => {
-                if (err) {
-                    reject(err);  // Rejeita a promise se houver erro
-                } else {
-                    resolve(foods);  // Resolve a promise com os alimentos
-                }
-            });
-        });
+        try {
+            const [foods] = await db.promise().query("SELECT * FROM foods");
+            return foods;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async FindById(id) {
+        try {
+            const food = await db.promise().query("SELECT * FROM foods WHERE id = ?", [id]);
+            return food[0];
+        } catch (err) {
+            throw err;
+        }
     }
 }
 

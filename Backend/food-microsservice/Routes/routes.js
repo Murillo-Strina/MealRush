@@ -6,6 +6,7 @@ const FoodController = require('../Controllers/FoodController')
 
 
 router.get('/foods', FoodController.GetAllFoods);
+router.get('/foods/:id', FoodController.GetFoodById);
 
 
 
