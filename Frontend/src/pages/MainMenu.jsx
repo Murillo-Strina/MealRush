@@ -9,7 +9,7 @@ export default class MainMenu extends Component {
                 <img src={logo} style={{width:85, marginRight:800}}/>
             </div>
           <div className="position-absolute start-50 translate-middle-x">
-            <a className="navbar-brand text-white" style={{fontFamily:"'Comic Sans MS', cursive, sans-serif", fontSize: 50}}>MealRush</a>
+            <a className="navbar-brand text-white" style={{fontFamily:"'Century Gothic', sans-serif", fontSize: 50}}>MealRush</a>
           </div>
           
           <button 
