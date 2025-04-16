@@ -3,7 +3,7 @@ import React, { Component } from "react";
 export default class Meal extends Component {
     render() {
         return (
-            <div className="border-none bg-warning text-center d-flex align-items-center justify-content-center position-relative"
+            <div className="border border-dark bg-warning text-center d-flex align-items-center justify-content-center position-relative"
                 style={{
                     height: this.props.style?.height || "250px",
                     width: this.props.style?.width || "100%",
