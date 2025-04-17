@@ -2,17 +2,21 @@ import React, { Component } from 'react';
 import { motion } from 'framer-motion';
 import logo from "../assets/images/logo_mealrush.jpeg";
 import vendingMachine from "../assets/images/vending_machine.png";
+
 export default class MainMenu extends Component {
   render() {
     return (
       <>
-        <nav className="navbar navbar-expand-lg navbar-black" style={{ background: "green" }}>
-          <div className="container-fluid position-relative">
-            <div>
-              <img src={logo} style={{ width: 85, marginRight: 800 }} />
+        <nav className="navbar navbar-expand-lg navbar-black" style={{ background: "green", position: "relative" }}>
+          <div className="container-fluid">
+            <div className="d-flex align-items-center">
+              <img src={logo} style={{ width: 60 }} className="img-fluid" />
             </div>
-            <div className="position-absolute start-50 translate-middle-x">
-              <a className="navbar-brand text-white" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 50 }}>MealRush</a>
+
+            <div className="position-absolute top-50 start-50 translate-middle text-center">
+              <a className="navbar-brand text-white" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 40 }}>
+                MealRush
+              </a>
             </div>
 
             <button
@@ -42,28 +46,31 @@ export default class MainMenu extends Component {
             </div>
           </div>
         </nav>
-        <div className="container border-none mt-4">
-          <div className="row">
-          <motion.div
-              className="col-6"
+
+        <div className="container mt-4">
+          <div className="row align-items-center">
+            <motion.div
+              className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0"
               initial={{ opacity: 0, x: -100 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1 }}
             >
-              <img src={vendingMachine} style={{ width: 250, marginLeft: 150 }} />
+              <img src={vendingMachine} className="img-fluid" style={{ maxWidth: 250 }} />
             </motion.div>
+
             <motion.div
-              className="col-6 d-flex justify-content-center align-items-center flex-column"
+              className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-center"
               initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1 }}
             >
-              <h1 style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 30 }}>
-                Bem-vindo ao nosso site informativo! Aqui você encontra informações sobre nós, nossos serviços de preparo de comida e muito mais! Fique por dentro de todo o processo da Mealrush!
+              <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
+                Bem-vindo ao nosso site informativo! Aqui você encontra informações sobre nós, nossos serviços de preparo de comida e muito mais! Fique por dentro de todo o processo da MealRush!
               </h1>
             </motion.div>
           </div>
         </div>
+        
       </>
     );
   }
