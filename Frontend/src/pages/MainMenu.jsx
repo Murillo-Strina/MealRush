@@ -7,6 +7,7 @@ export default class MainMenu extends Component {
   render() {
     return (
       <>
+        <div className="d-flex flex-column tp h-screen w-full">
         <nav className="navbar navbar-expand-lg navbar-black" style={{ background: "green", position: "relative" }}>
           <div className="container-fluid">
             <div className="d-flex align-items-center">
@@ -59,7 +60,8 @@ export default class MainMenu extends Component {
             </motion.div>
 
             <motion.div
-              className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-center"
+              className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-white text-center"
+              style={{background: "green", borderRadius: 20, padding: 30}}
               initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1 }}
@@ -70,7 +72,31 @@ export default class MainMenu extends Component {
             </motion.div>
           </div>
         </div>
-        
+        <div className="container text-white" style = {{background: "green", borderRadius: 20, padding: 20, fontFamily: "'Century Gothic', sans-serif", marginTop: 150}}>
+          <h1 className="px-3" style={{ fontFamily: "'Arial', sans-serif", fontSize: 30, fontWeight: "bold", textDecoration: "underline" }}>Quem somos?</h1>
+          <div className="row align-items-center">
+            <motion.div
+              className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0"
+              initial={{ opacity: 0, x: -100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1}}
+            >
+              <img src={logo} className="img-fluid" style={{ maxWidth: 250 }} />
+            </motion.div>
+
+            <motion.div
+              className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-center"
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1 }}
+            >
+              <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
+                Fundada em 2025, a MealRush tem como objetivo fornecer uma alimentação saudável para as pessoas, e para isso utilizamos máquinas de venda extremamente ágeis que preparam rapidamente as refeições, temos diversas opções nutritivas para todos os tipos de gostos. 
+              </h1>
+            </motion.div>
+          </div>
+        </div>
+        </div>
       </>
     );
   }
