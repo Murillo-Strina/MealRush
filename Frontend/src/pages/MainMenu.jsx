@@ -8,7 +8,7 @@ export default class MainMenu extends Component {
     return (
       <>
         <div className="d-flex flex-column tp h-screen w-full">
-        <nav className="navbar navbar-expand-lg navbar-black" style={{ background: "green", position: "relative" }}>
+        <nav className="navbar navbar-expand-lg navbar-black fixed-top" style={{ background: "green"}}>
           <div className="container-fluid">
             <div className="d-flex align-items-center">
               <img src={logo} style={{ width: 60 }} className="img-fluid" />
@@ -48,7 +48,7 @@ export default class MainMenu extends Component {
           </div>
         </nav>
 
-        <div className="container mt-4">
+        <div className="container" style={{ marginTop: 100 }}>
           <div className="row align-items-center">
             <motion.div
               className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0"
@@ -78,8 +78,9 @@ export default class MainMenu extends Component {
             <motion.div
               className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0"
               initial={{ opacity: 0, x: -100 }}
-              animate={{ opacity: 1, x: 0 }}
+              whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 1}}
+              viewport={{ amount: 0.3 }}
             >
               <img src={logo} className="img-fluid" style={{ maxWidth: 250 }} />
             </motion.div>
@@ -87,8 +88,9 @@ export default class MainMenu extends Component {
             <motion.div
               className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-center"
               initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
+              whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 1 }}
+              viewport={{ amount: 0.3 }}
             >
               <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
                 Fundada em 2025, a MealRush tem como objetivo fornecer uma alimentação saudável para as pessoas, e para isso utilizamos máquinas de venda extremamente ágeis que preparam rapidamente as refeições, temos diversas opções nutritivas para todos os tipos de gostos. 
