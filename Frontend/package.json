@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.5",
+    "motion": "^12.7.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.5.0"

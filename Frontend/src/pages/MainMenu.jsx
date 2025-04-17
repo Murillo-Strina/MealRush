@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { motion } from 'framer-motion';
 import logo from "../assets/images/logo_mealrush.jpeg";
-import vendingMachine from "../assets/images/vending_magine.png";
+import vendingMachine from "../assets/images/vending_machine.png";
 export default class MainMenu extends Component {
   render() {
     return (
@@ -41,8 +42,27 @@ export default class MainMenu extends Component {
             </div>
           </div>
         </nav>
-        <div>
-          <img src={vendingMachine} />
+        <div className="container border-none mt-4">
+          <div className="row">
+          <motion.div
+              className="col-6"
+              initial={{ opacity: 0, x: -100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1 }}
+            >
+              <img src={vendingMachine} style={{ width: 250, marginLeft: 150 }} />
+            </motion.div>
+            <motion.div
+              className="col-6 d-flex justify-content-center align-items-center flex-column"
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1 }}
+            >
+              <h1 style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 30 }}>
+                Bem-vindo ao nosso site informativo! Aqui você encontra informações sobre nós, nossos serviços de preparo de comida e muito mais! Fique por dentro de todo o processo da Mealrush!
+              </h1>
+            </motion.div>
+          </div>
         </div>
       </>
     );
