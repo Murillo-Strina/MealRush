@@ -22,10 +22,10 @@ Os microsserviços da nossa aplicação são:
 
 # Contribuidores 😎
 
-- [Felipe Kenzo Ohara Sakae | RA: 22.00815-2](https://github.com/Sakaef03)
-- [Guilherme Martins Souza Paula | RA: 22.00006-2](https://github.com/guimartins10sp)
-- [Igor Improta Martinez da Silva | RA: 21.00834-5](https://github.com/igor-ims)
-- [Lucas Gozze Crapino | RA: 22.00667-2](https://github.com/LucasCrapino)
-- [Murillo Penha Strina | RA: 22.00730-0](https://github.com/Murillo-Strina)
-- [Pedro Campos Dec | RA: 22.00787-3](https://github.com/pdec5504)
-- [Vinicius Garcia Imendes Dechechi | RA: 22.01568-0](https://github.com/vdechechi)
+- [Felipe Kenzo Ohara Sakae](https://github.com/Sakaef03) | RA: 22.00815-2
+- [Guilherme Martins Souza Paula](https://github.com/guimartins10sp) | RA: 22.00006-2
+- [Igor Improta Martinez da Silva](https://github.com/igor-ims) | RA: 21.00834-5
+- [Lucas Gozze Crapino](https://github.com/LucasCrapino) | RA: 22.00667-2
+- [Murillo Penha Strina](https://github.com/Murillo-Strina) | RA: 22.00730-0
+- [Pedro Campos Dec](https://github.com/pdec5504) | RA: 22.00787-3
+- [Vinicius Garcia Imendes Dechechi](https://github.com/vdechechi) | RA: 22.01568-0
