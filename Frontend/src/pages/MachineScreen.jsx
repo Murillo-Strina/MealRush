@@ -8,30 +8,46 @@ const MachineScreen = ({ machine }) => {
             buyPrice: 10.0,
             quantity: 20,
             sales: 5,
+        },
+        {
+            name: 'Comida 2',
+            sellPrice: 15.0,
+            buyPrice: 10.0,
+            quantity: 20,
+            sales: 5,
+        },
+        {
+            name: 'Comida 3',
+            sellPrice: 15.0,
+            buyPrice: 10.0,
+            quantity: 20,
+            sales: 5,
         }
     ]
 
     const [items] = useState(mockItems)
 
     return (
-        <div>
+        <div style={{ minHeight: '100vh' }} className='bg-dark'>
             <div className='p-3 px-3'>
-                <button>Voltar</button>
+                <button className='btn btn-secondary'>Voltar</button>
             </div>
             <div className="text-center d-flex align-items-center justify-content-center p-3 font-weight-bold">
-                <h1 className='fw-bold'>Máquina {machine}</h1>
+                <div className='border border-secondary w-auto rounded p-3 bg-secondary'>
+                    <h1 className='text-light fw-bold'>Máquina {machine}</h1>
+                </div>
             </div>
             <div className='p-3'>
-                <table className="table table-bordered mt-3">
+                <table className="table table-bordered table-striped mt-3 table-dark text-center">
                     <thead>
                         <tr>
-                            <th>Nome</th>
-                            <th>Preço de venda</th>
-                            <th>Preço de compra</th>
-                            <th>Quantidade em estoque</th>
-                            <th>Vendas</th>
-                            <th>Receita</th>
-                            <th>Lucro</th>
+                            <th className='bg-secondary'>Nome</th>
+                            <th className='bg-secondary'>Preço de venda</th>
+                            <th className='bg-secondary'>Preço de compra</th>
+                            <th className='bg-secondary'>Quantidade em estoque</th>
+                            <th className='bg-secondary'>Vendas</th>
+                            <th className='bg-secondary'>Receita</th>
+                            <th className='bg-secondary'>Lucro</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,8 +58,8 @@ const MachineScreen = ({ machine }) => {
                                 <td>{item.buyPrice.toFixed(2)}</td>
                                 <td>{item.quantity}</td>
                                 <td>{item.sales}</td>
-                                <td>{(item.sellPrice * item.sales).toFixed(2)}</td>
-                                <td>{((item.sellPrice - item.buyPrice) * item.sales).toFixed(2)}</td>
+                                <td>R$ {(item.sellPrice * item.sales).toFixed(2)}</td>
+                                <td>R$ {((item.sellPrice - item.buyPrice) * item.sales).toFixed(2)}</td>
                             </tr>
                         ))}
                     </tbody>
