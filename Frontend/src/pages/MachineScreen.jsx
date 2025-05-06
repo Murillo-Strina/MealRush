@@ -15,6 +15,9 @@ const MachineScreen = ({ machine }) => {
 
     return (
         <div>
+            <div className='p-3 px-3'>
+                <button>Voltar</button>
+            </div>
             <div className="text-center d-flex align-items-center justify-content-center p-3 font-weight-bold">
                 <h1 className='fw-bold'>Máquina {machine}</h1>
             </div>
