@@ -105,9 +105,185 @@ export default class MainMenu extends Component {
           <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
             Confira as principais refeições disponíveis para consumo nas máquinas:
           </h1>
-          <div className="row align-items-center">
+          <div className="row align-items-center mt-5">
           <motion.div
                 className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0"
+                initial={{ opacity: 0, x: -100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <img src={foodExample} className="img-fluid" style={{ maxWidth: 250 }} />
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-center"
+                initial={{ opacity: 0, x: 100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
+                  Arroz, feijão, batata cozida e frango empanado
+                </h1>
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0 mt-5"
+                initial={{ opacity: 0, x: -100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <img src={foodExample} className="img-fluid" style={{ maxWidth: 250 }} />
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-center"
+                initial={{ opacity: 0, x: 100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
+                  Arroz, feijão, batata cozida e frango empanado
+                </h1>
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0 mt-5"
+                initial={{ opacity: 0, x: -100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <img src={foodExample} className="img-fluid" style={{ maxWidth: 250 }} />
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-center"
+                initial={{ opacity: 0, x: 100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
+                  Arroz, feijão, batata cozida e frango empanado
+                </h1>
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0 mt-5"
+                initial={{ opacity: 0, x: -100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <img src={foodExample} className="img-fluid" style={{ maxWidth: 250 }} />
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-center"
+                initial={{ opacity: 0, x: 100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
+                  Arroz, feijão, batata cozida e frango empanado
+                </h1>
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0 mt-5"
+                initial={{ opacity: 0, x: -100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <img src={foodExample} className="img-fluid" style={{ maxWidth: 250 }} />
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-center"
+                initial={{ opacity: 0, x: 100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
+                  Arroz, feijão, batata cozida e frango empanado
+                </h1>
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0 mt-5"
+                initial={{ opacity: 0, x: -100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <img src={foodExample} className="img-fluid" style={{ maxWidth: 250 }} />
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-center"
+                initial={{ opacity: 0, x: 100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
+                  Arroz, feijão, batata cozida e frango empanado
+                </h1>
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0 mt-5"
+                initial={{ opacity: 0, x: -100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <img src={foodExample} className="img-fluid" style={{ maxWidth: 250 }} />
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-center"
+                initial={{ opacity: 0, x: 100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
+                  Arroz, feijão, batata cozida e frango empanado
+                </h1>
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0 mt-5"
+                initial={{ opacity: 0, x: -100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <img src={foodExample} className="img-fluid" style={{ maxWidth: 250 }} />
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-center"
+                initial={{ opacity: 0, x: 100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                viewport={{ amount: 0.3 }}
+              >
+                <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
+                  Arroz, feijão, batata cozida e frango empanado
+                </h1>
+              </motion.div>
+
+              <motion.div
+                className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0 mt-5"
                 initial={{ opacity: 0, x: -100 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 1 }}
