@@ -93,11 +93,18 @@ export default class MainMenu extends Component {
               viewport={{ amount: 0.3 }}
             >
               <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
-                Fundada em 2025, a MealRush tem como objetivo fornecer uma alimentação saudável para as pessoas, e para isso utilizamos máquinas de venda extremamente ágeis que preparam rapidamente as refeições, temos diversas opções nutritivas para todos os tipos de gostos. 
+                Fundada em 2025, a MealRush tem como objetivo fornecer uma alimentação saudável para as pessoas, e para isso utilizamos máquinas de venda que preparam rapidamente as refeições, temos diversas opções nutritivas para todos os tipos de gostos. 
               </h1>
             </motion.div>
           </div>
         </div>
+        </div>
+        <div className="container text-white" style = {{background: "green", borderRadius: 20, padding: 20, fontFamily: "'Century Gothic', sans-serif", marginTop: 150}}>
+        <h1 className="px-3" style={{ fontFamily: "'Arial', sans-serif", fontSize: 30, fontWeight: "bold", textDecoration: "underline" }}>Alimentos</h1>
+        <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
+               Confira as principais refeições disponíveis para consumo nas máquinas 
+        </h1>
+        
         </div>
       </>
     );
