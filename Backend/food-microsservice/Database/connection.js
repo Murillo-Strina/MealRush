@@ -1,9 +1,9 @@
-const mysql = require('mysql2');
+import { createConnection } from 'mysql2';
 require('dotenv').config({ path: '../.env' });
 
-const connection = mysql.createConnection({
+const connection = createConnection({
   host: 'trabalhoprog.cl40iigyy6en.sa-east-1.rds.amazonaws.com',
-  port: 3306, 
+  port: process.env.DB_PORT, 
   user: 'admin',
   password: process.env.DB_PASSWORD,
   database: 'mealrush'
@@ -18,4 +18,4 @@ connection.connect(function(err) {
   console.log('Conectado ao banco de dados com ID ');
 });
 
-module.exports = connection;
+export default connection;
