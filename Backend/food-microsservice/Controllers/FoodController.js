@@ -1,4 +1,4 @@
-const foodService = require('../Services/foodService.js')
+import foodService from '../Services/foodService.js'
 
 class FoodController {
 
@@ -93,4 +93,4 @@ class FoodController {
     }
 }
 
-module.exports = new FoodController()
+export default new FoodController()
