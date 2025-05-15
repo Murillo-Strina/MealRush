@@ -1,7 +1,7 @@
-var express = require("express")
-var app = express();
-var router = express.Router();
-const FoodController = require('../Controllers/FoodController')
+let express = require("express")
+let app = express();
+let router = express.Router();
+const FoodController = require('../Controllers/foodController')
 
 
 

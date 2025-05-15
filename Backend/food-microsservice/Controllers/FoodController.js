@@ -1,4 +1,4 @@
-const foodService = require('../Services/FoodService.js')
+const foodService = require('../Services/foodService.js')
 
 class FoodController {
 

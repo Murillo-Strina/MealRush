@@ -1,10 +1,11 @@
-var mysql = require('mysql2');
+const mysql = require('mysql2');
+require('dotenv').config({ path: '../.env' });
 
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
   host: 'trabalhoprog.cl40iigyy6en.sa-east-1.rds.amazonaws.com',
   port: 3306, 
   user: 'admin',
-  password: 'vendingMarmita',
+  password: process.env.DB_PASSWORD,
   database: 'mealrush'
 });
 

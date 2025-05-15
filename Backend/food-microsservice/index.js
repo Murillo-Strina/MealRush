@@ -1,8 +1,8 @@
-var bodyParser = require('body-parser')
-var express = require("express")
-var app = express()
-var router = require("./Routes/routes")
-var cors = require('cors')
+let bodyParser = require('body-parser')
+let express = require("express")
+let app = express()
+let router = require("./Routes/routes")
+let cors = require('cors')
 
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
