@@ -56,7 +56,6 @@ class FoodService {
         }
     }
 
-
 }
 
 export default new FoodService();
