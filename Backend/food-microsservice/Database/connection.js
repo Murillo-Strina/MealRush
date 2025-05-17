@@ -1,11 +1,10 @@
-import { createConnection } from 'mysql2';
-require('dotenv').config({ path: '../.env' });
+var mysql = require('mysql2');
 
-const connection = createConnection({
+var connection = mysql.createConnection({
   host: 'trabalhoprog.cl40iigyy6en.sa-east-1.rds.amazonaws.com',
-  port: process.env.DB_PORT, 
+  port: 3306, 
   user: 'admin',
-  password: process.env.DB_PASSWORD,
+  password: 'vendingMarmita',
   database: 'mealrush'
 });
 
@@ -18,4 +17,4 @@ connection.connect(function(err) {
   console.log('Conectado ao banco de dados com ID ');
 });
 
-export default connection;
+module.exports = connection;
