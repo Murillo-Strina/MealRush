@@ -32,7 +32,7 @@ class FoodController {
 
     async Create(req,res){
         try {
-            const {name, calories, carbs, proteins, fats, weight, imageUrl} = req.body
+            const {name, calories, carbs, proteins, fats, weight, imageUrl, price} = req.body
 
             const foodExists = await foodService.FindByName(name)
 
@@ -41,7 +41,7 @@ class FoodController {
                 return
             }
 
-            await foodService.Create(name, calories, carbs, proteins, fats, weight, imageUrl)
+            await foodService.Create(name, calories, carbs, proteins, fats, weight, imageUrl, price)
 
             if(name == undefined){
                 res.status(400).json({'Error': 'O nome da comida deve ser preenchido'})
@@ -74,7 +74,7 @@ class FoodController {
     async Update(req, res) {
         try {
             const id = req.params.id;
-            const { name, calories, carbs, proteins, fats, weight, imageUrl } = req.body;
+            const { name, calories, carbs, proteins, fats, weight, imageUrl, price} = req.body;
     
             const oldFood = await foodService.FindById(id)
 
@@ -82,7 +82,7 @@ class FoodController {
             if(oldFood[0].name == name){
                 return res.status(400).json({ 'Error': 'Já existe uma comida com esse nome' });
             }
-            await foodService.Update(id, name, calories, carbs, proteins, fats, weight, imageUrl);
+            await foodService.Update(id, name, calories, carbs, proteins, fats, weight, imageUrl, price);
     
             const updatedFood = await foodService.FindById(id);
             return res.status(200).json(updatedFood);
