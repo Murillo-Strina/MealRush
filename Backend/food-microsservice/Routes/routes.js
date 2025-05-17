@@ -1,14 +1,14 @@
-import express, { Router } from "express";
+import { Router } from "express";
 const router = Router();
-import { GetAllFoods, GetFoodById, Delete, Create, Update } from '../Controllers/foodController';
+import foodController from '../Controllers/FoodController.js';
 
 
 
-router.get('/foods', GetAllFoods);
-router.get('/foods/:id', GetFoodById);
-router.delete('/foods/:id', Delete);
-router.post('/foods/', Create);
-router.put('/foods/:id', Update);
+router.get('/foods', foodController.GetAllFoods);
+router.get('/foods/:id', foodController.GetFoodById);
+router.delete('/foods/:id', foodController.Delete);
+router.post('/foods/', foodController.Create);
+router.put('/foods/:id', foodController.Update);
 
 
 
