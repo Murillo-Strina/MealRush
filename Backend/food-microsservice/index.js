@@ -1,16 +1,17 @@
-var bodyParser = require('body-parser')
-var express = require("express")
-var app = express()
-var router = require("./Routes/routes")
-var cors = require('cors')
+import bodyParser from "body-parser";
+import express from "express";
+const app = express();
+import router from "./Routes/routes.js";
+import cors from "cors";
 
-app.use(cors())
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+const { urlencoded, json } = bodyParser;
 
+app.use(cors());
+app.use(urlencoded({ extended: false }));
+app.use(json());
 
-app.use("/", router)
+app.use("/", router);
 
 app.listen(3000, () => {
-    console.log("Servidor rodando na porta 3000")
+  console.log("Food: Servidor rodando na porta 3000");
 });

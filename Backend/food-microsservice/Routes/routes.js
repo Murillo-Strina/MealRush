@@ -1,16 +1,15 @@
-var express = require("express")
-var app = express();
-var router = express.Router();
-const FoodController = require('../Controllers/FoodController')
+import { Router } from "express";
+const router = Router();
+import foodController from '../Controllers/FoodController.js';
 
 
 
-router.get('/foods', FoodController.GetAllFoods);
-router.get('/foods/:id', FoodController.GetFoodById);
-router.delete('/foods/:id', FoodController.Delete);
-router.post('/foods/', FoodController.Create);
-router.put('/foods/:id', FoodController.Update);
+router.get('/foods', foodController.GetAllFoods);
+router.get('/foods/:id', foodController.GetFoodById);
+router.delete('/foods/:id', foodController.Delete);
+router.post('/foods/', foodController.Create);
+router.put('/foods/:id', foodController.Update);
 
 
 
-module.exports = router;
+export default router;
