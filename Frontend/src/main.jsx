@@ -6,9 +6,10 @@ import MainMenu from './pages/MainMenu.jsx'
 import MachineScreen from './pages/MachineScreen.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import LoginScreen from './pages/LoginScreen.jsx'
+import AdminScreen from './pages/AdminScreen.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <LoginScreen/>
+    <AdminScreen/>
   </StrictMode>,
 )
