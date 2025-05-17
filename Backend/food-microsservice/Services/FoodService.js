@@ -37,9 +37,9 @@ class FoodService {
         }
     }
 
-    async Create(name, calories, carbs, proteins, fats, weight, imageUrl) {
+    async Create(name, calories, carbs, proteins, fats, weight, imageUrl, price) {
         try {
-            return await db.promise().query("INSERT INTO foods(name, calories, carbs, proteins, fats, weight, imageUrl) values (?, ?, ?, ?, ?, ?, ?)",
+            return await db.promise().query("INSERT INTO foods(name, calories, carbs, proteins, fats, weight, imageUrl, price) values (?, ?, ?, ?, ?, ?, ?, ?)",
                  [name, calories, carbs, proteins, fats, weight, imageUrl]);
 
         } catch (err) {
@@ -47,9 +47,9 @@ class FoodService {
         }
     }
 
-    async Update(id, name, calories, carbs, proteins, fats, weight, imageUrl) {
+    async Update(id, name, calories, carbs, proteins, fats, weight, imageUrl, price) {
         try {
-            return await db.promise().query("UPDATE foods SET name = ?, calories = ?, carbs = ?, proteins = ?, fats = ?, weight = ?, imageUrl = ? where id = ?"
+            return await db.promise().query("UPDATE foods SET name = ?, calories = ?, carbs = ?, proteins = ?, fats = ?, weight = ?, imageUrl = ?, price = ? where id = ?"
                 ,[name, calories, carbs, proteins, fats, weight, imageUrl, id]);
         } catch (err) {
             throw err;
