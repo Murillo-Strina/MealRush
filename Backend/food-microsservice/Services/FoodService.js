@@ -1,4 +1,4 @@
-const db = require("../Database/connection.js");
+import db from "../Database/connection.js";
 
 class FoodService {
 
@@ -59,4 +59,4 @@ class FoodService {
 
 }
 
-module.exports = new FoodService();
+export default new FoodService();

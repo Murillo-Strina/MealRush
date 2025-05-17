@@ -10,6 +10,6 @@ app.use(json());
 
 app.use("/", router);
 
-app.listen(3000, () => {
-  console.log("Food: Servidor rodando na porta 3000");
+app.listen(9000, () => {
+  console.log("Auth: Servidor rodando na porta 9000");
 });
