@@ -40,12 +40,22 @@ class MachineService {
 
     async create(amountItems, statusId, lastMaintenance, lastFill, rent){
         try {
-            return await db.promise().query("INSERT INTO machines(amountItems, statusId, lastMaintenance, lastFill, rent) values (?, ?, ?, ?, ?)",
+            return await db.promise().query("INSERT INTO machines(qtd_itens, statusId, dt_ultima_manutencao, dt_ultimo_abastecimento, aluguel) values (?, ?, ?, ?, ?)",
                 [amountItems, statusId, lastMaintenance, lastFill, rent]);  
         } catch (err) {
             throw err;
         }
     }
+
+    async update(id, amountItems, statusId, lastMaintenance, lastFill, rent) {
+        try {
+            return await db.promise().query("UPDATE machines SET qtd_itens = ?, statusId = ?, dt_ultima_manutencao = ?, dt_ultimo_abastecimento = ?, aluguel = ? where id = ?"
+                ,[amountItems, statusId, lastMaintenance, lastFill, rent, id]);
+        } catch (err) {
+            throw err;
+        }
+    }
+    
 }
 
 export default new MachineService();
