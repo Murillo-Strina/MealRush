@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^1.9.0",
     "bootstrap": "^5.3.5",
+    "frontend.json": "file:",
     "motion": "^12.7.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
