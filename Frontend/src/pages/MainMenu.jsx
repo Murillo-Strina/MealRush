@@ -44,6 +44,9 @@ export default class MainMenu extends Component {
               <div className="collapse navbar-collapse" style={{ fontSize: 20 }} id="navbarNav">
                 <ul className="navbar-nav ms-auto">
                   <li className="nav-item">
+                    <Link className="nav-link text-white" to="/login">Login admin</Link>
+                  </li>
+                  <li className="nav-item">
                     <a className="nav-link active text-white" href="#sobre-nos">Sobre nós</a>
                   </li>
                   <li className="nav-item">
