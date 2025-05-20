@@ -4,6 +4,7 @@ import logo from "../assets/images/logo_mealrush.png";
 import vendingMachine from "../assets/images/vending_machine.png";
 import foodExample from "../assets/images/food_example.jpg"
 import Food from '../components/Food';
+import { Link } from 'react-router-dom';
 
 export default class MainMenu extends Component {
   render() {
@@ -43,7 +44,7 @@ export default class MainMenu extends Component {
                     <a className="nav-link text-white" href="#">Parcerias</a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link text-white" href="#">Simulação</a>
+                    <Link className="nav-link text-white" to="/simulation">Simulação</Link>
                   </li>
                 </ul>
               </div>
