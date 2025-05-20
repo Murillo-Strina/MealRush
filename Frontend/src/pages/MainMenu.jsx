@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import logo from "../assets/images/logo_mealrush.png";
+import logoIMT from "../assets/images/logo-IMT.png";
+import logoFEI from "../assets/images/logo_fei_color-01.svg";
+import logoUSP from "../assets/images/USP.jpg";
+import logoCongonhas from "../assets/images/logo_congonhas.png";
+import logoIbirapuera from "../assets/images/logo_ibira.png";
+import logoSCS from "../assets/images/logo_SCS.jpg";
+import logoSA from "../assets/images/logo_SA.jpg";
+import logoSBC from "../assets/images/logo_SBC.png";
 import vendingMachine from "../assets/images/vending_machine.png";
-import foodExample from "../assets/images/food_example.jpg"
+import foodExample from "../assets/images/food_example.jpg";
 import Food from '../components/Food';
+import Carousel from '../components/Carousel';
 
 export default class MainMenu extends Component {
   render() {
@@ -34,16 +44,19 @@ export default class MainMenu extends Component {
               <div className="collapse navbar-collapse" style={{ fontSize: 20 }} id="navbarNav">
                 <ul className="navbar-nav ms-auto">
                   <li className="nav-item">
-                    <a className="nav-link active text-white" href="#">Sobre nós</a>
+                    <Link className="nav-link text-white" to="/login">Login admin</Link>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link text-white" href="#">Alimentos</a>
+                    <a className="nav-link active text-white" href="#sobre-nos">Sobre nós</a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link text-white" href="#">Parcerias</a>
+                    <a className="nav-link text-white" href="#alimentos">Alimentos</a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link text-white" href="#">Simulação</a>
+                    <a className="nav-link text-white" href="#parcerias">Parcerias</a>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link text-white" to="/simulation">Simulação</Link>
                   </li>
                 </ul>
               </div>
@@ -74,7 +87,7 @@ export default class MainMenu extends Component {
               </motion.div>
             </div>
           </div>
-          <div className="container text-white" style={{ background: "green", borderRadius: 20, padding: 20, fontFamily: "'Century Gothic', sans-serif", marginTop: 150 }}>
+          <div id="sobre-nos" className="pt-5 mt-n5 container text-white" style={{ background: "green", borderRadius: 20, padding: 20, fontFamily: "'Century Gothic', sans-serif", marginTop: 150 }}>
             <h1 className="px-3" style={{ fontFamily: "'Arial', sans-serif", fontSize: 30, fontWeight: "bold", textDecoration: "underline" }}>Quem somos?</h1>
             <div className="row align-items-center">
               <motion.div
@@ -101,7 +114,7 @@ export default class MainMenu extends Component {
             </div>
           </div>
         </div>
-        <div className="container text-white" style={{ background: "green", borderRadius: 20, padding: 20, fontFamily: "'Century Gothic', sans-serif", marginTop: 150 }}>
+        <div id = "alimentos" className="pt-5 mt-n5 container text-white" style={{ background: "green", borderRadius: 20, padding: 20, fontFamily: "'Century Gothic', sans-serif", marginTop: 150 }}>
           <h1 className="px-3" style={{ fontFamily: "'Arial', sans-serif", fontSize: 30, fontWeight: "bold", textDecoration: "underline" }}>Alimentos</h1>
           <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
             Confira as principais refeições disponíveis para consumo nas máquinas:
@@ -143,6 +156,15 @@ export default class MainMenu extends Component {
             img= {foodExample}
             name= "Arroz, feijão, batata cozida e frango empanado"
             />
+          </div>
+        </div>
+        <div id = "parcerias" className="pt-5 mt-n5 container text-white" style={{ background: "green", borderRadius: 20, padding: 20, fontFamily: "'Century Gothic', sans-serif", marginTop: 150 }}>
+          <h1 className="px-3" style={{ fontFamily: "'Arial', sans-serif", fontSize: 30, fontWeight: "bold", textDecoration: "underline" }}>Parcerias</h1>
+          <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
+            Principais instituições e empresas parceiras:
+          </h1>
+          <div className="mt-5">
+            <Carousel images = {[logoIMT,logoFEI,logoUSP,logoCongonhas,logoIbirapuera,logoSCS,logoSA,logoSBC]}/>
           </div>
         </div>
       </>

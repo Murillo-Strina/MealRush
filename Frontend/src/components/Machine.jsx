@@ -24,18 +24,12 @@ class Machine extends Component {
       <div className="container-fluid py-3">
         <div className="row mb-4">
           <div className="col-md-6 mb-3 mb-md-0">
-            {/* <div className="bg-light p-3 border rounded">
-              Conteúdo da primeira div (esquerda)
-            </div> */}
             <MachineInfo
             type={"company"}
             company={"Instituto Mauá de Tecnologia"}
             />
           </div>
           <div className="col-md-6">
-            {/* <div className="bg-light p-3 border rounded">
-              Conteúdo da segunda div (direita)
-            </div> */}
             <MachineInfo
             type={"id"}
             id={"22007300"}

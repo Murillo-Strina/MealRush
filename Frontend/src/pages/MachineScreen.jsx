@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const MachineScreen = ({ machine }) => {
-  // items: array de objetos vindo da API
   const [items, setItems] = useState([]);
-  // loading: controla exibição enquanto busca
+
   const [loading, setLoading] = useState(true);
-  // error: caso algo dê errado na requisição
+
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Busca os foods na API assim que o componente monta
+    
     const fetchItems = async () => {
       try {
         const res = await axios.get('http://localhost:3000/foods');
