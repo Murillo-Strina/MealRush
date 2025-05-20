@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import logo from "../assets/images/logo_mealrush.png";
+import logoIMT from "../assets/images/logo-IMT.png";
+import logoFEI from "../assets/images/logo_fei_color-01.svg"
+import logoUSP from "../assets/images/USP.jpg";
+import logoCongonhas from "../assets/images/logo_congonhas.png";
+import logoIbirapuera from "../assets/images/logo_ibira.png";
+import logoSCS from "../assets/images/logo_SCS.jpg";
 import vendingMachine from "../assets/images/vending_machine.png";
 import foodExample from "../assets/images/food_example.jpg"
 import Food from '../components/Food';
-import { Link } from 'react-router-dom';
+import Carousel from '../components/Carousel';
 
 export default class MainMenu extends Component {
   render() {
@@ -144,6 +151,15 @@ export default class MainMenu extends Component {
             img= {foodExample}
             name= "Arroz, feijão, batata cozida e frango empanado"
             />
+          </div>
+        </div>
+        <div  className="container text-white" style={{ background: "green", borderRadius: 20, padding: 20, fontFamily: "'Century Gothic', sans-serif", marginTop: 150 }}>
+          <h1 className="px-3" style={{ fontFamily: "'Arial', sans-serif", fontSize: 30, fontWeight: "bold", textDecoration: "underline" }}>Parcerias</h1>
+          <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
+            Principais instituições e empresas parceiras:
+          </h1>
+          <div className="mt-5">
+            <Carousel images = {[logoIMT,logoFEI,logoUSP,logoCongonhas,logoIbirapuera,logoSCS]}/>
           </div>
         </div>
       </>
