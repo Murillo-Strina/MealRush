@@ -33,22 +33,16 @@ class MachineController{
     async Create(req, res){
         try {
            const {amountItems, statusId, lastMaintenance, lastFill, rent} = req.body;
-           const machineExists = await machineService.findById(id);
 
-        if (machineExists) {
-               res.status(400).json({'Error': 'Nao pode ter 2 maquinas com o mesmo id'});
-               return;
-           }
+        
 
-        await machineService.create(amountItems, statusId, lastMaintenance, lastFill, rent);
-
-        if (amountItems == undefined) {
+        if (amountItems < 1) {
                 res.status(400).json({'Error': 'A quantidade de itens da maquina deve ser preenchida'});
         }
 
-        const createdMachine = await machineService.findById(id);
+        await machineService.create(amountItems, statusId, lastMaintenance, lastFill, rent);
 
-        return res.status(200).json(createdMachine);
+        return res.status(200).json({'Message': 'Maquina criada com sucesso'});
         } catch (err) {
             console.error("Erro ao criar a maquina:", err);
             return res.status(500).json({'Error': 'Erro ao criar a maquina'});
