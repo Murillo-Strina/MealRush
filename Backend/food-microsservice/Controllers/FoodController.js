@@ -30,33 +30,32 @@ class FoodController {
         }
     }
 
-    async Create(req,res){
+    async Create(req, res) {
         try {
-            const {name, calories, carbs, proteins, fats, weight, imageUrl} = req.body
-
-            const foodExists = await foodService.FindByName(name)
-
-            if(foodExists){
-                res.status(400).json({'Error': 'Nao pode ter 2 comidas com o mesmo nome'})
-                return
+            const { name, calories, carbs, proteins, fats, weight, imageUrl } = req.body;
+    
+            if (!name || name.trim() === "") {
+                return res.status(400).json({ 'Error': 'O nome da comida deve ser preenchido' });
             }
+    
+            const foodExists = await foodService.FindByName(name.trim());
 
-            await foodService.Create(name, calories, carbs, proteins, fats, weight, imageUrl)
-
-            if(name == undefined){
-                res.status(400).json({'Error': 'O nome da comida deve ser preenchido'})
+            if (foodExists) {
+                return res.status(409).json({ 'Error': 'Já existe uma comida com esse nome' }); // 409: Conflict
             }
-            
-            const createdFood = await foodService.FindByName(name)
-            
-            return res.status(200).json(createdFood) 
+    
+            await foodService.Create(name.trim(), calories, carbs, proteins, fats, weight, imageUrl);
+    
+            const createdFood = await foodService.FindByName(name);
+    
+            return res.status(201).json(createdFood); // status 201 para "Created"
     
         } catch (error) {
-            console.error("Erro ao criar o alimento:", err)
-            return res.status(500).json({'Error': 'Erro ao criar o alimento'}) 
-            
+            console.error("Erro ao criar o alimento:", error);
+            return res.status(500).json({ 'Error': 'Erro ao criar o alimento' });
         }
     }
+    
 
     async Delete(req,res){
         try {
