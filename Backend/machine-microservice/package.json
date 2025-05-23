@@ -1,19 +1,21 @@
 {
-  "name": "auth-microservice",
+  "name": "machine-microsservice",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch index.js",
-    "start": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "auth-microservice": "file:",
-    "axios": "^1.9.0",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mysql2": "^3.14.0"
   }
 }

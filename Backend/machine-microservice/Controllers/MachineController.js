@@ -1,92 +1,135 @@
 import machineService from '../Services/MachineService.js';
 
-class MachineController{
+class MachineController {
 
-   async GetAllMachines(req, res) {
-       try {
-        const machines = await machineService.findAll();
-
-        if (machines.length === 0){
-            return res.status(404).json({'Error': 'Nenhuma maquina encontrada'});
-        }
-        res.status(200).json(machines);
-       } catch (err) {
-        console.error("Erro ao buscar as maquinas:", err);
-        return res.status(500).json({'Error': 'Erro ao buscar os dados'});
-       }
-    } 
-
-    async GetMachineById(req, res){
+    async GetAllMachines(req, res) {
         try {
-            const id = req.params.id;
-            const machine = await machineService.findById(id);
-            if (machine.length === 0) {
-                return res.status(404).json({'Error': 'A maquina com id ' + id + ' não foi encontrada'});
+            const machines = await machineService.findAll();
+
+            if (machines.length === 0) {
+                return res.status(404).json({ 'message': 'Nenhuma máquina encontrada' });
             }
+
+            res.status(200).json(machines);
+            
+    } catch (err) {
+        console.error("Erro no Controller ao buscar as máquinas:", err.message); // VERIFIQUE ESTA SAÍDA NO SEU CONSOLE
+        return res.status(500).json({ 'error': 'Erro interno ao buscar os dados das máquinas' });
+    }
+    }
+
+    async GetMachineById(req, res) {
+        try {
+            const { id } = req.params;
+            const machine = await machineService.findById(id);
+
+            if (!machine) {
+                return res.status(404).json({ 'message': `A máquina com id ${id} não foi encontrada` });
+            }
+
             res.status(200).json(machine);
         } catch (err) {
-            console.error("Erro ao buscar a maquina:", err);
-            return res.status(500).json({'Error': 'Erro ao buscar os dados'});
+            console.error(`Erro no Controller ao buscar a máquina ${id}:`, err.message);
+            return res.status(500).json({ 'error': 'Erro interno ao buscar os dados da máquina' });
         }
     }
 
-    async Create(req, res){
+    async Create(req, res) {
         try {
-           const {amountItems, statusId, lastMaintenance, lastFill, rent} = req.body;
-           const machineExists = await machineService.findById(id);
+            const { institutionId, aluguel } = req.body;
 
-        if (machineExists) {
-               res.status(400).json({'Error': 'Nao pode ter 2 maquinas com o mesmo id'});
-               return;
-           }
+            if (institutionId === undefined || aluguel === undefined) {
+                return res.status(400).json({ 'error': 'Campos institutionId e aluguel são obrigatórios' });
+            }
 
-        await machineService.create(amountItems, statusId, lastMaintenance, lastFill, rent);
+            const insertedId = await machineService.create(institutionId, aluguel);
 
-        if (amountItems == undefined) {
-                res.status(400).json({'Error': 'A quantidade de itens da maquina deve ser preenchida'});
-        }
+            if (!insertedId) {
+                return res.status(500).json({ 'error': 'Falha ao criar a máquina, ID não retornado.' });
+            }
+            
+            const createdMachine = await machineService.findById(insertedId);
 
-        const createdMachine = await machineService.findById(id);
+            if (!createdMachine) {
+                return res.status(500).json({ 'error': 'Máquina criada mas não pôde ser encontrada.' });
+            }
 
-        return res.status(200).json(createdMachine);
+            return res.status(201).json(createdMachine);
         } catch (err) {
-            console.error("Erro ao criar a maquina:", err);
-            return res.status(500).json({'Error': 'Erro ao criar a maquina'});
+            console.error("Erro no Controller ao criar a máquina:", err.message);
+            if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+                return res.status(400).json({ 'error': `Falha ao criar máquina: institutionId '${req.body.institutionId}' não existe ou é inválido.` });
+            }
+            return res.status(500).json({ 'error': 'Erro interno ao criar a máquina' });
         }
     }
 
     async Delete(req, res) {
-       try {
-        const id = req.params.id;
-        await machineService.delete(id);
-        return res.status(200).json({'Message': 'Maquina de id: ' +id+ 'deletada com sucesso'});
-       } catch (err) {
-        console.error("Erro ao deletar a maquina:", err);
-        return res.status(500).json({'Error': 'Erro ao deletar a maquina'});
-       }
+        try {
+            const { id } = req.params;
+            const affectedRows = await machineService.delete(id);
+
+            if (affectedRows === 0) {
+                return res.status(404).json({ 'message': `Máquina com id ${id} não encontrada para deletar` });
+            }
+
+            return res.status(200).json({ 'message': `Máquina com id ${id} deletada com sucesso` });
+        } catch (err) {
+            console.error(`Erro no Controller ao deletar a máquina ${req.params.id}:`, err.message);
+            return res.status(500).json({ 'error': 'Erro interno ao deletar a máquina' });
+        }
     }
 
     async Update(req, res) {
         try {
-          const id = req.params.id;
-          const {amountItems, statusId, lastMaintenance, lastFill, rent} = req.body;
-          
-        const machineExists = await machineService.findById(id);
-        if (machineExists.length === 0) {
-            return res.status(404).json({'Error': 'A maquina com id ' + id + ' não foi encontrada'});
-        }
-        await machineService.update(id, amountItems, statusId, lastMaintenance, lastFill, rent);
+            const { id } = req.params;
+            const { institutionId, aluguel } = req.body;
 
-        const updatedMachine = await machineService.findById(id);
-        return res.status(200).json(updatedMachine);
-
-        } catch (err) {
-            console.error("Erro ao atualizar a maquina:", err);
-            return res.status(500).json({'Error': 'Erro ao atualizar a maquina'});
+            if (institutionId === undefined && aluguel === undefined) {
+                return res.status(400).json({ 'error': 'Nenhum dado fornecido para atualização.' });
+            }
             
+            const existingMachine = await machineService.findById(id);
+            if (!existingMachine) {
+                return res.status(404).json({ 'message': `A máquina com id ${id} não foi encontrada para atualizar` });
+            }
+
+            const newInstitutionId = institutionId !== undefined ? institutionId : existingMachine.institutionId;
+            const newAluguel = aluguel !== undefined ? aluguel : existingMachine.aluguel;
+
+            const affectedRows = await machineService.update(newInstitutionId, newAluguel, id);
+
+            if (affectedRows === 0) {
+                 const notActuallyUpdatedMachine = await machineService.findById(id);
+                 return res.status(200).json(notActuallyUpdatedMachine);
+            }
+            
+            const updatedMachine = await machineService.findById(id);
+            return res.status(200).json(updatedMachine);
+        } catch (err) {
+            console.error(`Erro no Controller ao atualizar a máquina ${req.params.id}:`, err.message);
+            if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+                return res.status(400).json({ 'error': `Falha ao atualizar máquina: institutionId '${req.body.institutionId}' não existe ou é inválido.` });
+            }
+            return res.status(500).json({ 'error': 'Erro interno ao atualizar a máquina' });
         }
     }
 
+    async GetMachinesByInstitutionId(req, res) {
+        try {
+            const { institutionId } = req.params;
+            const machines = await machineService.getMachinesByInstitution(institutionId);
+
+            if (machines.length === 0) {
+                return res.status(404).json({ 'message': `Nenhuma máquina encontrada para a instituição com id ${institutionId}` });
+            }
+
+            res.status(200).json(machines);
+        } catch (err) {
+            console.error(`Erro no Controller ao buscar máquinas por instituição ${req.params.institutionId}:`, err.message);
+            return res.status(500).json({ 'error': 'Erro interno ao buscar os dados das máquinas por instituição' });
+        }
+    }
 }
 
 export default new MachineController();
