@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+
+// Importações de Imagens (ajuste os caminhos conforme sua estrutura)
 import logo from "../assets/images/logo_mealrush.png";
 import logoIMT from "../assets/images/logo-IMT.png";
 import logoFEI from "../assets/images/logo_fei_color-01.svg";
@@ -12,162 +14,265 @@ import logoSA from "../assets/images/logo_SA.jpg";
 import logoSBC from "../assets/images/logo_SBC.png";
 import vendingMachine from "../assets/images/vending_machine.png";
 import foodExample from "../assets/images/food_example.jpg";
-import Food from '../components/Food';
+
+// Componentes
+import MenuItemCard from '../components/MenuItemCard'; // Usando o card genérico
 import Carousel from '../components/Carousel';
 
-export default class MainMenu extends Component {
-  render() {
+const MainMenu = () => {
+    const colors = {
+        darkPrimary: '#1A202C', accent: '#00C9A7', lightNeutral: '#F7FAFC',
+        mediumNeutral: '#E2E8F0', textDark: '#2D3748', textLight: '#F7FAFC',
+        textSubtleDarkBg: '#A0AEC0', cardBackgroundDark: '#2D3748',
+        textSubtleLightBg: '#718096',
+    };
+
+    const sectionVariants = {
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
+    };
+    const itemVariants = {
+        hidden: { opacity: 0, scale: 0.9 },
+        visible: { opacity: 1, scale: 1, transition: { duration: 0.6 } }
+    };
+    const heroItemLeftVariants = {
+        hidden: { opacity: 0, x: -50 },
+        visible: { opacity: 1, x: 0, transition: { duration: 0.8, delay: 0.2 } }
+    };
+    const heroItemRightVariants = {
+        hidden: { opacity: 0, x: 50 },
+        visible: { opacity: 1, x: 0, transition: { duration: 0.8, delay: 0.4 } }
+    };
+
+    const foodItemsList = [
+        { id: "f001", name: "Salada Mediterrânea Fresca", description: "Pepino, tomate, azeitonas Kalamata, queijo feta e molho de limão siciliano.", image: foodExample, price: "22,50" },
+        { id: "f002", name: "Bowl Energético de Grãos Ancestrais", description: "Quinoa, freekeh, abacate, edamame e sementes de romã com vinagrete de tahine.", image: foodExample, price: "28,00" },
+        { id: "f003", name: "Wrap Tailandês Picante", description: "Frango grelhado, noodles de arroz, vegetais crocantes e molho de amendoim.", image: foodExample, price: "25,00" },
+        { id: "f004", name: "Sanduíche de Salmão Defumado", description: "Salmão defumado, cream cheese com endro, alcaparras em pão de centeio.", image: foodExample, price: "30,00" },
+        { id: "f005", name: "Smoothie Tropical Revitalizante", description: "Manga, abacaxi, maracujá e um toque de gengibre e hortelã.", image: foodExample, price: "18,00" },
+        { id: "f006", name: "Parfait de Iogurte Grego e Berries", description: "Camadas de iogurte grego natural, granola caseira e frutas vermelhas frescas.", image: foodExample, price: "16,50" },
+    ];
+
+    const partnerLogos = [logoIMT, logoFEI, logoUSP, logoCongonhas, logoIbirapuera, logoSCS, logoSA, logoSBC];
+
+    const menuItemCardStyles = {
+        cardStyle: { backgroundColor: colors.cardBackgroundDark, color: colors.textLight, borderRadius: '1rem', overflow: 'hidden', border: `1px solid ${colors.darkPrimary}` },
+        imageStyle: { objectFit: 'cover', height: '200px', width: '100%' },
+        titleStyle: { color: colors.accent, fontSize: '1.15rem', fontWeight: 'bold' },
+        descriptionStyle: { color: colors.textSubtleDarkBg, fontSize: '0.875rem', minHeight: '60px' },
+        priceStyle: { color: colors.textLight, fontSize: '1.05rem', fontWeight: 'bold'},
+        buttonStyle: { backgroundColor: colors.accent, color: colors.darkPrimary, fontWeight: 'bold', borderColor: colors.accent },
+        infoButtonStyle: { backgroundColor: 'transparent', color: colors.accent, borderColor: colors.accent, borderWidth: '2px' }
+    };
+
     return (
-      <>
-        <div className="d-flex flex-column tp h-screen w-full">
-          <nav className="navbar navbar-expand-lg navbar-black fixed-top" style={{ background: "green" }}>
-            <div className="container-fluid">
-              <div className="d-flex align-items-center">
-                <img src={logo} style={{ width: 60 }} className="img-fluid" />
-              </div>
+        <div style={{ backgroundColor: colors.lightNeutral, color: colors.textDark, paddingTop: '80px' }}>
+            <nav
+                className="navbar navbar-expand-lg fixed-top py-3 shadow-sm"
+                style={{ backgroundColor: 'rgba(26, 32, 44, 0.90)', backdropFilter: 'blur(10px)' }}
+            >
+                <div className="container">
+                    <Link className="navbar-brand d-flex align-items-center" to="/" style={{ color: colors.textLight }}>
+                        <img src={logo} alt="MealRush Logo" width="45" height="45" className="d-inline-block align-top me-2 rounded-circle" />
+                        <span className="fs-4 fw-bold">MealRush</span>
+                    </Link>
+                    <button
+                        className="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavMainMenu"
+                        aria-controls="navbarNavMainMenu"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                        style={{ borderColor: colors.accent }}
+                    >
+                        <span className="navbar-toggler-icon" style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='${colors.accent}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")` }}></span>
+                    </button>
+                    <div className="collapse navbar-collapse justify-content-end" id="navbarNavMainMenu">
+                        <ul className="navbar-nav align-items-center">
+                            {['Sobre Nós', 'Alimentos', 'Parcerias'].map(item => (
+                                <li className="nav-item mx-lg-1" key={item}>
+                                    <a className="nav-link px-2" href={`#${item.toLowerCase().replace(/\s+/g, '-')}`} style={{ color: colors.textSubtleDarkBg, fontWeight: 500, transition: 'color 0.2s ease-in-out' }}
+                                       onMouseOver={e => e.currentTarget.style.color = colors.accent}
+                                       onMouseOut={e => e.currentTarget.style.color = colors.textSubtleDarkBg}
+                                    >
+                                        {item.replace(' ', '')}
+                                    </a>
+                                </li>
+                            ))}
+                            <li className="nav-item mx-lg-1">
+                                 <Link className="nav-link px-2" to="/simulation" style={{ color: colors.textSubtleDarkBg, fontWeight: 500, transition: 'color 0.2s ease-in-out' }}
+                                    onMouseOver={e => e.currentTarget.style.color = colors.accent}
+                                    onMouseOut={e => e.currentTarget.style.color = colors.textSubtleDarkBg}
+                                 >Simulação</Link>
+                            </li>
+                            <li className="nav-item ms-lg-3 mt-2 mt-lg-0">
+                                <Link className="btn rounded-pill px-4 py-2" to="/login" style={{ backgroundColor: colors.accent, color: colors.darkPrimary, fontWeight: 'bold', transition: 'background-color 0.2s ease, transform 0.2s ease' }}
+                                   onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'}
+                                   onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
+                                >
+                                    Login Admin
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
 
-              <div className="position-absolute top-50 start-50 translate-middle text-center">
-                <a className="navbar-brand text-white" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 40 }}>
-                  MealRush
-                </a>
-              </div>
+            <header className="py-5 text-white" style={{ backgroundColor: colors.darkPrimary, display: 'flex', alignItems: 'center', minHeight: 'calc(100vh - 80px)'}}>
+                <div className="container">
+                    <div className="row align-items-center g-5 py-lg-5">
+                        <motion.div
+                            className="col-lg-6 text-center text-lg-start"
+                            variants={heroItemLeftVariants}
+                            initial="hidden"
+                            animate="visible"
+                        >
+                            <h1 className="display-3 fw-bolder lh-1 mb-4" style={{ color: colors.textLight }}>
+                                A Revolução da <span style={{ color: colors.accent }}>Alimentação Saudável</span> Chegou.
+                            </h1>
+                            <p className="lead fs-5 mb-4" style={{ color: colors.textSubtleDarkBg }}>
+                                Descubra refeições gourmet, frescas e nutritivas, prontas em instantes. MealRush é a sua pausa inteligente para um dia a dia mais saboroso e saudável.
+                            </p>
+                            <div className="d-grid gap-2 d-sm-flex justify-content-sm-start">
+                                <a href="#alimentos" className="btn btn-lg px-4 me-sm-2 rounded-pill" style={{ backgroundColor: colors.accent, color: colors.darkPrimary, fontWeight: 'bold' }}>
+                                    Explorar Cardápio
+                                </a>
+                                <a href="#sobre-nos" className="btn btn-outline-light btn-lg px-4 rounded-pill" style={{ borderColor: colors.accent, color: colors.accent }}>
+                                    Saber Mais
+                                </a>
+                            </div>
+                        </motion.div>
+                        <motion.div
+                            className="col-10 col-sm-8 col-lg-6 mx-auto"
+                             variants={heroItemRightVariants}
+                            initial="hidden"
+                            animate="visible"
+                        >
+                            <img src={vendingMachine} alt="MealRush Vending Machine Moderna" className="d-block mx-lg-auto img-fluid rounded-3 shadow-lg" style={{ filter: `drop-shadow(0 0 2rem ${colors.accent}40)` }} loading="lazy" />
+                        </motion.div>
+                    </div>
+                </div>
+            </header>
 
-              <button
-                className="navbar-toggler ms-auto"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav"
-              >
-                <span className="navbar-toggler-icon"></span>
-              </button>
+            <motion.section
+                id="sobre-nos"
+                className="py-5"
+                style={{ backgroundColor: colors.lightNeutral }}
+                variants={sectionVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+            >
+                <div className="container col-xl-10 col-xxl-8 px-4 py-5">
+                    <div className="row align-items-center g-lg-5 py-5">
+                        <motion.div className="col-lg-7 text-center text-lg-start" variants={itemVariants}>
+                            <h2 className="display-5 fw-bold lh-1 mb-4" style={{ color: colors.textDark }}>
+                                Inovação e Sabor em Cada <span style={{ color: colors.accent }}>Detalhe</span>.
+                            </h2>
+                            <p className="col-lg-10 fs-5 mb-4" style={{ color: colors.textSubtleLightBg }}>
+                                Fundada com a visão de transformar a alimentação rápida, a MealRush combina tecnologia de ponta com ingredientes frescos para oferecer uma experiência culinária única, acessível e incrivelmente saudável.
+                            </p>
+                             <p className="col-lg-10 fs-5" style={{ color: colors.textSubtleLightBg }}>
+                                Nossas vending machines inteligentes são mais que simples máquinas: são portais para um mundo de nutrição e conveniência, projetadas para o seu bem-estar.
+                            </p>
+                        </motion.div>
+                        <motion.div className="col-md-10 mx-auto col-lg-5" variants={itemVariants}>
+                            <div className="p-4 p-md-5 border-0 rounded-4 shadow-lg" style={{ backgroundColor: colors.darkPrimary }}>
+                                <img src={logo} alt="MealRush Logo Detalhe" className="img-fluid rounded-3 mb-4 mx-auto d-block" style={{maxWidth: '200px'}}/>
+                                <h3 className="fw-bold mb-3 text-center" style={{ color: colors.accent }}>Nossa Missão</h3>
+                                <p className="text-center" style={{ color: colors.textSubtleDarkBg }}>
+                                    Tornar a alimentação saudável uma escolha fácil e prazerosa para todos, todos os dias.
+                                </p>
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </motion.section>
 
-              <div className="collapse navbar-collapse" style={{ fontSize: 20 }} id="navbarNav">
-                <ul className="navbar-nav ms-auto">
-                  <li className="nav-item">
-                    <Link className="nav-link text-white" to="/login">Login admin</Link>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link active text-white" href="#sobre-nos">Sobre nós</a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link text-white" href="#alimentos">Alimentos</a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link text-white" href="#parcerias">Parcerias</a>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link text-white" to="/simulation">Simulação</Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </nav>
+            <motion.section
+                id="alimentos"
+                className="py-5"
+                style={{ backgroundColor: colors.darkPrimary, color: colors.textLight }}
+                variants={sectionVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.1 }}
+            >
+                <div className="container px-4 py-5">
+                    <h2 className="display-5 fw-bold text-center mb-3">Cardápio <span style={{ color: colors.accent }}>Exclusivo</span></h2>
+                    <p className="fs-5 text-center mb-5 mx-auto" style={{ color: colors.textSubtleDarkBg, maxWidth: '700px' }}>
+                        Criações pensadas para nutrir seu corpo e encantar seu paladar, disponíveis em nossas máquinas inteligentes.
+                    </p>
+                    <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+                        {foodItemsList.map((food, index) => (
+                            <motion.div
+                                className="col d-flex"
+                                key={food.id}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: index * 0.05 }}
+                                viewport={{ once: true, amount: 0.1 }}
+                            >
+                                <MenuItemCard
+                                    id={food.id}
+                                    name={food.name}
+                                    description={food.description}
+                                    image={food.image}
+                                    price={food.price}
+                                    styles={menuItemCardStyles}
+                                    // Exemplo de como passar ações
+                                    // selectAction={(id, name) => console.log(`Selecionado no MainMenu: ${name} (ID: ${id})`)}
+                                    // infoAction={(id, name) => alert(`Detalhes de: ${name} (ID: ${id})`)}
+                                />
+                            </motion.div>
+                        ))}
+                    </div>
+                     <div className="text-center mt-5">
+                        <Link to="/cardapio-completo" className="btn btn-lg rounded-pill px-5 py-3" style={{ ...menuItemCardStyles.buttonStyle, fontSize: '1.1rem' }}>
+                            Ver Todas as Opções
+                        </Link>
+                    </div>
+                </div>
+            </motion.section>
 
-          <div className="container" style={{ marginTop: 100 }}>
-            <div className="row align-items-center">
-              <motion.div
-                className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0"
-                initial={{ opacity: 0, x: -100 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1 }}
-              >
-                <img src={vendingMachine} className="img-fluid" style={{ maxWidth: 250 }} />
-              </motion.div>
+            <motion.section
+                id="parcerias"
+                className="py-5"
+                style={{ backgroundColor: colors.lightNeutral }}
+                variants={sectionVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+            >
+                <div className="container py-5">
+                    <h2 className="display-5 fw-bold text-center mb-3" style={{ color: colors.textDark }}>
+                        Parceiros que <span style={{ color: colors.accent }}>Acreditam</span> na Inovação
+                    </h2>
+                    <p className="fs-5 text-center mb-5 mx-auto" style={{ color: colors.textSubtleLightBg, maxWidth: '700px' }}>
+                        Colaboramos com instituições e empresas que compartilham nossa visão de bem-estar, tecnologia e alimentação de qualidade.
+                    </p>
+                    <div className="mt-4">
+                        <Carousel images={partnerLogos} accentColor={colors.accent} itemsPerSlideDesktop={4} itemsPerSlideMobile={2}/>
+                    </div>
+                </div>
+            </motion.section>
 
-              <motion.div
-                className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-white text-center"
-                style={{ background: "green", borderRadius: 20, padding: 30 }}
-                initial={{ opacity: 0, x: 100 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1 }}
-              >
-                <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
-                  Bem-vindo ao nosso site informativo! Aqui você encontra informações sobre nós, nossos serviços de preparo de comida e muito mais! Fique por dentro de todo o processo da MealRush!
-                </h1>
-              </motion.div>
-            </div>
-          </div>
-          <div id="sobre-nos" className="pt-5 mt-n5 container text-white" style={{ background: "green", borderRadius: 20, padding: 20, fontFamily: "'Century Gothic', sans-serif", marginTop: 150 }}>
-            <h1 className="px-3" style={{ fontFamily: "'Arial', sans-serif", fontSize: 30, fontWeight: "bold", textDecoration: "underline" }}>Quem somos?</h1>
-            <div className="row align-items-center">
-              <motion.div
-                className="col-12 col-md-6 d-flex justify-content-center mb-4 mb-md-0"
-                initial={{ opacity: 0, x: -100 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1 }}
-                viewport={{ amount: 0.3 }}
-              >
-                <img src={logo} className="img-fluid" style={{ maxWidth: 250 }} />
-              </motion.div>
-
-              <motion.div
-                className="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column text-center"
-                initial={{ opacity: 0, x: 100 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1 }}
-                viewport={{ amount: 0.3 }}
-              >
-                <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
-                  Fundada em 2025, a MealRush tem como objetivo fornecer uma alimentação saudável para as pessoas, e para isso utilizamos máquinas de venda que preparam rapidamente as refeições, temos diversas opções nutritivas para todos os tipos de gostos.
-                </h1>
-              </motion.div>
-            </div>
-          </div>
+            <footer className="py-5 text-center" style={{ backgroundColor: colors.darkPrimary, color: colors.textSubtleDarkBg }}>
+                <div className="container">
+                    <Link to="/" className="d-inline-block mb-3">
+                      <img src={logo} alt="MealRush Logo Footer" width="60" className="rounded-circle"/>
+                    </Link>
+                    <p className="mb-1">&copy; {new Date().getFullYear()} MealRush. Todos os direitos reservados.</p>
+                    <p className="mb-0">
+                        <Link to="/termos" className="mx-2" style={{ color: colors.accent, textDecoration: 'none' }}>Termos de Uso</Link>
+                        |
+                        <Link to="/privacidade" className="mx-2" style={{ color: colors.accent, textDecoration: 'none' }}>Política de Privacidade</Link>
+                    </p>
+                </div>
+            </footer>
         </div>
-        <div id = "alimentos" className="pt-5 mt-n5 container text-white" style={{ background: "green", borderRadius: 20, padding: 20, fontFamily: "'Century Gothic', sans-serif", marginTop: 150 }}>
-          <h1 className="px-3" style={{ fontFamily: "'Arial', sans-serif", fontSize: 30, fontWeight: "bold", textDecoration: "underline" }}>Alimentos</h1>
-          <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
-            Confira as principais refeições disponíveis para consumo nas máquinas:
-          </h1>
-          <div>
-            <Food
-            img= {foodExample}
-            name= "Arroz, feijão, batata cozida e frango empanado"
-            />
-            <Food
-            img= {foodExample}
-            name= "Arroz, feijão, batata cozida e frango empanado"
-            />
-            <Food
-            img= {foodExample}
-            name= "Arroz, feijão, batata cozida e frango empanado"
-            />
-            <Food
-            img= {foodExample}
-            name= "Arroz, feijão, batata cozida e frango empanado"
-            />
-            <Food
-            img= {foodExample}
-            name= "Arroz, feijão, batata cozida e frango empanado"
-            />
-            <Food
-            img= {foodExample}
-            name= "Arroz, feijão, batata cozida e frango empanado"
-            />
-            <Food
-            img= {foodExample}
-            name= "Arroz, feijão, batata cozida e frango empanado"
-            />
-            <Food
-            img= {foodExample}
-            name= "Arroz, feijão, batata cozida e frango empanado"
-            />
-            <Food
-            img= {foodExample}
-            name= "Arroz, feijão, batata cozida e frango empanado"
-            />
-          </div>
-        </div>
-        <div id = "parcerias" className="pt-5 mt-n5 container text-white" style={{ background: "green", borderRadius: 20, padding: 20, fontFamily: "'Century Gothic', sans-serif", marginTop: 150 }}>
-          <h1 className="px-3" style={{ fontFamily: "'Arial', sans-serif", fontSize: 30, fontWeight: "bold", textDecoration: "underline" }}>Parcerias</h1>
-          <h1 className="px-3" style={{ fontFamily: "'Century Gothic', sans-serif", fontSize: 24 }}>
-            Principais instituições e empresas parceiras:
-          </h1>
-          <div className="mt-5">
-            <Carousel images = {[logoIMT,logoFEI,logoUSP,logoCongonhas,logoIbirapuera,logoSCS,logoSA,logoSBC]}/>
-          </div>
-        </div>
-      </>
     );
-  }
-}
+};
+
+export default MainMenu;
