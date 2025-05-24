@@ -57,7 +57,7 @@ const Carousel = ({ images, accentColor = '#00C9A7', itemsPerGroup = 1 }) => {
                         type="button"
                         data-bs-target={`#${carouselId}`}
                         data-bs-slide="prev"
-                        style={{ width: 'auto', left: '0px' }} // Ajustado para posicionamento
+                        style={{ width: 'auto', left: '0px' }} 
                         onMouseOver={e => e.currentTarget.querySelector('span > span').style.opacity = 1}
                         onMouseOut={e => e.currentTarget.querySelector('span > span').style.opacity = 0.7}
                     >
@@ -71,7 +71,7 @@ const Carousel = ({ images, accentColor = '#00C9A7', itemsPerGroup = 1 }) => {
                         type="button"
                         data-bs-target={`#${carouselId}`}
                         data-bs-slide="next"
-                        style={{ width: 'auto', right: '0px' }} // Ajustado para posicionamento
+                        style={{ width: 'auto', right: '0px' }} 
                         onMouseOver={e => e.currentTarget.querySelector('span > span').style.opacity = 1}
                         onMouseOut={e => e.currentTarget.querySelector('span > span').style.opacity = 0.7}
                     >

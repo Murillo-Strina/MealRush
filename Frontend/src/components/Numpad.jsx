@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-const Numpad = ({ colors, onConfirm, onClear, initialValue = "", maxDisplayLength = 4 }) => {
+const Numpad = ({ colors, onConfirm, onClear, initialValue = "", maxDisplayLength = 2 }) => {
     const [displayValue, setDisplayValue] = useState(initialValue);
 
     useEffect(() => {
@@ -15,7 +15,7 @@ const Numpad = ({ colors, onConfirm, onClear, initialValue = "", maxDisplayLengt
         success: '#00C9A7', 
         buttonTextDark: '#1A202C', 
     };
-    const c = colors || defaultColors;
+
 
     const buttonBaseStyle = {
         width: '100%',
@@ -37,14 +37,7 @@ const Numpad = ({ colors, onConfirm, onClear, initialValue = "", maxDisplayLengt
     const handleConfirm = () => {
         if (displayValue && onConfirm) {
             onConfirm(displayValue);
-        }
-    };
-
-    const handleClearAction = () => {
-        if (displayValue.length > 0) {
-            setDisplayValue(displayValue.slice(0, -1));
-        } else if (onClear) {
-             onClear();
+            setDisplayValue("");
         }
     };
     
@@ -54,52 +47,52 @@ const Numpad = ({ colors, onConfirm, onClear, initialValue = "", maxDisplayLengt
     }
 
     const keys = [
-        "1", "2", "3",
-        "4", "5", "6",
-        "7", "8", "9",
-        "LIMPAR", "0", "OK" 
+        "A1", "A2", "A3",
+        "B1", "B2", "B3",
+        "C1", "C2", "C3",
+        "LIMPAR","OK" 
     ];
 
     return (
         <motion.div 
             className='p-3 shadow-xl rounded-4'
-            style={{ backgroundColor: c.cardBackgroundDark, border: `1px solid ${c.darkPrimary}`}}
+            style={{ backgroundColor: defaultColors.cardBackgroundDark, border: `1px solid ${defaultColors.darkPrimary}`}}
             initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:0.4, ease: "circOut"}}
         >
             <div 
                 className='d-flex align-items-center justify-content-end p-3 mb-3 rounded-3 text-end'
                 style={{
                     height: "70px",
-                    backgroundColor: c.darkPrimary,
-                    color: c.textLight,
+                    backgroundColor: defaultColors.darkPrimary,
+                    color: defaultColors.textLight,
                     fontSize: '2.2rem',
                     fontWeight: 'bold',
                     letterSpacing: '0.1em',
                     overflow: 'hidden',
-                    border: `2px solid ${c.accent}50`, 
+                    border: `2px solid ${defaultColors.accent}50`, 
                     fontFamily: "'Roboto Mono', monospace" 
                 }}
             >
-                {displayValue || <span style={{color: c.textSubtleDarkBg}}>{'_'.repeat(maxDisplayLength)}</span>}
+                {displayValue || ""}
             </div>
             <div className='row row-cols-3 g-2'>
                 {keys.map((key) => {
-                    let btnStyle = { ...buttonBaseStyle, backgroundColor: c.mediumNeutral, color: c.buttonTextDark };
+                    let btnStyle = { ...buttonBaseStyle, backgroundColor: defaultColors.mediumNeutral, color: defaultColors.buttonTextDark };
                     let action = () => handleKeyPress(key);
-                    let motionProps = { whileTap: { scale: 0.95, backgroundColor: c.accent }};
+                    let motionProps = { whileTap: { scale: 0.95, backgroundColor: defaultColors.accent }};
                     let colClass = 'col p-1';
 
                     if (key === 'OK') {
-                        btnStyle = { ...buttonBaseStyle, backgroundColor: c.success, color: c.darkPrimary, fontSize: '1.3rem' };
+                        btnStyle = { ...buttonBaseStyle, backgroundColor: defaultColors.success, color: defaultColors.darkPrimary, fontSize: '1.3rem' };
                         action = handleConfirm;
                         motionProps = { whileTap: { scale: 0.95 }};
                     } else if (key === 'LIMPAR') {
-                        btnStyle = { ...buttonBaseStyle, backgroundColor: c.danger, color: c.textLight, fontSize: '0.9rem', lineHeight: '1.2' }; // Tamanho de fonte menor para LIMPAR
+                        btnStyle = { ...buttonBaseStyle, backgroundColor: defaultColors.danger, color: defaultColors.textLight, fontSize: '0.9rem', lineHeight: '1.2' }; 
                         action = handleFullClear; 
                         motionProps = { whileTap: { scale: 0.95 }};
                     } else if (key === '0') {
-                         btnStyle = { ...buttonBaseStyle, backgroundColor: c.mediumNeutral, color: c.buttonTextDark };
-                         motionProps = { whileTap: { scale: 0.95, backgroundColor: c.accent }};
+                         btnStyle = { ...buttonBaseStyle, backgroundColor: defaultColors.mediumNeutral, color: defaultColors.buttonTextDark };
+                         motionProps = { whileTap: { scale: 0.95, backgroundColor: defaultColors.accent }};
                     }
                     
 

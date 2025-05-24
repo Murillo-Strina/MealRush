@@ -42,10 +42,9 @@ class FeedbackController {
         }
     }
 
-    // NOVO MÉTODO ADICIONADO
     async getFeedbacksByInstitutionName(req, res) {
         try {
-            const { name } = req.params; // Espera o nome como parâmetro de rota
+            const { name } = req.params;
             const feedbacks = await feedbackService.findByInstitutionName(name);
 
             if (!feedbacks || feedbacks.length === 0) {

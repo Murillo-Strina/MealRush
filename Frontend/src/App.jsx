@@ -1,6 +1,6 @@
 import React from 'react';
-import MenuItemCard from './components/MenuItemCard'; // Ajuste o caminho se necessário
-import placeholder from "./assets/images/foodplaceholder.png"; // Ajuste o caminho
+import MenuItemCard from './components/MenuItemCard';
+import placeholder from "./assets/images/foodplaceholder.png"; 
 
 const App = () => {
     const colors = {

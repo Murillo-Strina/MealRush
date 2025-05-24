@@ -7,9 +7,9 @@ const MenuItemCard = ({
     description,
     image,
     price,
-    styles, // Objeto contendo todos os sub-estilos (cardStyle, imageStyle, etc.)
-    selectAction, // Função para ação principal (ex: "Selecionar", "Adicionar")
-    infoAction,   // Função para ação secundária (ex: "Detalhes")
+    styles, 
+    selectAction, 
+    infoAction,
     selectActionText = "Selecionar",
     infoActionText = "Detalhes"
 }) => {
@@ -20,7 +20,6 @@ const MenuItemCard = ({
         mediumNeutral: '#E2E8F0'
     };
 
-    // Usa os estilos passados ou os padrões para evitar erros
     const s = {
         cardStyle: styles?.cardStyle || { backgroundColor: defaultColors.cardBackgroundDark, color: defaultColors.textLight, borderRadius: '1rem', overflow: 'hidden', border: `1px solid ${defaultColors.darkPrimary}` },
         imageStyle: styles?.imageStyle || { objectFit: 'cover', height: '200px', width: '100%' },
@@ -33,7 +32,7 @@ const MenuItemCard = ({
 
     return (
         <motion.div
-            className="card w-100 shadow-lg border-0 d-flex flex-column" // Assegura que o card ocupe a coluna e use flex
+            className="card w-100 shadow-lg border-0 d-flex flex-column"
             style={s.cardStyle}
             whileHover={{ y: -7, boxShadow: `0 1rem 1.75rem rgba(0, 201, 167, 0.1), 0 0.5rem 0.75rem rgba(0,0,0,0.15)` }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -47,7 +46,7 @@ const MenuItemCard = ({
                     </p>
                 )}
                 <p className="mb-3 fs-5" style={s.priceStyle}>R$ {price}</p>
-                <div className="mt-auto"> {/* Empurra os botões para baixo */}
+                <div className="mt-auto"> 
                     <div className="d-grid gap-2">
                         {selectAction && (
                             <button

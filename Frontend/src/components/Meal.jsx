@@ -1,11 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-// Este é o Meal.jsx para ser usado DENTRO da Machine.jsx (interface da vending machine)
 const Meal = ({ foodId, name, img, price, stock, getInfo, selectFood, styles }) => {
     const isOutOfStock = stock === 0;
 
-    const defaultStyles = { // Estilos padrão caso 'styles' não seja fornecido completamente
+    const defaultStyles = { 
         cardStyle: { backgroundColor: '#2D3748', color: '#F7FAFC', borderRadius: '0.75rem', border: '1px solid #1A202C', overflow: 'hidden', position: 'relative', height: '230px', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'},
         imageContainerStyle: { flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.5rem' },
         imageStyle: { objectFit: 'contain', maxHeight: '110px', maxWidth: '90%'},
@@ -17,7 +16,7 @@ const Meal = ({ foodId, name, img, price, stock, getInfo, selectFood, styles }) 
         outOfStockOverlayStyle: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(26, 32, 44, 0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#E53E3E', fontWeight: 'bold', fontSize: '1rem', borderRadius: '0.75rem', textAlign: 'center', border: '2px dashed #E53E3E'}
     };
 
-    const s = styles || defaultStyles; // Usa styles passados ou os padrão
+    const s = styles || defaultStyles; 
 
     return (
         <motion.div
@@ -58,12 +57,6 @@ const Meal = ({ foodId, name, img, price, stock, getInfo, selectFood, styles }) 
             <div style={s.priceStyle}>
                 R$ {price}
             </div>
-
-            {isOutOfStock && (
-                <div style={s.outOfStockOverlayStyle}>
-                    INDISPONÍVEL
-                </div>
-            )}
         </motion.div>
     );
 };
