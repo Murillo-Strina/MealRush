@@ -5,25 +5,25 @@ const Numpad = ({ colors, onConfirm, onClear, initialValue = "", maxDisplayLengt
     const [displayValue, setDisplayValue] = useState(initialValue);
 
     useEffect(() => {
-        setDisplayValue(initialValue); // Atualiza se o valor inicial mudar externamente
+        setDisplayValue(initialValue); 
     }, [initialValue]);
 
     const defaultColors = {
         darkPrimary: '#1A202C', accent: '#00C9A7', cardBackgroundDark: '#2D3748',
         textLight: '#F7FAFC', mediumNeutral: '#E2E8F0', textDark: '#2D3748',
-        danger: '#D32F2F', // Vermelho mais suave para X
-        success: '#00C9A7', // Usando accent para OK
-        buttonTextDark: '#1A202C', // Texto para botões claros
+        danger: '#D32F2F', 
+        success: '#00C9A7', 
+        buttonTextDark: '#1A202C', 
     };
     const c = colors || defaultColors;
 
     const buttonBaseStyle = {
         width: '100%',
-        height: '65px', // Ajustado
+        height: '65px', 
         fontSize: '1.6rem',
         fontWeight: 'bold',
         border: 'none',
-        borderRadius: '0.75rem', // Mais arredondado
+        borderRadius: '0.75rem',
         transition: 'transform 0.1s ease, background-color 0.15s ease',
         boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
     };
@@ -37,7 +37,6 @@ const Numpad = ({ colors, onConfirm, onClear, initialValue = "", maxDisplayLengt
     const handleConfirm = () => {
         if (displayValue && onConfirm) {
             onConfirm(displayValue);
-            // setDisplayValue(""); // Decide se limpa após confirmar ou deixa para o componente pai
         }
     };
 
@@ -45,7 +44,7 @@ const Numpad = ({ colors, onConfirm, onClear, initialValue = "", maxDisplayLengt
         if (displayValue.length > 0) {
             setDisplayValue(displayValue.slice(0, -1));
         } else if (onClear) {
-             onClear(); // Limpa tudo se já estiver vazio, chamando o onClear do pai
+             onClear();
         }
     };
     
@@ -58,7 +57,7 @@ const Numpad = ({ colors, onConfirm, onClear, initialValue = "", maxDisplayLengt
         "1", "2", "3",
         "4", "5", "6",
         "7", "8", "9",
-        "LIMPAR", "0", "OK" // Alterado ✓ para OK, X para LIMPAR
+        "LIMPAR", "0", "OK" 
     ];
 
     return (
@@ -77,8 +76,8 @@ const Numpad = ({ colors, onConfirm, onClear, initialValue = "", maxDisplayLengt
                     fontWeight: 'bold',
                     letterSpacing: '0.1em',
                     overflow: 'hidden',
-                    border: `2px solid ${c.accent}50`, // Borda sutil com cor de acento
-                    fontFamily: "'Roboto Mono', monospace" // Fonte monoespaçada para o display
+                    border: `2px solid ${c.accent}50`, 
+                    fontFamily: "'Roboto Mono', monospace" 
                 }}
             >
                 {displayValue || <span style={{color: c.textSubtleDarkBg}}>{'_'.repeat(maxDisplayLength)}</span>}
@@ -96,20 +95,18 @@ const Numpad = ({ colors, onConfirm, onClear, initialValue = "", maxDisplayLengt
                         motionProps = { whileTap: { scale: 0.95 }};
                     } else if (key === 'LIMPAR') {
                         btnStyle = { ...buttonBaseStyle, backgroundColor: c.danger, color: c.textLight, fontSize: '0.9rem', lineHeight: '1.2' }; // Tamanho de fonte menor para LIMPAR
-                        action = handleFullClear; // Limpa tudo
+                        action = handleFullClear; 
                         motionProps = { whileTap: { scale: 0.95 }};
                     } else if (key === '0') {
                          btnStyle = { ...buttonBaseStyle, backgroundColor: c.mediumNeutral, color: c.buttonTextDark };
                          motionProps = { whileTap: { scale: 0.95, backgroundColor: c.accent }};
                     }
                     
-                    // Se o botão for LIMPAR, ele pode ocupar mais espaço ou ter um tratamento diferente.
-                    // Para este layout de grid, mantemos o tamanho.
 
                     return (
                         <div className={colClass} key={key}>
                             <motion.button
-                                className="btn w-100 h-100 d-flex align-items-center justify-content-center" // w-100 h-100 para preencher
+                                className="btn w-100 h-100 d-flex align-items-center justify-content-center"
                                 style={btnStyle}
                                 onClick={action}
                                 {...motionProps}

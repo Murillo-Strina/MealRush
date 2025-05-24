@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import MenuItemCard from './components/MenuItemCard'; // Ajuste o caminho se necessário
 import placeholder from "./assets/images/foodplaceholder.png"; // Ajuste o caminho
 

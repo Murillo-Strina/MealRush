@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 
 const MachineScreen = () => {
@@ -26,10 +25,6 @@ const MachineScreen = () => {
             }
             setLoading(true);
             try {
-                // const res = await axios.get(`http://localhost:3000/machines/${machineId}/foods`); // API Real
-                // setItems(res.data);
-                
-                // Dados Mockados para exemplo:
                 const mockItems = [
                     { id: 1, name: 'Salada Caesar Premium', sellPrice: 15.90, buyPrice: 5.50, quantity: 22, sales: 125 },
                     { id: 2, name: 'Wrap de Frango Grelhado', sellPrice: 18.75, buyPrice: 6.20, quantity: 18, sales: 93 },

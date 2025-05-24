@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Carousel = ({ images, accentColor = '#00C9A7', itemsPerGroup = 1 /* Mantendo um por slide conforme original */ }) => {
+const Carousel = ({ images, accentColor = '#00C9A7', itemsPerGroup = 1 }) => {
     if (!images || images.length === 0) {
         return <p className="text-center" style={{ color: '#718096' }}>Nenhuma imagem de parceiro disponível.</p>;
     }
@@ -15,8 +15,7 @@ const Carousel = ({ images, accentColor = '#00C9A7', itemsPerGroup = 1 /* Manten
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        transition: 'background-color 0.2s ease',
-        opacity: 0.7, // Opacidade para os controles
+        transition: 'background-color 0.2s ease', 
     };
 
     const controlIconStyle = {
@@ -25,27 +24,26 @@ const Carousel = ({ images, accentColor = '#00C9A7', itemsPerGroup = 1 /* Manten
         height: '1.5rem',
     };
     
-    const validAccentColor = accentColor || '#00C9A7'; // Garante uma cor válida
+    const validAccentColor = accentColor || '#00C9A7';
 
     return (
         <div id={carouselId} className="carousel slide" data-bs-ride="carousel">
             <div className="carousel-inner rounded-3">
                 {images.map((imgSrc, index) => (
                     <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
-                        <div className="d-flex justify-content-center align-items-center p-3" style={{minHeight: '150px'}}> {/* Container para centralizar */}
+                        <div className="d-flex justify-content-center align-items-center p-3" style={{minHeight: '150px'}}> 
                             <img
                                 src={imgSrc}
-                                className="d-block img-fluid" // Removido w-100 para respeitar o aspect ratio
+                                className="d-block img-fluid"
                                 alt={`Parceria ${index + 1}`}
                                 style={{
-                                    maxHeight: '100px', // Ajustado para melhor visualização de logos
-                                    width: 'auto', // Para manter proporção
+                                    maxHeight: '150px', 
+                                    width: 'auto', 
                                     objectFit: 'contain',
-                                    filter: 'grayscale(90%) opacity(0.7)',
                                     transition: 'all 0.3s ease-out'
                                 }}
                                 onMouseOver={e => { e.currentTarget.style.filter = 'grayscale(0%) opacity(1)'; e.currentTarget.style.transform = 'scale(1.1)'; }}
-                                onMouseOut={e => { e.currentTarget.style.filter = 'grayscale(90%) opacity(0.7)'; e.currentTarget.style.transform = 'scale(1)'; }}
+                                onMouseOut={e => {e.currentTarget.style.transform = 'scale(1)'; }}
                             />
                         </div>
                     </div>

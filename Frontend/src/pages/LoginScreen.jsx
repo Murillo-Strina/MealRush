@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-// Importe seu logo (ajuste o caminho original "src/assets/images/logo_mealrush_transparent.png")
 import logoMealRush from "../assets/images/logo_mealrush_transparent.png";
 
 const LoginScreen = () => {
@@ -26,8 +25,6 @@ const LoginScreen = () => {
         target.style.boxShadow = isHovering ? `0 4px 10px rgba(0, 201, 167, 0.3)` : 'none';
     };
 
-    // Supondo que o logo transparente funcione bem em fundo claro.
-    // Se não, use o logo normal (logo_mealrush.png)
     return (
         <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', backgroundColor: colors.lightNeutral, padding: '1rem' }}>
             <div className="container">
@@ -83,9 +80,6 @@ const LoginScreen = () => {
                                 </div>
                             </form>
                         </div>
-                         <p className="text-center mt-4" style={{color: colors.textSubtleLightBg}}>
-                            Não tem uma conta? <Link to="/cadastro" style={{color: colors.accent, fontWeight: 'bold', textDecoration: 'none'}}>Cadastre-se</Link>
-                        </p>
                     </div>
                 </div>
             </div>
@@ -95,7 +89,7 @@ const LoginScreen = () => {
                         from { opacity: 0; transform: translateY(20px); }
                         to { opacity: 1; transform: translateY(0); }
                     }
-                    .form-control:focus { /* Melhorando o foco padrão do Bootstrap */
+                    .form-control:focus {
                         border-color: ${colors.accent};
                         box-shadow: 0 0 0 0.25rem rgba(0, 201, 167, 0.25);
                     }
