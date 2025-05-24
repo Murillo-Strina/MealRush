@@ -16,12 +16,12 @@ const connection = createConnection({
   database: 'mealrush'
 });
 
-connection.connect(function(err) {
+connection.connect((err) => {
   if (err) {
     console.error('Erro ao conectar ao banco de dados: ' + err.stack);
     return;
   }
-  console.log('Conectado ao banco de dados com ID ');
+  console.log('Conectado ao banco de dados!');
 });
 
 export default connection;
