@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const AdminScreen = () => {
-    const machines = [
+    const institution = [
         {
             name: "Centro Universitário FEI",
             id: 1111,
@@ -32,11 +32,22 @@ const AdminScreen = () => {
             registry: 55555555555555,
             machines: 1,
         }
-    ]
+    ];
 
-    const navigate = useNavigate();
+    const machines = [
+        {
+            id: 1,
+            stock: 20,
+            profit: 2500,
+            lastMaintenance: "2025-05-24",
+            sales: 23
+        }
+    ];
 
-    const click = () => {
+    const [showMachines, setShowMachines] = useState(false);
+    const [selectedInstitution, setSelectedInstitution] = useState(null);
+
+    const goToMachine = () => {
         const input = document.querySelector('input[type="number"]');
         const inputValue = input.value.trim();
 
@@ -45,7 +56,16 @@ const AdminScreen = () => {
             return false;
         }
 
-        const route = "institution";
+        const institutionId = parseInt(inputValue);
+        const foundInstitution = institution.find(inst => inst.id === institutionId);
+
+        if (!foundInstitution) {
+            alert("Instituição não encontrada");
+            return false;
+        }
+
+        setSelectedInstitution(foundInstitution);
+        setShowMachines(true);
     }
 
     return (
@@ -74,7 +94,7 @@ const AdminScreen = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {machines.map((item, idx) => (
+                        {institution.map((item, idx) => (
                             <tr key={idx}>
                                 <td>{item.id}</td>
                                 <td>{item.name}</td>
@@ -91,9 +111,55 @@ const AdminScreen = () => {
                 <div className="d-flex flex-row gap-3 p-3">
                     <button className="btn btn-secondary btn-lg">Cadastrar Instituição</button>
                     <button className="btn btn-secondary btn-lg">Remover Instituição</button>
-                    <button className="btn btn-secondary btn-lg" onClick={click}>Gerenciar Máquinas</button>
+                    <button className="btn btn-secondary btn-lg" onClick={goToMachine}>Gerenciar Máquinas</button>
                 </div>
             </div>
+
+            {showMachines && (
+                <div id="machines-section">
+                    <div className="text-center d-flex align-items-center justify-content-center p-3 font-weight-bold">
+                        <div className="text-center d-flex flex-column align-items-center justify-content-center p-3">
+                            <div className="border border-secondary rounded p-3 bg-secondary">
+                                <h1 className="fw-bold">Máquinas da Instituição: {selectedInstitution.name}</h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="p-3">
+                        <table className="table table-bordered table-striped table-dark text-center">
+                            <thead>
+                                <tr>
+                                    <th className="bg-secondary">ID</th>
+                                    <th className="bg-secondary">Estoque</th>
+                                    <th className="bg-secondary">Lucro</th>
+                                    <th className="bg-secondary">Última Manutenção</th>
+                                    <th className="bg-secondary">Marmitas Vendidas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {machines.map((item, idx) => (
+                                    <tr key={idx}>
+                                        <td>{item.id}</td>
+                                        <td>{item.stock}</td>
+                                        <td>{item.profit}</td>
+                                        <td>{item.lastMaintenance}</td>
+                                        <td>{item.sales}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="text-center d-flex flex-column align-items-center justify-content-center p-3">
+                        <h2 className="mb-3">Ações</h2>
+                        <input type="number" placeholder="Insira o ID da máquina a ser gerenciada..." className="border border-secondary rounded w-25 p-1 bg-secondary text-light" required />
+                        <div className="d-flex flex-row gap-3 p-3">
+                            <button className="btn btn-secondary btn-lg">Adicionar Máquina</button>
+                            <button className="btn btn-secondary btn-lg">Remover Máquina</button>
+                            <button className="btn btn-secondary btn-lg">Gerenciar Máquina</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

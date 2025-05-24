@@ -9,7 +9,6 @@ import LoginScreen from './pages/LoginScreen.jsx'
 import AdminScreen from './pages/AdminScreen.jsx'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import InstitutionScreen from './pages/InstitutionScreen.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
