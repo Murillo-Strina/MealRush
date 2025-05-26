@@ -32,7 +32,7 @@ class FoodController {
 
     async Create(req, res) {
         try {
-            const { name, calories, carbs, proteins, fats, weight, imageUrl } = req.body;
+            const { name, calories, carbs, proteins, fats, weight, imageUrl, price } = req.body;
     
             if (!name || name.trim() === "") {
                 return res.status(400).json({ 'Error': 'O nome da comida deve ser preenchido' });
@@ -43,8 +43,12 @@ class FoodController {
             if (foodExists) {
                 return res.status(409).json({ 'Error': 'Já existe uma comida com esse nome' }); // 409: Conflict
             }
+
+            if (price < 0) {
+                return res.status(400).json({ 'Error': 'O preço não pode ser negativo' });
+            }
     
-            await foodService.Create(name.trim(), calories, carbs, proteins, fats, weight, imageUrl);
+            await foodService.Create(name.trim(), calories, carbs, proteins, fats, weight, imageUrl, price);
     
             const createdFood = await foodService.FindByName(name);
     
@@ -73,16 +77,22 @@ class FoodController {
     async Update(req, res) {
         try {
             const id = req.params.id;
-            const { name, calories, carbs, proteins, fats, weight, imageUrl } = req.body;
+            const { name, calories, carbs, proteins, fats, weight, imageUrl, price } = req.body;
     
             const oldFood = await foodService.FindById(id)
 
             console.log(oldFood)
+            
             if(oldFood[0].name == name){
                 return res.status(400).json({ 'Error': 'Já existe uma comida com esse nome' });
             }
-            await foodService.Update(id, name, calories, carbs, proteins, fats, weight, imageUrl);
-    
+
+            if (price < 0) {
+                return res.status(400).json({ 'Error': 'O preço não pode ser negativo' });
+            }
+
+            await foodService.Update(id, name, calories, carbs, proteins, fats, weight, imageUrl, price);
+
             const updatedFood = await foodService.FindById(id);
             return res.status(200).json(updatedFood);
         } catch (error) {
