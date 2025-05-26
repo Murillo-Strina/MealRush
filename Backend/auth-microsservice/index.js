@@ -12,6 +12,6 @@ app.use(json());
 
 app.use("/", router);
 
-app.listen(9000, () => {
-  console.log("Auth: Servidor rodando na porta 9000");
+app.listen(3020, () => {
+  console.log("Auth: Servidor rodando na porta 3020");
 });
