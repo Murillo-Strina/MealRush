@@ -4,8 +4,8 @@ Este projeto tem como finalidade desenvolver um site informativo à respeito da 
 
 # Folders 📂
 
-- back-end: Back-end folder | Node.js struct
-- front-end: Front-ende folder | React struct
+- Backend: Back-end folder | Node.js struct
+- Frontend: Front-end folder | React struct
 
 # Funcionalidades 🔍
 
@@ -19,9 +19,10 @@ Este projeto tem como finalidade desenvolver um site informativo à respeito da 
 
 Os microsserviços da nossa aplicação são:
 - food-microsservice: responsável pela aquisição dos dados das refeições oferecidas pela empresa
-- machine-microsservice:
-- institution-microsservice:
-- login-microsservice:
+- machine-microsservice: responsável pela aquisição dos dados das máquinas disponíveis em cada instituição parceira
+- institution-microsservice: responsável pela aquisição dos dados das instituições parceiras
+- login-microsservice: realiza a autenticação do administrador para visualizar suas interfaces exclusivas
+- feedback-microsservice: chatbot que coleta as críticas e reclamações dos clientes referente à utilização das máquinas e consumo dos alimentos
 # Contribuidores 😎
 
 - [Felipe Kenzo Ohara Sakae](https://github.com/Sakaef03) | RA: 22.00815-2
