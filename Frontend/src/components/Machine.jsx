@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import axios from 'axios';
+import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Meal from "./Meal.jsx";
 import placeholder from "../assets/images/foodplaceholder.png";
 import Numpad from "./Numpad";
+import { use } from "react";
 
 const Machine = () => {
+    const [foodItemsList, setFoodItemsList] = useState([]);
+
     const colors = {
         darkPrimary: '#1A202C', accent: '#00C9A7', cardBackgroundDark: '#2D3748',
         textLight: '#F7FAFC', textSubtleDarkBg: '#A0AEC0', mediumNeutral: '#E2E8F0',
@@ -48,6 +52,31 @@ const Machine = () => {
         { id: "C2", name: "Maçã Fuji Orgânica", price: "5,00", image: placeholder, stock: 10 },
         { id: "C3", name: "Kombucha de Gengibre e Limão", price: "14,00", image: placeholder, stock: 4 }
     ];
+
+    useEffect(() => {
+        const fetchFoods = async () => {
+            try {
+               const response =  await axios.get('http://localhost:3000/foods');
+               const foodsFromApi = response.data;
+               const formattedFoods = foodsFromApi.slice(0,9).map(food => ({
+                id: food.id,
+                name: food.name,
+                price: food.price,
+                image: food.imageUrl,
+                calories: food.calories,
+                carbs: food.carbs,
+                proteins: food.proteins,
+                fats: food.fats,
+                weight: food.weight
+               })); 
+
+               setFoodItemsList(formattedFoods);
+            } catch (err) {
+                console.error("Erro ao buscar alimentos:", err);
+            }
+        }
+        fetchFoods();
+    }, []);
 
     const rows = [
         foodItemsData.filter(item => item.id.startsWith('A')),

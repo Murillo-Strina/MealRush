@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { color, motion } from 'framer-motion';
 import logo from "../assets/images/logo_mealrush.png";
@@ -17,6 +18,9 @@ import MenuItemCard from '../components/MenuItemCard';
 import Carousel from '../components/Carousel';
 
 const MainMenu = () => {
+
+    const [foodItemsList, setFoodItemsList] = useState([]);
+
     const colors = {
         darkPrimary: '#1A202C', accent: '#00C9A7', lightNeutral: '#F7FAFC',
         mediumNeutral: '#E2E8F0', textDark: '#2D3748', textLight: '#F7FAFC',
@@ -41,22 +45,33 @@ const MainMenu = () => {
         visible: { opacity: 1, x: 0, transition: { duration: 0.8, delay: 0.4 } }
     };
 
-    const foodItemsList = [
-        { id: "f001", name: "Salada Mediterrânea Fresca", description: "Pepino, tomate, azeitonas Kalamata, queijo feta e molho de limão siciliano.", image: foodExample, price: "22,50" },
-        { id: "f002", name: "Bowl Energético de Grãos Ancestrais", description: "Quinoa, freekeh, abacate, edamame e sementes de romã com vinagrete de tahine.", image: foodExample, price: "28,00" },
-        { id: "f003", name: "Wrap Tailandês Picante", description: "Frango grelhado, noodles de arroz, vegetais crocantes e molho de amendoim.", image: foodExample, price: "25,00" },
-        { id: "f004", name: "Sanduíche de Salmão Defumado", description: "Salmão defumado, cream cheese com endro, alcaparras em pão de centeio.", image: foodExample, price: "30,00" },
-        { id: "f005", name: "Smoothie Tropical Revitalizante", description: "Manga, abacaxi, maracujá e um toque de gengibre e hortelã.", image: foodExample, price: "18,00" },
-        { id: "f006", name: "Parfait de Iogurte Grego e Berries", description: "Camadas de iogurte grego natural, granola caseira e frutas vermelhas frescas.", image: foodExample, price: "16,50" },
-    ];
+    useEffect(() => {
+        const fetchFoods = async () =>{
+            try {
+                const response = await axios.get('http://localhost:3000/foods');
+                const foodsFromAPI = response.data;
+                const formattedFoods = foodsFromAPI.slice(0, 6).map(food => ({
+                    id: food.id,
+                    name: food.name,
+                    image: food.imageUrl || foodExample,
+                    price: food.price 
+                }));
+
+                setFoodItemsList(formattedFoods);
+            } catch (err) {
+                console.error("Erro ao buscar os alimentos:", err);
+            }
+        };
+
+        fetchFoods()
+    }, [])
 
     const partnerLogos = [logoIMT, logoFEI, logoUSP, logoCongonhas, logoIbirapuera, logoSCS, logoSA, logoSBC];
 
     const menuItemCardStyles = {
         cardStyle: { backgroundColor: colors.cardBackgroundDark, color: colors.textLight, borderRadius: '1rem', overflow: 'hidden', border: `1px solid ${colors.darkPrimary}` },
-        imageStyle: { objectFit: 'cover', height: '200px', width: '100%' },
+        imageStyle: { objectFit: 'cover', objectPosition: 'center', height: '200px', width: '100%' },
         titleStyle: { color: colors.accent, fontSize: '1.15rem', fontWeight: 'bold' },
-        descriptionStyle: { color: colors.textSubtleDarkBg, fontSize: '0.875rem', minHeight: '60px' },
         priceStyle: { color: colors.textLight, fontSize: '1.05rem', fontWeight: 'bold' },
         buttonStyle: { backgroundColor: colors.accent, color: colors.darkPrimary, fontWeight: 'bold', borderColor: colors.accent },
         infoButtonStyle: { backgroundColor: 'transparent', color: colors.accent, borderColor: colors.accent, borderWidth: '2px' }
@@ -176,7 +191,7 @@ const MainMenu = () => {
                 </div>
             </motion.section>
 
-            <motion.section
+           <motion.section
                 id="alimentos"
                 className="py-5"
                 style={{ backgroundColor: colors.darkPrimary, color: colors.textLight }}
@@ -203,7 +218,6 @@ const MainMenu = () => {
                                 <MenuItemCard
                                     id={food.id}
                                     name={food.name}
-                                    description={food.description}
                                     image={food.image}
                                     price={food.price}
                                     styles={menuItemCardStyles}

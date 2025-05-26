@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 const MenuItemCard = ({
     id,
     name,
-    description,
     image,
     price,
     styles, 
@@ -40,11 +39,6 @@ const MenuItemCard = ({
             <img src={image} className="card-img-top" alt={name} style={s.imageStyle} />
             <div className="card-body d-flex flex-column p-3 p-md-4">
                 <h5 className="card-title" style={s.titleStyle}>{name}</h5>
-                {description && (
-                    <p className="card-text flex-grow-1 mb-3" style={s.descriptionStyle}>
-                        {description}
-                    </p>
-                )}
                 <p className="mb-3 fs-5" style={s.priceStyle}>R$ {price}</p>
                 <div className="mt-auto"> 
                     <div className="d-grid gap-2">
