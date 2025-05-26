@@ -1,39 +1,27 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const AdminScreen = () => {
-    const institution = [
-        {
-            name: "Centro Universitário FEI",
-            id: 1111,
-            registry: 11111111111111,
-            machines: 1,
-        },
-        {
-            name: "Instituto Mauá de Tecnologia - IMT",
-            id: 2222,
-            registry: 22222222222222,
-            machines: 1,
-        },
-        {
-            name: "Estação Prefeito Walter Braido",
-            id: 3333,
-            registry: 33333333333333,
-            machines: 1,
-        },
-        {
-            name: "Universidade Municipal de São Caetano do Sul",
-            id: 4444,
-            registry: 44444444444444,
-            machines: 1,
-        },
-        {
-            name: "Parque Chico Mendes",
-            id: 5555,
-            registry: 55555555555555,
-            machines: 1,
-        }
-    ];
-
+    const [institution, setInstitutions] = useState([]);
+    
+        useEffect(() => {
+            const fetchInstitutions = async () => {
+                try {
+                   const response = await axios.get('http://localhost:3005/institutions');
+                   const institutesFromApi = response.data;
+                   const formattedInstitutions = institutesFromApi.map((institution) => ({
+                        id: institution.id,
+                        name: institution.name,
+                        registry: institution.registration_number,
+                        machines:  Math.floor(Math.random() * 11)
+                   }))
+                   setInstitutions(formattedInstitutions);
+                } catch (err) {
+                    console.error("Erro ao buscar instituições:", err);
+                }
+            }
+            fetchInstitutions();
+        }, []);
     const machines = [
         {
             id: 1,
