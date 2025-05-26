@@ -53,7 +53,7 @@ const MainMenu = () => {
                 const formattedFoods = foodsFromAPI.slice(0, 6).map(food => ({
                     id: food.id,
                     name: food.name,
-                    image: food.imageUrl || foodExample,
+                    image: food.imageUrl,
                     price: food.price 
                 }));
 

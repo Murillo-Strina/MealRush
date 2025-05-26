@@ -47,9 +47,9 @@ const Numpad = ({ colors, onConfirm, onClear, initialValue = "", maxDisplayLengt
     }
 
     const keys = [
-        "A1", "A2", "A3",
-        "B1", "B2", "B3",
-        "C1", "C2", "C3",
+        "1", "2", "3",
+        "4", "5", "6",
+        "7", "8", "9",
         "LIMPAR","OK" 
     ];
 

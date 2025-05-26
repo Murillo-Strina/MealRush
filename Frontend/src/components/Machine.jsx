@@ -3,12 +3,13 @@ import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Meal from "./Meal.jsx";
+import logo from "../assets/images/logo_mealrush.png";
 import placeholder from "../assets/images/foodplaceholder.png";
 import Numpad from "./Numpad";
 import { use } from "react";
 
 const Machine = () => {
-    const [foodItemsList, setFoodItemsList] = useState([]);
+    const [foodItemsData, setFoodItemsData] = useState([]);
 
     const colors = {
         darkPrimary: '#1A202C', accent: '#00C9A7', cardBackgroundDark: '#2D3748',
@@ -18,9 +19,9 @@ const Machine = () => {
 
     const [numpadValue, setNumpadValue] = useState("");
 
-    const getFoodInfo = (foodId, foodName) => {
-        const foodItem = foodItemsData.find(f => f.id === foodId);
-        alert(`Detalhes de ${foodName}:\nID: ${foodId}\nPreço: R$ ${foodItem?.price}\nEstoque: ${foodItem?.stock}`);
+    const getFoodInfo = (displayId, foodName) => {
+        const foodItem = foodItemsData.find((f,i) => String(i+1) === displayId);
+        alert(`Detalhes de ${foodName}:\nID: ${displayId}\nPreço: R$ ${foodItem?.price}\nEstoque: ${foodItem?.stock}\nPeso: ${foodItem?.weight}g\nCalorias: ${foodItem?.calories}\nCarboidratos: ${foodItem?.carbs}g\nProteínas: ${foodItem?.proteins}g\nGorduras: ${foodItem?.fats}g`);
     };
 
     const selectFoodOnNumpad = (foodId) => {
@@ -28,7 +29,7 @@ const Machine = () => {
     };
 
     const handleNumpadConfirm = (value) => {
-        const selectedItem = foodItemsData.find(item => item.id.toUpperCase() === value.toUpperCase());
+        const selectedItem = foodItemsData[parseInt(value) - 1];
         if (selectedItem) {
             if (selectedItem.stock > 0) {
                 alert(`Confirmado: ${selectedItem.name} (ID: ${value}). Preparando seu pedido!`);
@@ -41,36 +42,38 @@ const Machine = () => {
         setNumpadValue("");
     };
 
-    const foodItemsData = [
-        { id: "A1", name: "Wrap Vegano Premium", price: "18,50", image: placeholder, stock: 5 },
-        { id: "A2", name: "Salada Caesar com Frango", price: "20,00", image: placeholder, stock: 3 },
-        { id: "A3", name: "Suco Verde Detoxificante", price: "12,00", image: placeholder, stock: 8 },
-        { id: "B1", name: "Sanduíche Natural Integral", price: "15,00", image: placeholder, stock: 9 },
-        { id: "B2", name: "Mix de Castanhas e Frutas Secas", price: "10,50", image: placeholder, stock: 12 },
-        { id: "B3", name: "Água de Coco Natural Gelada", price: "8,00", image: placeholder, stock: 15 },
-        { id: "C1", name: "Barra de Proteína Artesanal", price: "9,00", image: placeholder, stock: 7 },
-        { id: "C2", name: "Maçã Fuji Orgânica", price: "5,00", image: placeholder, stock: 10 },
-        { id: "C3", name: "Kombucha de Gengibre e Limão", price: "14,00", image: placeholder, stock: 4 }
-    ];
+    // const foodItemsData = [
+    //     { id: "A1", name: "Wrap Vegano Premium", price: "18,50", image: placeholder, stock: 5 },
+    //     { id: "A2", name: "Salada Caesar com Frango", price: "20,00", image: placeholder, stock: 3 },
+    //     { id: "A3", name: "Suco Verde Detoxificante", price: "12,00", image: placeholder, stock: 8 },
+    //     { id: "B1", name: "Sanduíche Natural Integral", price: "15,00", image: placeholder, stock: 9 },
+    //     { id: "B2", name: "Mix de Castanhas e Frutas Secas", price: "10,50", image: placeholder, stock: 12 },
+    //     { id: "B3", name: "Água de Coco Natural Gelada", price: "8,00", image: placeholder, stock: 15 },
+    //     { id: "C1", name: "Barra de Proteína Artesanal", price: "9,00", image: placeholder, stock: 7 },
+    //     { id: "C2", name: "Maçã Fuji Orgânica", price: "5,00", image: placeholder, stock: 10 },
+    //     { id: "C3", name: "Kombucha de Gengibre e Limão", price: "14,00", image: placeholder, stock: 4 }
+    // ];
 
     useEffect(() => {
         const fetchFoods = async () => {
             try {
                const response =  await axios.get('http://localhost:3000/foods');
                const foodsFromApi = response.data;
-               const formattedFoods = foodsFromApi.slice(0,9).map(food => ({
+               const formattedFoods = foodsFromApi.slice(0,9).map((food,index) => ({
                 id: food.id,
+                displayId: String(index + 1),
                 name: food.name,
-                price: food.price,
-                image: food.imageUrl,
                 calories: food.calories,
                 carbs: food.carbs,
                 proteins: food.proteins,
                 fats: food.fats,
-                weight: food.weight
+                weight: food.weight,
+                image: food.imageUrl,
+                price: food.price,
+                stock: Math.floor(Math.random() * 11)
                })); 
 
-               setFoodItemsList(formattedFoods);
+               setFoodItemsData(formattedFoods);
             } catch (err) {
                 console.error("Erro ao buscar alimentos:", err);
             }
@@ -79,9 +82,9 @@ const Machine = () => {
     }, []);
 
     const rows = [
-        foodItemsData.filter(item => item.id.startsWith('A')),
-        foodItemsData.filter(item => item.id.startsWith('B')),
-        foodItemsData.filter(item => item.id.startsWith('C')),
+        foodItemsData.slice(0,3),
+        foodItemsData.slice(3,6),
+        foodItemsData.slice(6,9)
     ];
 
     const mealMachineStyles = {
@@ -157,13 +160,13 @@ const Machine = () => {
                                         transition={{ duration: 0.3, delay: (rowIndex * 3 + colIndex) * 0.03 }}
                                     >
                                         <Meal
-                                            foodId={item.id}
+                                            foodId={item.displayId}
                                             name={item.name}
                                             img={item.image}
                                             price={item.price}
                                             stock={item.stock}
-                                            getInfo={() => getFoodInfo(item.id, item.name)}
-                                            selectFood={() => selectFoodOnNumpad(item.id)}
+                                            getInfo={() => getFoodInfo(item.displayId, item.name)}
+                                            selectFood={() => selectFoodOnNumpad(item.displayId)}
                                             styles={mealMachineStyles}
                                         />
                                     </motion.div>
@@ -180,6 +183,8 @@ const Machine = () => {
                             onConfirm={handleNumpadConfirm}
                             onClear={() => setNumpadValue("")}
                         />
+                        <h1 className='text-center' style={{ marginTop: '70px', color: colors.textLight }}>Powered By:</h1>
+                        <img src={logo} alt="Logo MealRush" className="img-fluid" style={{ maxWidth: '300px', marginTop: '70px' }} />
                     </div>
                 </div>
             </div>
