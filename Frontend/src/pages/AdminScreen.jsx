@@ -1,9 +1,9 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 const AdminScreen = () => {
     const [institution, setInstitutions] = useState([]);
-    
+    const [machines, setMachines] = useState([]);
         useEffect(() => {
             const fetchInstitutions = async () => {
                 try {
@@ -13,7 +13,7 @@ const AdminScreen = () => {
                         id: institution.id,
                         name: institution.name,
                         registry: institution.registration_number,
-                        machines:  Math.floor(Math.random() * 11)
+                        machines:  0
                    }))
                    setInstitutions(formattedInstitutions);
                 } catch (err) {
@@ -22,15 +22,47 @@ const AdminScreen = () => {
             }
             fetchInstitutions();
         }, []);
-    const machines = [
-        {
-            id: 1,
-            stock: 20,
-            profit: 2500,
-            lastMaintenance: "2025-05-24",
-            sales: 23
+    // const machines = [
+    //     {
+    //         id: 1,
+    //         stock: 20,
+    //         profit: 2500,
+    //         lastMaintenance: "2025-05-24",
+    //         sales: 23
+    //     }
+    // ];
+    
+    useEffect(() => {
+        const fetchMachines = async () => {
+            try {
+                const response = await axios.get('http://localhost:3010/machines');
+                const machinesFromApi = response.data;
+                const formattedMachines = machinesFromApi.map((machine) => ({
+                    id: machine.id,
+                    institutionId: machine.institutionId,
+                    stock: machine.qtd_itens,
+                    status: machine.statusId,
+                    lastMaintenance: machine.dt_ultima_manutencao,
+                    lastFill: machine.dt_ultimo_abastecimento,
+                    rent: machine.aluguel
+                }));
+                setMachines(formattedMachines);
+            } catch (err) {
+                console.error("Erro ao buscar máquinas:", err);
+            }
         }
-    ];
+        fetchMachines();
+    }, []);
+
+    useEffect(() => {
+        if(institution.length > 0 && machines.length > 0) {
+            const updatedInstitutions = institution.map( inst => {
+                const machineCount = machines.filter(machine => machine.institutionId === inst.id).length;
+                return { ...inst, machines: machineCount };
+            });
+            setInstitutions(updatedInstitutions);
+        }
+    }, [institution, machines]);
 
     const [showMachines, setShowMachines] = useState(false);
     const [selectedInstitution, setSelectedInstitution] = useState(null);
@@ -119,9 +151,10 @@ const AdminScreen = () => {
                                 <tr>
                                     <th className="bg-secondary">ID</th>
                                     <th className="bg-secondary">Estoque</th>
-                                    <th className="bg-secondary">Lucro</th>
+                                    <th className="bg-secondary">Status</th>
                                     <th className="bg-secondary">Última Manutenção</th>
-                                    <th className="bg-secondary">Marmitas Vendidas</th>
+                                    <th className="bg-secondary">Último abastecimento</th>
+                                    <th className="bg-secondary">Aluguel</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -129,9 +162,10 @@ const AdminScreen = () => {
                                     <tr key={idx}>
                                         <td>{item.id}</td>
                                         <td>{item.stock}</td>
-                                        <td>{item.profit}</td>
+                                        <td>{item.status}</td>
                                         <td>{item.lastMaintenance}</td>
-                                        <td>{item.sales}</td>
+                                        <td>{item.lastFill}</td>
+                                        <td>{item.rent}</td>
                                     </tr>
                                 ))}
                             </tbody>
