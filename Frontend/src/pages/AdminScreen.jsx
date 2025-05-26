@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
-
+import ButtonAdmin from "../components/ButtonAdmin";
+import iconFeedback from "../assets/images/icon_feedback.png";
+import iconManagement from "../assets/images/icon_management.png";
 const AdminScreen = () => {
     const navigate = useNavigate();
     return (
@@ -16,9 +18,9 @@ const AdminScreen = () => {
                     </div>
                 </div>
             </div>
-            <div className="container align-items-center col-xl-10 px-4 py-5">
-                <button className="btn btn-secondary" onClick={() => navigate("/management")} style={{ backgroundColor: "#00C9A7"}}>Gerenciar Instituições</button>
-                <button className="btn btn-secondary">Consultar Feedbacks</button>
+            <div className="container d-flex justify-content-center gap-5 mt-4">
+                <ButtonAdmin router="management" text="Gerenciar Instituições" img={iconManagement} />
+                <ButtonAdmin router="feedback" text="Consultar Feedbacks" img={iconFeedback} />
             </div>
         </div>
     );
