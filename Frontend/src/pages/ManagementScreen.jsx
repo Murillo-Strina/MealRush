@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const ManagementScreen = () => {
     const navigate = useNavigate();
     const [institution, setInstitutions] = useState([]);
     const [machines, setMachines] = useState([]);
+    const [institutionsWithMachinesCount, setInstitutionsWithMachinesCount] = useState([]);
 
     useEffect(() => {
         const fetchInstitutions = async () => {
@@ -17,12 +18,12 @@ const ManagementScreen = () => {
                     name: institution.name,
                     registry: institution.registration_number,
                     machines: 0
-                }))
+                }));
                 setInstitutions(formattedInstitutions);
             } catch (err) {
                 console.error("Erro ao buscar instituições:", err);
             }
-        }
+        };
         fetchInstitutions();
     }, []);
 
@@ -48,7 +49,7 @@ const ManagementScreen = () => {
             } catch (err) {
                 console.error("Erro ao buscar máquinas:", err);
             }
-        }
+        };
         fetchMachines();
     }, []);
 
@@ -58,12 +59,18 @@ const ManagementScreen = () => {
                 const machineCount = machines.filter(machine => machine.institutionId === inst.id).length;
                 return { ...inst, machines: machineCount };
             });
-            setInstitutions(updatedInstitutions);
+            setInstitutionsWithMachinesCount(updatedInstitutions);
+        } else if (institution.length > 0) {
+            const updatedInstitutions = institution.map(inst => ({ ...inst, machines: 0 }));
+            setInstitutionsWithMachinesCount(updatedInstitutions);
         }
     }, [institution, machines]);
 
     const [showMachines, setShowMachines] = useState(false);
     const [selectedInstitution, setSelectedInstitution] = useState(null);
+
+    const [institutionIdInput, setInstitutionIdInput] = useState('');
+    const [machineIdInput, setMachineIdInput] = useState('');
 
     const goToMachine = () => {
         const inputValue = institutionIdInput.trim();
@@ -83,7 +90,7 @@ const ManagementScreen = () => {
 
         setSelectedInstitution(foundInstitution);
         setShowMachines(true);
-    }
+    };
 
     const [showInstitutionModal, setShowInstitutionModal] = useState(false);
     const [showMachineInputModal, setShowMachineInputModal] = useState(false);
@@ -92,7 +99,7 @@ const ManagementScreen = () => {
     const [newInstitution, setNewInstitution] = useState({
         name: '',
         registry: ''
-    })
+    });
 
     const handleInstitutionChange = async () => {
         if (newInstitution.name.trim() === '' || newInstitution.registry.trim() === '') {
@@ -105,31 +112,31 @@ const ManagementScreen = () => {
                 name: newInstitution.name,
                 registration_number: newInstitution.registry
             });
-            setInstitutions([...institution, response.data]);
+            setInstitutions(prev => [...prev, response.data]);
             setShowInstitutionModal(false);
             setNewInstitution({ name: '', registry: '' });
         } catch (err) {
             console.error("Erro ao cadastrar instituição:", err);
             alert("Erro ao cadastrar instituição");
         }
-    }
-
-    const [institutionIdInput, setInstitutionIdInput] = useState('');
+    };
 
     const handleRemoveInstitution = async (id) => {
         if (window.confirm("Tem certeza que deseja remover esta instituição?")) {
             try {
                 await axios.delete(`http://localhost:3005/institutions/${id}`);
-                setInstitutions(institution.filter(inst => inst.id !== id));
-                setMachines(machines.filter(machine => machine.institutionId !== id));
+                setInstitutions(prev => prev.filter(inst => inst.id !== id));
+                setMachines(prev => prev.filter(machine => machine.institutionId !== id));
+                if (selectedInstitution && selectedInstitution.id === id) {
+                    setSelectedInstitution(null);
+                    setShowMachines(false);
+                }
             } catch (err) {
                 console.error("Erro ao remover instituição:", err);
                 alert("Erro ao remover instituição");
             }
         }
-    }
-
-    const [machineIdInput, setMachineIdInput] = useState('');
+    };
 
     const handleRemoveMachine = async (id) => {
         if (!selectedInstitution) {
@@ -140,13 +147,13 @@ const ManagementScreen = () => {
         if (window.confirm("Tem certeza que deseja remover esta máquina?")) {
             try {
                 await axios.delete(`http://localhost:3010/machines/${id}/institution/${selectedInstitution.id}`);
-                setMachines(machines.filter(machine => machine.id !== id));
+                setMachines(prev => prev.filter(machine => machine.id !== id));
             } catch (err) {
                 console.error("Erro ao remover máquina:", err);
                 alert("Erro ao remover máquina");
             }
         }
-    }
+    };
 
     const [newMachine, setNewMachine] = useState({
         institutionId: '',
@@ -155,18 +162,20 @@ const ManagementScreen = () => {
         lastMaintenance: new Date().toISOString().split('T')[0],
         lastFill: new Date().toISOString().split('T')[0],
         rent: ''
-    })
+    });
 
     const handleMachineInput = async () => {
         if (!selectedInstitution) {
-            alert("É necessário selecionar uma instituição!")
-            return
-        };
+            alert("É necessário selecionar uma instituição!");
+            return;
+        }
+
         const today = new Date().toISOString().split('T')[0];
+
         try {
             const response = await axios.post('http://localhost:3010/machines', {
                 institutionId: selectedInstitution.id,
-                amount: newMachine.stock,
+                stock: newMachine.stock,
                 status: newMachine.status,
                 lastMaintenance: today,
                 lastFill: today,
@@ -176,8 +185,8 @@ const ManagementScreen = () => {
             const newMachineFormatted = {
                 id: response.data.id,
                 institutionId: selectedInstitution.id,
-                stock: 30,
-                status: 1,
+                stock: newMachine.stock,
+                status: newMachine.status,
                 lastMaintenance: newMachine.lastMaintenance,
                 lastFill: newMachine.lastFill,
                 rent: newMachine.rent
@@ -190,7 +199,7 @@ const ManagementScreen = () => {
             console.error("Erro ao cadastrar máquina:", err);
             alert("Erro ao cadastrar máquina");
         }
-    }
+    };
 
     const [updatedMachine, setUpdatedMachine] = useState({
         stock: '',
@@ -205,16 +214,19 @@ const ManagementScreen = () => {
             alert("É necessário selecionar uma instituição!");
             return;
         }
+
         const id = parseInt(machineIdInput);
         if (!id || isNaN(id)) {
             alert("Insira um ID válido");
             return;
         }
+
         const existingMachine = machines.find(machine => machine.id === id && machine.institutionId === selectedInstitution.id);
         if (!existingMachine) {
             alert("Máquina não encontrada na instituição selecionada");
             return;
         }
+
         try {
             await axios.put(`http://localhost:3010/machines/${id}/institution/${selectedInstitution.id}`, {
                 institutionId: selectedInstitution.id,
@@ -242,7 +254,7 @@ const ManagementScreen = () => {
             console.error("Erro ao atualizar máquina:", err);
             alert("Erro ao atualizar máquina");
         }
-    }
+    };
 
     return (
         <div style={{ minHeight: '100vh' }} className="bg-dark text-light">
@@ -252,7 +264,7 @@ const ManagementScreen = () => {
 
             <div className="text-center d-flex align-items-center justify-content-center p-3 font-weight-bold">
                 <div className="text-center d-flex flex-column align-items-center justify-content-center p-3">
-                    <img src="src/assets/images/logo_mealrush.png" style={{ width: "200px" }} className="mb-3" />
+                    <img src="src/assets/images/logo_mealrush.png" style={{ width: "200px" }} className="mb-3" alt="Logo" />
                     <div className="border border-secondary rounded p-3 bg-secondary">
                         <h1 className="fw-bold">Lista de Instituições</h1>
                     </div>
@@ -270,7 +282,7 @@ const ManagementScreen = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {institution.map((item, idx) => (
+                        {institutionsWithMachinesCount.map((item, idx) => (
                             <tr key={idx}>
                                 <td>{item.id}</td>
                                 <td>{item.name}</td>
@@ -281,21 +293,32 @@ const ManagementScreen = () => {
                     </tbody>
                 </table>
             </div>
+
             <div className="text-center d-flex flex-column align-items-center justify-content-center p-3">
                 <h2 className="mb-3">Ações</h2>
-                <input type="number" placeholder="Insira o ID da instituição a ser gerenciada..." className="border border-secondary rounded w-25 p-1 bg-secondary text-light" value={institutionIdInput} onChange={e => setInstitutionIdInput(e.target.value)} required />
+                <input
+                    type="number"
+                    placeholder="Insira o ID da instituição a ser gerenciada..."
+                    className="border border-secondary rounded w-25 p-1 bg-secondary text-light"
+                    value={institutionIdInput}
+                    onChange={e => setInstitutionIdInput(e.target.value)}
+                    required
+                />
                 <div className="d-flex flex-row gap-3 p-3">
                     <button className="btn btn-secondary btn-lg" onClick={() => setShowInstitutionModal(true)}>Cadastrar Instituição</button>
                     <button className="btn btn-secondary btn-lg" onClick={() => {
                         const id = parseInt(institutionIdInput);
-                        if (!id || isNaN(id)) { alert("Insira um ID válido"); return; }
+                        if (!id || isNaN(id)) {
+                            alert("Insira um ID válido");
+                            return;
+                        }
                         handleRemoveInstitution(id);
                     }}>Remover Instituição</button>
                     <button className="btn btn-secondary btn-lg" onClick={goToMachine}>Gerenciar Máquinas</button>
                 </div>
             </div>
 
-            {showMachines && (
+            {showMachines && selectedInstitution && (
                 <div id="machines-section">
                     <div className="text-center d-flex align-items-center justify-content-center p-3 font-weight-bold">
                         <div className="text-center d-flex flex-column align-items-center justify-content-center p-3">
@@ -331,9 +354,17 @@ const ManagementScreen = () => {
                             </tbody>
                         </table>
                     </div>
+
                     <div className="text-center d-flex flex-column align-items-center justify-content-center p-3">
                         <h2 className="mb-3">Ações</h2>
-                        <input type="number" placeholder="Insira o ID da máquina a ser gerenciada..." className="border border-secondary rounded w-25 p-1 bg-secondary text-light" value={machineIdInput} onChange={e => setMachineIdInput(e.target.value)} required />
+                        <input
+                            type="number"
+                            placeholder="Insira o ID da máquina a ser gerenciada..."
+                            className="border border-secondary rounded w-25 p-1 bg-secondary text-light"
+                            value={machineIdInput}
+                            onChange={e => setMachineIdInput(e.target.value)}
+                            required
+                        />
                         <div className="d-flex flex-row gap-3 p-3">
                             <button className="btn btn-secondary btn-lg" onClick={() => setShowMachineInputModal(true)}>Adicionar Máquina</button>
                             <button className="btn btn-secondary btn-lg" onClick={() => {
@@ -486,7 +517,7 @@ const ManagementScreen = () => {
                                         value={newInstitution.registry}
                                         onChange={(e) => {
                                             const onlyNumbers = e.target.value.replace(/\D/g, '');
-                                            setNewInstitution({ ...newInstitution, registry: onlyNumbers })
+                                            setNewInstitution({ ...newInstitution, registry: onlyNumbers });
                                         }}
                                     />
                                 </div>
