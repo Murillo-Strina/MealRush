@@ -31,13 +31,17 @@ const ManagementScreen = () => {
             try {
                 const response = await axios.get('http://localhost:3010/machines');
                 const machinesFromApi = response.data;
+                const formatDate = (dateString) => {
+                        if (!dateString) return '';
+                        return new Date(dateString).toISOString().split('T')[0];
+                };
                 const formattedMachines = machinesFromApi.map((machine) => ({
                     id: machine.id,
                     institutionId: machine.institutionId,
                     stock: machine.qtd_itens,
                     status: machine.statusId,
-                    lastMaintenance: machine.dt_ultima_manutencao,
-                    lastFill: machine.dt_ultimo_abastecimento,
+                    lastMaintenance: formatDate(machine.dt_ultima_manutencao),
+                    lastFill: formatDate(machine.dt_ultimo_abastecimento),
                     rent: machine.aluguel
                 }));
                 setMachines(formattedMachines);
@@ -119,6 +123,48 @@ const ManagementScreen = () => {
                 console.error("Erro ao remover instituição:", err);
                 alert("Erro ao remover instituição");
             }
+        }
+    }
+
+    const [newMachine, setNewMachine] = useState({
+        institutionId: '',
+        stock: 30,
+        status: 1,
+        lastMaintenance: new Date().toISOString().split('T')[0],
+        lastFill: new Date().toISOString().split('T')[0],
+        rent: 299
+    })
+
+    const handleMachineInput = async () => {
+        if(!selectedInstitution) {
+            alert("É necessário selecionar uma instituição!") 
+            return};
+        const today = new Date().toISOString().split('T')[0];
+        try {
+            const response = await axios.post('http://localhost:3010/machines', {
+                institutionId: selectedInstitution.id,
+                qtd_itens: newMachine.stock,
+                statusId: newMachine.status,
+                dt_ultima_manutencao: today,
+                dt_ultimo_abastecimento: today,
+                aluguel: newMachine.rent
+            });
+
+            const newMachineFormatted = {
+            id: response.data.id,
+            institutionId: selectedInstitution.id,
+            stock: 30,
+            status: 1,
+            lastMaintenance: newMachine.lastMaintenance,
+            lastFill: newMachine.lastFill,
+            rent: 299
+        };
+
+            setMachines(prev => [...prev, newMachineFormatted]);
+            alert("Máquina cadastrada com sucesso!");
+        } catch (err) {
+            console.error("Erro ao cadastrar máquina:", err);
+            alert("Erro ao cadastrar máquina");
         }
     }
 
@@ -213,13 +259,14 @@ const ManagementScreen = () => {
                         <h2 className="mb-3">Ações</h2>
                         <input type="number" placeholder="Insira o ID da máquina a ser gerenciada..." className="border border-secondary rounded w-25 p-1 bg-secondary text-light" required />
                         <div className="d-flex flex-row gap-3 p-3">
-                            <button className="btn btn-secondary btn-lg">Adicionar Máquina</button>
+                            <button className="btn btn-secondary btn-lg" onClick={handleMachineInput}>Adicionar Máquina</button>
                             <button className="btn btn-secondary btn-lg">Remover Máquina</button>
                             <button className="btn btn-secondary btn-lg">Gerenciar Máquina</button>
                         </div>
                     </div>
                 </div>
             )}
+            
         {showInstitutionModal && (
             <div className="modal d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
                 <div className="modal-dialog" role="document">
