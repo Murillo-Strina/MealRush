@@ -8,6 +8,6 @@ router.get('/machines/:id', machineController.GetMachineById);
 router.get('/machines/institution/:institutionId', machineController.GetMachinesByInstitutionId);
 router.post('/machines', machineController.Create);
 router.put('/machines/:id/institution/:institutionId', machineController.Update);
-router.delete('/machines/:id', machineController.Delete);
+router.delete('/machines/:id/institution/:institutionId', machineController.Delete);
 
 export default router;

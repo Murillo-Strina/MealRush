@@ -66,8 +66,8 @@ class MachineController {
 
     async Delete(req, res) {
         try {
-            const { id } = req.params;
-            const affectedRows = await machineService.delete(id);
+            const { id, institutionId } = req.params;
+            const affectedRows = await machineService.delete(id, institutionId);
 
             if (affectedRows === 0) {
                 return res.status(404).json({ 'message': `Máquina com id ${id} não encontrada para deletar` });

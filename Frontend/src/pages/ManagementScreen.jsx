@@ -126,6 +126,25 @@ const ManagementScreen = () => {
         }
     }
 
+    const [machineIdInput, setMachineIdInput] = useState('');
+
+    const handleRemoveMachine = async (id) => {
+        if (!selectedInstitution) {
+            alert("Nenhuma instituição selecionada!");
+            return;	
+        }
+
+        if (window.confirm("Tem certeza que deseja remover esta máquina?")) {
+            try {
+                await axios.delete(`http://localhost:3010/machines/${id}/institution/${selectedInstitution.id}`);
+                setMachines(machines.filter(machine => machine.id !== id));
+            } catch (err) {
+                console.error("Erro ao remover máquina:", err);
+                alert("Erro ao remover máquina");
+            }
+        }
+    }
+
     const [newMachine, setNewMachine] = useState({
         institutionId: '',
         stock: 30,
@@ -257,10 +276,17 @@ const ManagementScreen = () => {
                     </div>
                     <div className="text-center d-flex flex-column align-items-center justify-content-center p-3">
                         <h2 className="mb-3">Ações</h2>
-                        <input type="number" placeholder="Insira o ID da máquina a ser gerenciada..." className="border border-secondary rounded w-25 p-1 bg-secondary text-light" required />
+                        <input type="number" placeholder="Insira o ID da máquina a ser gerenciada..." className="border border-secondary rounded w-25 p-1 bg-secondary text-light" value={machineIdInput} onChange={e => setMachineIdInput(e.target.value)} required />
                         <div className="d-flex flex-row gap-3 p-3">
                             <button className="btn btn-secondary btn-lg" onClick={handleMachineInput}>Adicionar Máquina</button>
-                            <button className="btn btn-secondary btn-lg">Remover Máquina</button>
+                            <button className="btn btn-secondary btn-lg" onClick={() => {
+                                const id = parseInt(machineIdInput);
+                                if (!id || isNaN(id)) {
+                                    alert("Insira um ID válido");
+                                    return;
+                                }
+                                handleRemoveMachine(id);
+                            }}>Remover Máquina</button>
                             <button className="btn btn-secondary btn-lg">Gerenciar Máquina</button>
                         </div>
                     </div>
