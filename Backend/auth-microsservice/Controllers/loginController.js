@@ -10,6 +10,16 @@ export const Login = async (req, res) => {
   }
 };
 
+export const Register = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const result = await loginService.register(email, password);
+    res.status(201).json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
 export const UpdatePassword = async (req, res) => {
   const { email, oldPassword, newPassword } = req.body;
   if (req.user.email !== email) {
