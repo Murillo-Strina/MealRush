@@ -86,6 +86,7 @@ const ManagementScreen = () => {
     }
 
     const [showInstitutionModal, setShowInstitutionModal] = useState(false);
+    const [showMachineInputModal, setShowMachineInputModal] = useState(false);
     const [newInstitution, setNewInstitution] = useState({
         name: '',
         registry: ''
@@ -151,7 +152,7 @@ const ManagementScreen = () => {
         status: 1,
         lastMaintenance: new Date().toISOString().split('T')[0],
         lastFill: new Date().toISOString().split('T')[0],
-        rent: 299
+        rent: ''
     })
 
     const handleMachineInput = async () => {
@@ -162,11 +163,11 @@ const ManagementScreen = () => {
         try {
             const response = await axios.post('http://localhost:3010/machines', {
                 institutionId: selectedInstitution.id,
-                qtd_itens: newMachine.stock,
-                statusId: newMachine.status,
-                dt_ultima_manutencao: today,
-                dt_ultimo_abastecimento: today,
-                aluguel: newMachine.rent
+                amount: newMachine.stock,
+                status: newMachine.status,
+                lastMaintenance: today,
+                lastFill: today,
+                rent: newMachine.rent
             });
 
             const newMachineFormatted = {
@@ -176,10 +177,11 @@ const ManagementScreen = () => {
             status: 1,
             lastMaintenance: newMachine.lastMaintenance,
             lastFill: newMachine.lastFill,
-            rent: 299
+            rent: newMachine.rent
         };
 
             setMachines(prev => [...prev, newMachineFormatted]);
+            setShowMachineInputModal(false);
             alert("Máquina cadastrada com sucesso!");
         } catch (err) {
             console.error("Erro ao cadastrar máquina:", err);
@@ -278,7 +280,7 @@ const ManagementScreen = () => {
                         <h2 className="mb-3">Ações</h2>
                         <input type="number" placeholder="Insira o ID da máquina a ser gerenciada..." className="border border-secondary rounded w-25 p-1 bg-secondary text-light" value={machineIdInput} onChange={e => setMachineIdInput(e.target.value)} required />
                         <div className="d-flex flex-row gap-3 p-3">
-                            <button className="btn btn-secondary btn-lg" onClick={handleMachineInput}>Adicionar Máquina</button>
+                            <button className="btn btn-secondary btn-lg" onClick={() => setShowMachineInputModal(true)}>Adicionar Máquina</button>
                             <button className="btn btn-secondary btn-lg" onClick={() => {
                                 const id = parseInt(machineIdInput);
                                 if (!id || isNaN(id)) {
@@ -293,6 +295,33 @@ const ManagementScreen = () => {
                 </div>
             )}
             
+        {showMachineInputModal && (
+            <div className="modal d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content bg-dark text-light">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Cadastrar Máquina</h5>
+                            <button type="button" className="btn-close btn-close-white" onClick={() => setShowMachineInputModal(false)}></button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="form-group mb-3">
+                                <label>Aluguel</label>
+                                <input
+                                    type="number"
+                                    className="form-control bg-secondary text-light"
+                                    value={newMachine.rent}
+                                    onChange={(e) => setNewMachine({ ...newMachine, rent: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={() => setShowMachineInputModal(false)}>Cancelar</button>
+                            <button className="btn btn-primary" onClick={handleMachineInput}>Cadastrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
         {showInstitutionModal && (
             <div className="modal d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
                 <div className="modal-dialog" role="document">
@@ -315,9 +344,13 @@ const ManagementScreen = () => {
                                 <label>Número de Registro</label>
                                 <input
                                     type="text"
+                                    maxLength={14}
                                     className="form-control bg-secondary text-light"
                                     value={newInstitution.registry}
-                                    onChange={(e) => setNewInstitution({ ...newInstitution, registry: e.target.value })}
+                                    onChange={(e) => {
+                                        const onlyNumbers = e.target.value.replace(/\D/g, '');
+                                        setNewInstitution({ ...newInstitution, registry: onlyNumbers })
+                                    }}
                                 />
                             </div>
                         </div>
