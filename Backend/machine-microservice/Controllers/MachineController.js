@@ -94,7 +94,7 @@ class MachineController {
                 return res.status(404).json({ 'message': `A máquina com id ${id} não foi encontrada para atualizar` });
             }
 
-            const newstock = stock !== undefined ? stock : existingMachine.stock;
+            const newstock = stock !== undefined ? stock : existingMachine.qtd_itens;
             const newStatus = status !== undefined ? status : existingMachine.status;
             const newLastMaintenance = lastMaintenance !== undefined ? lastMaintenance : existingMachine.lastMaintenance;
             const newLastFill = lastFill !== undefined ? lastFill : existingMachine.lastFill;
