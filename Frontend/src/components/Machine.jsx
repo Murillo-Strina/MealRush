@@ -42,18 +42,6 @@ const Machine = () => {
         setNumpadValue("");
     };
 
-    // const foodItemsData = [
-    //     { id: "A1", name: "Wrap Vegano Premium", price: "18,50", image: placeholder, stock: 5 },
-    //     { id: "A2", name: "Salada Caesar com Frango", price: "20,00", image: placeholder, stock: 3 },
-    //     { id: "A3", name: "Suco Verde Detoxificante", price: "12,00", image: placeholder, stock: 8 },
-    //     { id: "B1", name: "Sanduíche Natural Integral", price: "15,00", image: placeholder, stock: 9 },
-    //     { id: "B2", name: "Mix de Castanhas e Frutas Secas", price: "10,50", image: placeholder, stock: 12 },
-    //     { id: "B3", name: "Água de Coco Natural Gelada", price: "8,00", image: placeholder, stock: 15 },
-    //     { id: "C1", name: "Barra de Proteína Artesanal", price: "9,00", image: placeholder, stock: 7 },
-    //     { id: "C2", name: "Maçã Fuji Orgânica", price: "5,00", image: placeholder, stock: 10 },
-    //     { id: "C3", name: "Kombucha de Gengibre e Limão", price: "14,00", image: placeholder, stock: 4 }
-    // ];
-
     useEffect(() => {
         const fetchFoods = async () => {
             try {

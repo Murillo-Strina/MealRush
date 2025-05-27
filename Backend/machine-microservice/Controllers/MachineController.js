@@ -36,13 +36,13 @@ class MachineController {
 
     async Create(req, res) {
         try {
-            const { institutionId, aluguel } = req.body;
+            const { institutionId, stock, status, lastMaintenance, lastFill, rent } = req.body;
 
-            if (institutionId === undefined || aluguel === undefined) {
-                return res.status(400).json({ 'error': 'Campos institutionId e aluguel são obrigatórios' });
+            if (institutionId === undefined || stock === undefined || status === undefined || lastMaintenance === undefined || lastFill === undefined || rent === undefined) {
+                return res.status(400).json({ 'error': 'Todos os campos são obrigatórios' });
             }
 
-            const insertedId = await machineService.create(institutionId, aluguel);
+            const insertedId = await machineService.create(institutionId, stock, status, lastMaintenance, lastFill, rent);
 
             if (!insertedId) {
                 return res.status(500).json({ 'error': 'Falha ao criar a máquina, ID não retornado.' });
@@ -66,8 +66,8 @@ class MachineController {
 
     async Delete(req, res) {
         try {
-            const { id } = req.params;
-            const affectedRows = await machineService.delete(id);
+            const { id, institutionId } = req.params;
+            const affectedRows = await machineService.delete(id, institutionId);
 
             if (affectedRows === 0) {
                 return res.status(404).json({ 'message': `Máquina com id ${id} não encontrada para deletar` });
@@ -82,10 +82,10 @@ class MachineController {
 
     async Update(req, res) {
         try {
-            const { id } = req.params;
-            const { institutionId, aluguel } = req.body;
+            const { id , institutionId} = req.params;
+            const { stock, status, lastMaintenance, lastFill, rent } = req.body;
 
-            if (institutionId === undefined && aluguel === undefined) {
+            if (stock === undefined && status === undefined && lastMaintenance === undefined && lastFill === undefined && rent === undefined) {
                 return res.status(400).json({ 'error': 'Nenhum dado fornecido para atualização.' });
             }
             
@@ -94,10 +94,13 @@ class MachineController {
                 return res.status(404).json({ 'message': `A máquina com id ${id} não foi encontrada para atualizar` });
             }
 
-            const newInstitutionId = institutionId !== undefined ? institutionId : existingMachine.institutionId;
-            const newAluguel = aluguel !== undefined ? aluguel : existingMachine.aluguel;
+            const newstock = stock !== undefined ? stock : existingMachine.qtd_itens;
+            const newStatus = status !== undefined ? status : existingMachine.status;
+            const newLastMaintenance = lastMaintenance !== undefined ? lastMaintenance : existingMachine.lastMaintenance;
+            const newLastFill = lastFill !== undefined ? lastFill : existingMachine.lastFill;
+            const newRent = rent !== undefined ? rent : existingMachine.rent;
 
-            const affectedRows = await machineService.update(newInstitutionId, newAluguel, id);
+            const affectedRows = await machineService.update(newstock, newStatus, newLastMaintenance, newLastFill, newRent, id, institutionId);
 
             if (affectedRows === 0) {
                  const notActuallyUpdatedMachine = await machineService.findById(id);
