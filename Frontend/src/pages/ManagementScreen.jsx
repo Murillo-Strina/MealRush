@@ -264,9 +264,9 @@ const ManagementScreen = () => {
 
             <div className="text-center d-flex align-items-center justify-content-center p-3 font-weight-bold">
                 <div className="text-center d-flex flex-column align-items-center justify-content-center p-3">
-                    <img src="src/assets/images/logo_mealrush.png" style={{ width: "200px" }} className="mb-3" alt="Logo" />
+                    <img src="src/assets/images/logo_mealrush_white.png" style={{ width: "350px" }} className="mb-3" alt="Logo" />
                     <div className="border border-secondary rounded p-3 bg-secondary">
-                        <h1 className="fw-bold">Lista de Instituições</h1>
+                        <h1 className="fw-bold">Instituições</h1>
                     </div>
                 </div>
             </div>
