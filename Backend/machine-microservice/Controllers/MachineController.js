@@ -82,10 +82,10 @@ class MachineController {
 
     async Update(req, res) {
         try {
-            const { id } = req.params;
-            const { institutionId, amount, status, lastMaintenance, lastFill, rent } = req.body;
+            const { id , institutionId} = req.params;
+            const { amount, status, lastMaintenance, lastFill, rent } = req.body;
 
-            if (institutionId === undefined && amount === undefined && status === undefined && lastMaintenance === undefined && lastFill === undefined && rent === undefined) {
+            if (amount === undefined && status === undefined && lastMaintenance === undefined && lastFill === undefined && rent === undefined) {
                 return res.status(400).json({ 'error': 'Nenhum dado fornecido para atualização.' });
             }
             
@@ -94,14 +94,13 @@ class MachineController {
                 return res.status(404).json({ 'message': `A máquina com id ${id} não foi encontrada para atualizar` });
             }
 
-            const newInstitutionId = institutionId !== undefined ? institutionId : existingMachine.institutionId;
             const newAmount = amount !== undefined ? amount : existingMachine.amount;
             const newStatus = status !== undefined ? status : existingMachine.status;
             const newLastMaintenance = lastMaintenance !== undefined ? lastMaintenance : existingMachine.lastMaintenance;
             const newLastFill = lastFill !== undefined ? lastFill : existingMachine.lastFill;
             const newRent = rent !== undefined ? rent : existingMachine.rent;
 
-            const affectedRows = await machineService.update(newAmount, newStatus, newLastMaintenance, newLastFill, newRent, id, newInstitutionId);
+            const affectedRows = await machineService.update(newAmount, newStatus, newLastMaintenance, newLastFill, newRent, id, institutionId);
 
             if (affectedRows === 0) {
                  const notActuallyUpdatedMachine = await machineService.findById(id);
