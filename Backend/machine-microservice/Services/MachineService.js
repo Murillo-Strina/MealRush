@@ -22,11 +22,11 @@ class MachineService {
         }
     }
 
-    async create(institutionId, amount, status, lastMaintenance, lastFill, rent) {
+    async create(institutionId, stock, status, lastMaintenance, lastFill, rent) {
         try {
             const [result] = await db.promise().query(
                 "INSERT INTO machine (institutionId, qtd_itens, statusId, dt_ultima_manutencao, dt_ultimo_abastecimento, aluguel) VALUES (?,?,?,?,?,?)",
-                [institutionId, amount, status, lastMaintenance, lastFill, rent]
+                [institutionId, stock, status, lastMaintenance, lastFill, rent]
             );
             return result.insertId;
         } catch (err) {
@@ -35,11 +35,11 @@ class MachineService {
         }
     }
 
-    async update(amount, status, lastMaintenance, lastFill, rent, id, institutionId) {
+    async update(stock, status, lastMaintenance, lastFill, rent, id, institutionId) {
         try {
             const [result] = await db.promise().query(
                 "UPDATE machine SET qtd_itens = ?, statusId = ?, dt_ultima_manutencao = ?, dt_ultimo_abastecimento = ?, aluguel = ? WHERE id = ? AND institutionId = ?",
-                [amount, status, lastMaintenance, lastFill, rent, id, institutionId]
+                [stock, status, lastMaintenance, lastFill, rent, id, institutionId]
             );
             return result.affectedRows;
         } catch (err) {

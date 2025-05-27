@@ -36,13 +36,13 @@ class MachineController {
 
     async Create(req, res) {
         try {
-            const { institutionId, amount, status, lastMaintenance, lastFill, rent } = req.body;
+            const { institutionId, stock, status, lastMaintenance, lastFill, rent } = req.body;
 
-            if (institutionId === undefined || amount === undefined || status === undefined || lastMaintenance === undefined || lastFill === undefined || rent === undefined) {
+            if (institutionId === undefined || stock === undefined || status === undefined || lastMaintenance === undefined || lastFill === undefined || rent === undefined) {
                 return res.status(400).json({ 'error': 'Todos os campos são obrigatórios' });
             }
 
-            const insertedId = await machineService.create(institutionId, amount, status, lastMaintenance, lastFill, rent);
+            const insertedId = await machineService.create(institutionId, stock, status, lastMaintenance, lastFill, rent);
 
             if (!insertedId) {
                 return res.status(500).json({ 'error': 'Falha ao criar a máquina, ID não retornado.' });
@@ -83,9 +83,9 @@ class MachineController {
     async Update(req, res) {
         try {
             const { id , institutionId} = req.params;
-            const { amount, status, lastMaintenance, lastFill, rent } = req.body;
+            const { stock, status, lastMaintenance, lastFill, rent } = req.body;
 
-            if (amount === undefined && status === undefined && lastMaintenance === undefined && lastFill === undefined && rent === undefined) {
+            if (stock === undefined && status === undefined && lastMaintenance === undefined && lastFill === undefined && rent === undefined) {
                 return res.status(400).json({ 'error': 'Nenhum dado fornecido para atualização.' });
             }
             
@@ -94,13 +94,13 @@ class MachineController {
                 return res.status(404).json({ 'message': `A máquina com id ${id} não foi encontrada para atualizar` });
             }
 
-            const newAmount = amount !== undefined ? amount : existingMachine.amount;
+            const newstock = stock !== undefined ? stock : existingMachine.stock;
             const newStatus = status !== undefined ? status : existingMachine.status;
             const newLastMaintenance = lastMaintenance !== undefined ? lastMaintenance : existingMachine.lastMaintenance;
             const newLastFill = lastFill !== undefined ? lastFill : existingMachine.lastFill;
             const newRent = rent !== undefined ? rent : existingMachine.rent;
 
-            const affectedRows = await machineService.update(newAmount, newStatus, newLastMaintenance, newLastFill, newRent, id, institutionId);
+            const affectedRows = await machineService.update(newstock, newStatus, newLastMaintenance, newLastFill, newRent, id, institutionId);
 
             if (affectedRows === 0) {
                  const notActuallyUpdatedMachine = await machineService.findById(id);
