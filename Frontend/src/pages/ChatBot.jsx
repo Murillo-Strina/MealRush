@@ -6,6 +6,34 @@ const ChatBot = () => {
     const [userInput, setUserInput] = useState('');
     const [step, setStep] = useState(0);
     const messagesEndRef = useRef(null);
+    const [institutions, setInstitutions] = useState([]);
+
+   useEffect(() => {
+  fetch('http://localhost:3015/feedbacks/institutions')
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then(data => {
+      console.log('institutions payload:', data);
+      // Se vier { rows: [...] }:
+      if (Array.isArray(data)) {
+        setInstitutions(data);
+      } else if (Array.isArray(data.rows)) {
+        setInstitutions(data.rows);
+      } else {
+        console.error('Formato inesperado:', data);
+        setInstitutions([]);
+      }
+    })
+    .catch(err => {
+      console.error("Erro ao buscar instituições:", err);
+      setInstitutions([]);
+    });
+}, []);
+
 
     const botMessages = {
         greeting: "Olá! Seja bem-vindo(a) à área de feedback da MealRush! Conte para nós como foi sua experiência.",
@@ -76,6 +104,8 @@ const ChatBot = () => {
             handleSubmit={handleSubmit}
             setUserInput={setUserInput}
             messagesEndRef={messagesEndRef}
+            institutions={institutions}
+            step={step}
         />
     );
 };
