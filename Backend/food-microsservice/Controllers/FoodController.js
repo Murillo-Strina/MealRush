@@ -1,4 +1,5 @@
-import foodService from '../Services/foodService.js'
+import foodService from '../Services/foodService.js';
+import { publishEvent } from '../../event-bus/index.js'; 
 
 class FoodController {
 
@@ -52,7 +53,8 @@ class FoodController {
     
             const createdFood = await foodService.FindByName(name);
     
-            return res.status(201).json(createdFood); // status 201 para "Created"
+            publishEvent('food.created', createdFood); 
+            return res.status(201).json(createdFood); 
     
         } catch (error) {
             console.error("Erro ao criar o alimento:", error);
@@ -65,6 +67,7 @@ class FoodController {
         try {
             const id = req.params.id
             await foodService.Delete(id)
+            publishEvent('food.deleted', { id }); 
             return res.status(200).json({'Message': `Alimento com id ${id} deletado com sucesso`}) 
     
         } catch (error) {
@@ -94,6 +97,8 @@ class FoodController {
             await foodService.Update(id, name, calories, carbs, proteins, fats, weight, imageUrl, price);
 
             const updatedFood = await foodService.FindById(id);
+
+            publishEvent('food.updated', updatedFood);
             return res.status(200).json(updatedFood);
         } catch (error) {
             console.error("Erro ao atualizar o alimento:", error);
