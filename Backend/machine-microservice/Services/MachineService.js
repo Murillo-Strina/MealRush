@@ -4,58 +4,94 @@ class MachineService {
 
     async findAll() {
         try {
-            const [machines] = await db.promise().query("SELECT * FROM machines");
-            return machines;
+            const [rows] = await db.promise().query("SELECT * FROM machine");
+            return rows;
         } catch (err) {
+            console.error("Erro no Service ao buscar todas as máquinas:", err);
             throw err;
         }
     }
-    
-    async findById(id){
 
+    async findById(id) {
         try {
-            const machine = await db.promise().query("SELECT * FROM machines WHERE id = ?", [id]);
-            return machine[0];
-        } catch (err) { 
+            const [rows] = await db.promise().query("SELECT * FROM machine WHERE id = ?", [id]);
+            return rows[0];
+        } catch (err) {
+            console.error(`Erro no Service ao buscar máquina por ID ${id}:`, err);
             throw err;
         }
     }
 
-    async findByInstitutionId(institutionId){
-       try {
-            const machine = await db.promise().query("SELECT * FROM machines WHERE id = ?", [institutionId]);
-            return machine[0];
-        } catch (err) { 
+    async create(institutionId, aluguel) {
+        try {
+            const [result] = await db.promise().query(
+                "INSERT INTO machine (institutionId, aluguel) VALUES (?, ?)",
+                [institutionId, aluguel]
+            );
+            return result.insertId;
+        } catch (err) {
+            console.error("Erro no Service ao criar máquina:", err);
+            throw err;
+        }
+    }
+
+    async update(institutionId, aluguel, id) {
+        try {
+            const [result] = await db.promise().query(
+                "UPDATE machine SET institutionId = ?, aluguel = ? WHERE id = ?",
+                [institutionId, aluguel, id]
+            );
+            return result.affectedRows;
+        } catch (err) {
+            console.error(`Erro no Service ao atualizar máquina ID ${id}:`, err);
             throw err;
         }
     }
 
     async delete(id) {
         try {
-            await db.promise().query("DELETE FROM machines WHERE id = ?", [id]);
+            const [result] = await db.promise().query("DELETE FROM machine WHERE id = ?", [id]);
+            return result.affectedRows;
         } catch (err) {
+            console.error(`Erro no Service ao deletar máquina ID ${id}:`, err);
             throw err;
         }
     }
 
-    async create(amountItems, statusId, lastMaintenance, lastFill, rent){
+    async updateStatus(statusId, id) {
         try {
-            return await db.promise().query("INSERT INTO machines(qtd_itens, statusId, dt_ultima_manutencao, dt_ultimo_abastecimento, aluguel) values (?, ?, ?, ?, ?)",
-                [amountItems, statusId, lastMaintenance, lastFill, rent]);  
+            const [result] = await db.promise().query(
+                "UPDATE machine SET statusId = ? WHERE id = ?",
+                [statusId, id]
+            );
+            return result.affectedRows;
         } catch (err) {
+            console.error(`Erro no Service ao atualizar status da máquina ID ${id}:`, err);
             throw err;
         }
     }
 
-    async update(id, amountItems, statusId, lastMaintenance, lastFill, rent) {
+    async getMachinesByInstitution(institutionId) {
         try {
-            return await db.promise().query("UPDATE machines SET qtd_itens = ?, statusId = ?, dt_ultima_manutencao = ?, dt_ultimo_abastecimento = ?, aluguel = ? where id = ?"
-                ,[amountItems, statusId, lastMaintenance, lastFill, rent, id]);
+            const [rows] = await db.promise().query(`
+                SELECT 
+                    mach.id AS machineId,
+                    mach.aluguel,
+                    stat.id AS statusId,
+                    stat.descricao AS statusDescricao,
+                    inst.id AS institutionId,
+                    inst.name AS institutionName
+                FROM machine mach
+                INNER JOIN status stat ON mach.statusId = stat.id
+                INNER JOIN institution inst ON mach.institutionId = inst.id
+                WHERE mach.institutionId = ?
+            `, [institutionId]);
+            return rows;
         } catch (err) {
+            console.error(`Erro no Service ao buscar máquinas por instituição ID ${institutionId}:`, err);
             throw err;
         }
     }
-    
 }
 
 export default new MachineService();

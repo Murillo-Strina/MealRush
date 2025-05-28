@@ -12,6 +12,6 @@ app.use(json());
 
 app.use("/", router);
 
-app.listen(3010, () => {
-  console.log("Machine: Servidor rodando na porta 3010");
+app.listen(3015, () => {
+  console.log("Food: Servidor rodando na porta 3015");
 });

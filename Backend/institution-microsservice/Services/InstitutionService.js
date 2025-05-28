@@ -57,6 +57,8 @@ class InstitutionService {
             throw err;
         }
     }
+
+    
 }
 
 export default new InstitutionService();

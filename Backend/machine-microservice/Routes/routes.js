@@ -1,11 +1,13 @@
-import express, { Router } from "express";
-const router = Router();
-import { GetAllMachines, GetMachineById, Delete, Create, Update } from '../Controllers/MachineController';
+import express from 'express';
+import machineController from "../Controllers/machineController.js";
 
-router.get('/machines', GetAllMachines);
-router.get('/machines/:id', GetMachineById);
-router.delete('/machines/:id', Delete);
-router.post('/machines/', Create);
-router.put('/machines/:id', Update);
+const router = express.Router();
+
+router.get('/machines', machineController.GetAllMachines);
+router.get('/machines/:id', machineController.GetMachineById);
+router.get('/machines/institution/:institutionId', machineController.GetMachinesByInstitutionId);
+router.post('/machines', machineController.Create);
+router.put('/machines/:id', machineController.Update);
+router.delete('/machines/:id', machineController.Delete);
 
 export default router;
