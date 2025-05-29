@@ -20,16 +20,20 @@ export const Register = async (req, res) => {
   }
 };
 
-export const UpdatePassword = async (req, res) => {
-  const { email, oldPassword, newPassword } = req.body;
-  if (req.user.email !== email) {
-    return res.status(403).json({ error: "Você só pode alterar sua própria conta" });
-  }
+export const ResetPassword = async (req, res) => {
+  const { email, newPassword } = req.body;
+
   try {
-    const result = await loginService.updatePassword(email, oldPassword, newPassword);
-    res.status(200).json(result);
+    const user = await loginService.findUserByEmail(email);
+    if (!user) {
+      return res.status(404).json({ error: "Usuário não encontrado" });
+    }
+
+    await loginService.updatePassword(email, newPassword);
+    return res.status(200).json({ message: "Senha redefinida com sucesso" });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    console.error(err);
+    return res.status(500).json({ error: "Erro ao redefinir a senha" });
   }
 };
 
