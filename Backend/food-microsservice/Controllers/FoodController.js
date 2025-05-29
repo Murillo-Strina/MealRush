@@ -1,4 +1,4 @@
-import foodService from '../Services/foodService.js';
+import foodService from '../Services/FoodService.js';
 import { publishEvent } from '../../event-bus/index.js';
 class FoodController {
 

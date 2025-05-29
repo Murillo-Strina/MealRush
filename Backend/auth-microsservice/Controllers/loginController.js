@@ -1,4 +1,5 @@
 import loginService from "../Services/loginService.js";
+import { publishEvent } from "../../event-bus/index.js";
 
 export const Login = async (req, res) => {
   const { email, password } = req.body;
@@ -14,6 +15,7 @@ export const Register = async (req, res) => {
   const { email, password } = req.body;
   try {
     const result = await loginService.register(email, password);
+    publishEvent("user.registered", { email }); 
     res.status(201).json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -30,6 +32,7 @@ export const ResetPassword = async (req, res) => {
     }
 
     await loginService.updatePassword(email, newPassword);
+    publishEvent("user.password_reset", { email });
     return res.status(200).json({ message: "Senha redefinida com sucesso" });
   } catch (err) {
     console.error(err);
@@ -44,6 +47,7 @@ export const DeleteUser = async (req, res) => {
   }
   try {
     const result = await loginService.deleteUser(email, password);
+    publishEvent("user.deleted", { email }); 
     res.status(200).json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
