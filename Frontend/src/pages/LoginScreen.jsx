@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 
 import logoMealRush from "../assets/images/logo_mealrush_transparent.png";
 
 const LoginScreen = () => {
+    const navigate = useNavigate();
     const colors = {
         darkPrimary: '#1A202C', accent: '#00C9A7', lightNeutral: '#F7FAFC',
         mediumNeutral: '#E2E8F0', textDark: '#2D3748',
@@ -38,9 +40,9 @@ const LoginScreen = () => {
             localStorage.setItem('token', token);
             console.log('Login bem-sucedido:', user);
 
-            window.location.href = '/admin';
+            navigate('/admin');
         } catch (err) {
-            if(err && err.response.data) setError(err.response.data.message)
+            if(err && err.response.data) setError(err.response.data.error)
             else setError('Erro ao conectar com o servidor.');
         }
     }
