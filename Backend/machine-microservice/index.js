@@ -12,18 +12,18 @@ const { urlencoded, json } = bodyParser;
 app.use(cors());
 app.use(urlencoded({ extended: false }));
 app.use(json());
+
 app.use("/", router);
 
 (async () => {
   try {
     await initRabbitMQ();
     console.log("RabbitMQ inicializado com sucesso!");
-    app.listen(3000, () => {
-      console.log("Food: Servidor rodando na porta 3000");
+    app.listen(3010, () => {
+      console.log("Machine: Servidor rodando na porta 3010");
     });
   } catch (err) {
     console.error("Erro ao inicializar o RabbitMQ:", err);
     process.exit(1);
   }
 })();
-
