@@ -1,4 +1,5 @@
 import feedbackService from '../Services/FeedbackService.js';
+import { publishEvent } from '../../event-bus/index.js';
 
 class FeedbackController {
     async getAllFeedbacks(req, res) {
@@ -73,6 +74,8 @@ class FeedbackController {
             if (!createdFeedback) {
                 return res.status(500).json({ error: 'Feedback criado mas não pôde ser encontrado.' });
             }
+
+            publishEvent('feedback.created', createdFeedback);
             return res.status(201).json(createdFeedback);
         } catch (err) {
             console.error("Erro no Controller ao criar feedback:", err.message);
@@ -103,6 +106,8 @@ class FeedbackController {
             await feedbackService.update(id, { comment, occurrency_date, institutionId });
             
             const updatedFeedback = await feedbackService.findById(id);
+
+            publishEvent('feedback.updated', updatedFeedback);
             return res.status(200).json(updatedFeedback);
         } catch (err) {
             console.error(`Erro no Controller ao atualizar o feedback ${req.params.id}:`, err.message);
@@ -128,6 +133,7 @@ class FeedbackController {
             if (affectedRows === 0) {
                 return res.status(404).json({ message: `Feedback com id ${id} encontrado, mas não pôde ser deletado (affectedRows = 0). Verifique o banco.` });
             }
+            publishEvent('feedback.deleted', { id });
             return res.status(200).json({ message: `Feedback com id ${id} deletado com sucesso` });
         } catch (err) {
             console.error(`Erro no Controller ao deletar o feedback ${req.params.id}:`, err.message);
