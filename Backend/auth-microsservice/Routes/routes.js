@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { Login, UpdatePassword, DeleteUser } from '../Controllers/loginController.js';
+import { Login, UpdatePassword, DeleteUser, Register } from '../Controllers/loginController.js';
 import { authenticateToken } from '../Middleware/authMiddleware.js';
 
 const router = Router();
 
 router.post('/login', Login);
+router.post('/register', authenticateToken, Register);
 router.put('/user/update', authenticateToken, UpdatePassword);
 router.delete('/user/delete', authenticateToken, DeleteUser);
 

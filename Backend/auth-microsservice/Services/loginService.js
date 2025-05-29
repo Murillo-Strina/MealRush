@@ -36,6 +36,28 @@ class LoginService {
     return { token, user: { id: users[0].id, email: users[0].email } };
   }
 
+  async register(email, password) {
+    const hashedPassword = this.hashPassword(password);
+
+    // Verifica se o usuário já existe
+    const [existingUsers] = await db.promise().query(
+      "SELECT * FROM users WHERE email = ?",
+      [email]
+    );
+
+    if (existingUsers.length > 0) {
+      throw new Error("Usuário já existe");
+    }
+
+    // Insere novo usuário no banco
+    await db.promise().query(
+      "INSERT INTO users (email, hashedPassword) VALUES (?, ?)",
+      [email, hashedPassword]
+    );
+
+    return { message: "Usuário registrado com sucesso" };
+  }
+
   async updatePassword(email, oldPassword, newPassword) {
     const hashedOldPassword = this.hashPassword(oldPassword);
 
