@@ -7,7 +7,6 @@ const AdminScreen = () => {
 
     const logout = () => {
         localStorage.removeItem('token');
-        window.location.href = '/login';
         navigate("/");
     }
     return (
