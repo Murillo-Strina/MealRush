@@ -42,7 +42,6 @@
             try {
                 return await db.promise().query("INSERT INTO foods(name, calories, carbs, proteins, fats, weight, imageUrl, price) values (?, ?, ?, ?, ?, ?, ?, ?)",
                     [name, calories, carbs, proteins, fats, weight, imageUrl, price]);
-
             } catch (err) {
                 throw err;
             }

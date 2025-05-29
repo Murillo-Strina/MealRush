@@ -1,6 +1,5 @@
 import foodService from '../Services/foodService.js';
-import { publishEvent } from '../../event-bus/index.js'; 
-
+import { publishEvent } from '../../event-bus/index.js';
 class FoodController {
 
     async GetAllFoods(req, res) {
@@ -51,8 +50,7 @@ class FoodController {
     
             await foodService.Create(name.trim(), calories, carbs, proteins, fats, weight, imageUrl, price);
     
-            const createdFood = await foodService.FindByName(name);
-    
+            const createdFood = await foodService.FindByName(name.trim());
             publishEvent('food.created', createdFood); 
             return res.status(201).json(createdFood); 
     

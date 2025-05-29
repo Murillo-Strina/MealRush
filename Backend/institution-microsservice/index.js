@@ -1,17 +1,28 @@
 import bodyParser from "body-parser";
 import express from "express";
-const app = express();
 import router from "./Routes/routes.js";
 import cors from "cors";
+import dotenv from "dotenv";
+import { initRabbitMQ } from "../event-bus/index.js";
 
+dotenv.config();
 const { urlencoded, json } = bodyParser;
-
+const app = express();
 app.use(cors());
 app.use(urlencoded({ extended: false }));
 app.use(json());
 
 app.use("/", router);
 
-app.listen(3005, () => {
-  console.log("Institution: Servidor rodando na porta 3005");
-});
+(async () => {
+  try {
+    await initRabbitMQ();
+    console.log("RabbitMQ inicializado com sucesso!");
+    app.listen(3005, () => {
+      console.log("Institution: Servidor rodando na porta 3005");
+    });
+  } catch (err) {
+    console.error("Erro ao inicializar o RabbitMQ:", err);
+    process.exit(1);
+  }
+})();
