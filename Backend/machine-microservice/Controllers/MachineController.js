@@ -1,4 +1,5 @@
 import machineService from '../Services/MachineService.js';
+import { publishEvent } from '../../event-bus/index.js';
 
 class MachineController {
 
@@ -54,6 +55,7 @@ class MachineController {
                 return res.status(500).json({ 'error': 'Máquina criada mas não pôde ser encontrada.' });
             }
 
+            publishEvent('machine.created', createdMachine);
             return res.status(201).json(createdMachine);
         } catch (err) {
             console.error("Erro no Controller ao criar a máquina:", err.message);
@@ -73,6 +75,7 @@ class MachineController {
                 return res.status(404).json({ 'message': `Máquina com id ${id} não encontrada para deletar` });
             }
 
+            publishEvent('machine.deleted', { id, institutionId });
             return res.status(200).json({ 'message': `Máquina com id ${id} deletada com sucesso` });
         } catch (err) {
             console.error(`Erro no Controller ao deletar a máquina ${req.params.id}:`, err.message);
@@ -108,6 +111,8 @@ class MachineController {
             }
             
             const updatedMachine = await machineService.findById(id);
+
+            publishEvent('machine.updated', updatedMachine);
             return res.status(200).json(updatedMachine);
         } catch (err) {
             console.error(`Erro no Controller ao atualizar a máquina ${req.params.id}:`, err.message);
