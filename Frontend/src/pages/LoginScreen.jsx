@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 import logoMealRush from "../assets/images/logo_mealrush_transparent.png";
@@ -25,6 +26,25 @@ const LoginScreen = () => {
         target.style.boxShadow = isHovering ? `0 4px 10px rgba(0, 201, 167, 0.3)` : 'none';
     };
 
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:3020/login', {email, password});
+            const {token , user} = response.data
+            localStorage.setItem('token', token);
+            console.log('Login bem-sucedido:', user);
+
+            window.location.href = '/admin';
+        } catch (err) {
+            if(err && err.response.data) setError(err.response.data.message)
+            else setError('Erro ao conectar com o servidor.');
+        }
+    }
+
     return (
         <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', backgroundColor: colors.lightNeutral, padding: '1rem' }}>
             <div className="container">
@@ -37,7 +57,7 @@ const LoginScreen = () => {
                                 <p style={{color: colors.textSubtleLightBg}}>Acesse sua conta MealRush.</p>
                             </div>
 
-                            <form onSubmit={(e) => e.preventDefault()}>
+                            <form onSubmit={handleLogin}>
                                 <div className="mb-3">
                                     <label htmlFor="emailInput" className="form-label visually-hidden">E-mail</label>
                                     <input
@@ -45,6 +65,8 @@ const LoginScreen = () => {
                                         className="form-control rounded-pill p-3"
                                         id="emailInput"
                                         placeholder="Seu e-mail"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         required
                                         style={inputStyle}
                                     />
@@ -56,6 +78,8 @@ const LoginScreen = () => {
                                         className="form-control rounded-pill p-3"
                                         id="passwordInput"
                                         placeholder="Sua senha"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
                                         required
                                         style={inputStyle}
                                     />
@@ -78,6 +102,7 @@ const LoginScreen = () => {
                                         Esqueci minha senha
                                     </Link>
                                 </div>
+                                {error &&  <div className="alert alert-danger mt-3 text-center">{error}</div>}
                             </form>
                         </div>
                     </div>
