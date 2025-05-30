@@ -18,3 +18,24 @@ export function publishEvent(routingKey, payload){
     const msg = Buffer.from(JSON.stringify(payload));
     channel.publish(EXCHANGE, routingKey, msg, { persistent: true });
 }
+
+export async function consumeEvent(queueName, bindingKey, onMessage ){
+    if(!channel) throw new Error('Barramento não inicializado...');
+    
+    await channel.assertQueue(queueName, {durable: true});
+    await channel.bindQueue(queueName, EXCHANGE, bindingKey);
+    
+    await channel.consume(queueName, (msg) => {
+        if (!msg) return;
+        const rk = msg.fields.routingKey;
+        let payload;
+
+        try {
+            payload =  JSON.parse(msg.content.toString());
+            onMessage(rk, payload);
+            channel.ack(msg);
+        } catch (err) {
+            console.error(`[${queueName}] Erro ao processar mensagem: ${err.message}`);
+        }
+    }, {noAck: false});
+}
