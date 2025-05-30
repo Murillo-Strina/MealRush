@@ -1,29 +1,34 @@
-# MealRush 🥣
+# **MealRush** 🥣
 
-Este projeto tem como finalidade desenvolver um site informativo à respeito da empresa que prepara refeições em máquinas de venda chamada Mealrush. O site deve conter informações nutricionais dos alimentos disponíveis, informações sobre a empresa e seus serviços prestados, instituições onde as máquinas estão localizadas, parcerias e patrocinadores, simulação virtual de como funciona uma máquina de preparo de comida, além de uma versão do administrador para realizar controle de estoque nas localidades em que as máquinas se encontram.
+A MealRush é uma empresa responsável por desenvolver máquinas de venda que preparam refeições saudáveis, nutritivas e de forma rápida, buscando sempre satisfazer o cliente oferecendo um serviço prático e sem a necessidade de longas esperas. E neste projeto, o objetivo é apresentar nossa aplicação, através de um site informativo que contém informações sobre a empresa, sobre as refeições oferecidas e uma simulação de uma máquina de venda, bem como uma seção de envio de feedbacks na qual os clientes poderão enviar suas opiniões e críticas à respeito dos serviços das máquinas. Além disso, nossa aplicação também tera uma versão para utilização exclusiva de nossos administradores. 
 
-# Folders 📂
+# **Folders** 📂
 
 - Backend: Back-end folder | Node.js struct
 - Frontend: Front-end folder | React struct
 
-# Funcionalidades 🔍
+*** Este projeto foi desenvolvido em Javascript
 
-- Visualizar informações das refeições: Durante a navegação do site informativo, os usuários podem visualizar as refeições oferecidas pela empresa, bem como suas informações nutricionais, como quantidade de calorias, quantidade de proteínas, etc.
+# **Funcionalidades** 🔍
 
-- Simular uma máquina de venda: Os usuários poderão acessar uma interface gráfica que representa uma máquina de venda de preparo das refeições, e nela poderão interagir selecionando a refeição de interesse e confirmar, como se estivessem escolhendo na vida real
+- **Visualizar informações das refeições:** Durante a navegação do site informativo, os usuários podem conhecer um pouco mais sobre os nossos serviços, algumas das principais refeições oferecidas, além de conhecer as parcerias estabelecidas com instituições acadêmicas, aeroportos e prefeituras para utilização dos nossos serviços em parques.
 
-- Versão de administrador: Antes de acessar o site, haverá uma opção de seleção de qual tipo de usuário estará acessando o site: administrador ou usuário comum, caso opte por administrador, aparecerão interfaces diferentes do usuário, que serão responsáveis pelo controle de estoque de cada máquina em cada localidade, informações sobre vendas de refeições, situação operacional das máquinas, entre outras funcionalidades exclusivas do administrador
+- **Simular uma máquina de venda:** Os usuários poderão acessar uma interface gráfica que representa uma máquina de venda de preparo das refeições, e nela poderão interagir selecionando a refeição de interesse e confirmar, como se estivessem escolhendo na vida real, além de poder visualizar as informações nutricionais de cada refeição, como quantidade de proteínas, carboidratos, calorias, gorduras e peso.
 
-# Microsserviços 💼
+- **Avaliar os serviços das máquinas:** Os clientes poderão enviar feedbacks para a MealRush através de um ChatBot que receberá todas as informações passadas pelo cliente, como a data e em qual instituição ele utilizou a máquina, além da opinião a respeito do serviço. Todas as informações de feedback serão encaminhadas para os administradores posteriormente.
+
+- **Versão de administrador:** Ao acessar o menu principal, haverá uma opção de login de administrador, na qual será responsável por encaminhar a uma seção exclusiva para administradores, na qual serão responsáveis por fazer o gerenciamento, atualização e remoção das máquinas de comida e das instituições em que as máquinas estão instaladas, além de visualizar os feedbacks dos clientes quanto ao uso das máquinas.
+
+# **Microsserviços** 💼
 
 Os microsserviços da nossa aplicação são:
-- food-microsservice: responsável pela aquisição dos dados das refeições oferecidas pela empresa
-- machine-microsservice: responsável pela aquisição dos dados das máquinas disponíveis em cada instituição parceira
-- institution-microsservice: responsável pela aquisição dos dados das instituições parceiras
-- login-microsservice: realiza a autenticação do administrador para visualizar suas interfaces exclusivas
-- feedback-microsservice: chatbot que coleta as críticas e reclamações dos clientes referente à utilização das máquinas e consumo dos alimentos
-# Contribuidores 😎
+- **food-microsservice:** responsável pela aquisição dos dados das refeições oferecidas pela empresa
+- **machine-microsservice:** responsável pela aquisição dos dados das máquinas disponíveis em cada instituição parceira
+- **institution-microsservice:** responsável pela aquisição dos dados das instituições parceiras
+- **login-microsservice:** realiza a autenticação do administrador para visualizar suas interfaces exclusivas
+- **feedback-microsservice:** chatbot que coleta as críticas e reclamações dos clientes referente à utilização das máquinas e consumo dos alimentos e os envia para o administrador poder visualizar os comentários do feedback e a instituição em que utilizaram os serviços
+
+# **Contribuidores** 👷‍♂️
 
 - [Felipe Kenzo Ohara Sakae](https://github.com/Sakaef03) | RA: 22.00815-2
 - [Guilherme Martins Souza Paula](https://github.com/guimartins10sp) | RA: 22.00006-2
