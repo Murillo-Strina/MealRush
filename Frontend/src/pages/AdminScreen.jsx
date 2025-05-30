@@ -4,10 +4,15 @@ import iconFeedback from "../assets/images/icon_feedback.png";
 import iconManagement from "../assets/images/icon_management.png";
 const AdminScreen = () => {
     const navigate = useNavigate();
+
+    const logout = () => {
+        localStorage.removeItem('token');
+        navigate("/");
+    }
     return (
         <div style={{ minHeight: '100vh' }} className="bg-dark text-light">
             <div className="p-3">
-                <button className="btn btn-secondary" onClick={() => navigate("/")}>Voltar ao menu principal</button>
+                <button className="btn btn-secondary" onClick={logout}>Sair e voltar ao menu principal</button>
             </div>
 
             <div className="text-center d-flex align-items-center justify-content-center p-3 font-weight-bold">

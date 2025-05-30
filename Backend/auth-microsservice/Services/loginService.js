@@ -58,29 +58,6 @@ class LoginService {
     return { message: "Usuário registrado com sucesso" };
   }
 
-  async updatePassword(email, oldPassword, newPassword) {
-    const hashedOldPassword = this.hashPassword(oldPassword);
-
-    // Verifica se o usuário existe e a senha antiga está correta
-    const [users] = await db.promise().query(
-      "SELECT * FROM users WHERE email = ? AND hashedPassword = ?",
-      [email, hashedOldPassword]
-    );
-
-    if (users.length === 0) {
-      throw new Error("Usuário ou senha antiga inválidos");
-    }
-
-    const hashedNewPassword = this.hashPassword(newPassword);
-
-    await db.promise().query(
-      "UPDATE users SET hashedPassword = ? WHERE email = ?",
-      [hashedNewPassword, email]
-    );
-
-    return { message: "Senha atualizada com sucesso" };
-  }
-
   async deleteUser(email, password) {
     const hashedPassword = this.hashPassword(password);
 
@@ -100,6 +77,24 @@ class LoginService {
     );
 
     return { message: "Usuário excluído com sucesso" };
+  }
+
+  async findUserByEmail(email){
+    try {
+      const[rows] = await db.promise().query("SELECT * FROM users WHERE email = ?", [email]);
+      return rows[0]; 
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async updatePassword(email, newPassword){
+    try {
+      const hashedPassword = this.hashPassword(newPassword);
+      return await db.promise().query("UPDATE users SET hashedPassword = ? WHERE email = ?", [hashedPassword, email]);
+    } catch (err) {
+      throw err;
+    }
   }
 }
 

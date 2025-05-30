@@ -1,9 +1,12 @@
 import bodyParser from "body-parser";
 import express from "express";
-const app = express();
+import dotenv from "dotenv";
 import router from "./Routes/routes.js";
 import cors from "cors";
+import { initRabbitMQ } from "../event-bus/index.js"; 
 
+dotenv.config();
+const app = express();
 const { urlencoded, json } = bodyParser;
 
 app.use(cors());
@@ -12,6 +15,14 @@ app.use(json());
 
 app.use("/", router);
 
-app.listen(3020, () => {
-  console.log("Auth: Servidor rodando na porta 3020");
-});
+(async () => {
+  try{
+    await initRabbitMQ();
+    console.log("RabbitMQ inicializado com sucesso!");
+    app.listen(3020, () => {
+      console.log("Auth: Servidor rodando na porta 3020");
+    });
+  } catch (err) {
+    console.error("Erro ao inicializar o servidor:", err);
+  }
+})();
