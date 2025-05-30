@@ -6,6 +6,7 @@ import Machine from './components/Machine.jsx'
 import MainMenu from './pages/MainMenu.jsx'
 import MachineScreen from './pages/MachineScreen.jsx'
 import LoginScreen from './pages/LoginScreen.jsx'
+import AdminFeedbackScreen from './pages/AdminFeedbackScreen.jsx'
 import ManagementScreen from './pages/ManagementScreen.jsx'
 import AdminScreen from './pages/AdminScreen.jsx'
 import ForgottenPasswordScreen from './pages/ForgottenPasswordScreen.jsx'
@@ -23,6 +24,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/machine" element={<MachineScreen />} />
         <Route path="/simulation" element={<Machine />} />
         <Route path="/admin" element={<PrivateRoute><AdminScreen /></PrivateRoute>} />
+        <Route path="/feedback" element={<PrivateRoute><AdminFeedbackScreen /></PrivateRoute>} />
         <Route path="/management" element={<PrivateRoute><ManagementScreen /></PrivateRoute>} />	
       </Routes>
     </BrowserRouter>
