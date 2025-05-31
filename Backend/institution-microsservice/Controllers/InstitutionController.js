@@ -34,6 +34,25 @@ class InstitutionController {
         }
     }
 
+    // async GetInstitutionByName(req, res) {
+    //     try {
+    //         const name = req.params.name.trim();
+    //         if (!name) {
+    //             return res.status(400).json({ 'Error': 'O nome da instituição deve ser preenchido' });
+    //         }
+
+    //         const institution = await institutionService.FindByName(name);
+    //         if (!institution) {
+    //             return res.status(404).json({ 'Error': `Instituição com nome "${name}" não encontrada` });
+    //         }
+
+    //         res.status(200).json(institution);
+    //     } catch (err) {
+    //         console.error("Erro ao buscar instituição pelo nome:", err);
+    //         return res.status(500).json({ 'Error': 'Erro ao buscar os dados' });
+    //     }
+    // }
+
     async Create(req, res) {
         try {
             const { name, registration_number } = req.body;
