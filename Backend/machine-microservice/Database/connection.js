@@ -9,9 +9,9 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 const connection = createConnection({
-  host: 'trabalhoprog.cl40iigyy6en.sa-east-1.rds.amazonaws.com',
+  host: 'mealrush-database.mysql.database.azure.com',
   port: process.env.DB_PORT || 3306, 
-  user: 'admin',
+  user: 'mealrushadmin',
   password: process.env.DB_PASSWORD,
   database: 'mealrush'
 });
