@@ -1,4 +1,11 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
+
+const mainMenu = () => {
+  navigate("/");
+}
+
+
 
 const ChatBotUI = ({
   messages,
@@ -7,14 +14,23 @@ const ChatBotUI = ({
   setUserInput,
   messagesEndRef,
   step,
-  handleOptionClick 
+  handleOptionClick
 }) => {
+  const navigate = useNavigate(); // Chame o hook DENTRO do componente funcional
+
+  // Defina a função que usa 'navigate' DENTRO do componente
+  const handleGoToMainMenu = () => {
+    navigate("/");
+  };
   return (
     <div className='d-flex justify-content-center align-items-center'
       style={{
         minHeight: '100vh',
         backgroundColor: '#1A1A1A'
       }}>
+      <div className="position-fixed top-0 start-0 p-3" style={{ zIndex: 1050 }}>
+        <button className="btn btn-secondary" onClick={handleGoToMainMenu}>Voltar ao menu principal</button>
+      </div>
       <div style={{
         width: '500px',
         height: '600px',
@@ -51,7 +67,7 @@ const ChatBotUI = ({
           flex: 1,
           overflowY: 'auto',
           padding: '1rem',
-          backgroundColor: '#8c8c8c' 
+          backgroundColor: '#8c8c8c'
         }}>
           {messages.map((msg, index) => (
             <div key={index} className={`mb-3 ${msg.isBot ? '' : 'd-flex justify-content-end'}`}>
@@ -61,14 +77,14 @@ const ChatBotUI = ({
                 padding: '0.5rem 1rem',
                 maxWidth: '80%',
                 color: '#E0E0E0',
-                display: 'flex', 
-                flexDirection: 'column' 
+                display: 'flex',
+                flexDirection: 'column'
               }}>
                 {/* Conteúdo da Mensagem (Texto ou Botões) */}
                 <div>
                   {msg.messageType === 'options' && msg.options ? (
                     <>
-                      {msg.questionText && 
+                      {msg.questionText &&
                         <p style={{ marginBottom: '0.5rem', fontFamily: "'Century Gothic', sans-serif", fontSize: '15px', whiteSpace: 'pre-wrap' }}>
                           {msg.questionText}
                         </p>
@@ -79,19 +95,19 @@ const ChatBotUI = ({
                             key={optIndex}
                             onClick={() => handleOptionClick(option.value)}
                             style={{
-                              backgroundColor: '#E0E0E0', 
-                              color: '#1A1A1A', 
+                              backgroundColor: '#E0E0E0',
+                              color: '#1A1A1A',
                               border: 'none',
-                              borderRadius: '10px', 
+                              borderRadius: '10px',
                               padding: '10px 15px',
                               textAlign: 'left',
                               fontFamily: "'Century Gothic', sans-serif",
                               fontSize: '14px',
                               cursor: 'pointer',
-                              width: '100%', 
+                              width: '100%',
                               boxSizing: 'border-box'
                             }}
-                            onMouseOver={(e) => e.target.style.backgroundColor = '#BDBDBD'} 
+                            onMouseOver={(e) => e.target.style.backgroundColor = '#BDBDBD'}
                             onMouseOut={(e) => e.target.style.backgroundColor = '#E0E0E0'}
                           >
                             {option.text}
@@ -109,8 +125,8 @@ const ChatBotUI = ({
                 <small style={{
                   fontSize: '12px',
                   color: msg.isBot ? '#A0A0A0' : '#BDBDBD',
-                  textAlign: 'right', 
-                  marginTop: '5px' 
+                  textAlign: 'right',
+                  marginTop: '5px'
                 }}>
                   {msg.time}
                 </small>
@@ -131,7 +147,7 @@ const ChatBotUI = ({
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
               style={{
-                boxShadow:"none",
+                boxShadow: "none",
                 backgroundColor: '#E0E0E0',
                 color: 'black',
                 borderColor: '#424242',
