@@ -1,5 +1,5 @@
 import express from 'express';
-import institutionController from '../Controllers/institutionController.js';
+import institutionController from '../Controllers/InstitutionController.js';
 
 const router = express.Router();
 

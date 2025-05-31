@@ -22,11 +22,11 @@ class MachineService {
         }
     }
 
-    async create(institutionId, aluguel) {
+    async create(institutionId, stock, status, lastMaintenance, lastFill, rent) {
         try {
             const [result] = await db.promise().query(
-                "INSERT INTO machine (institutionId, aluguel) VALUES (?, ?)",
-                [institutionId, aluguel]
+                "INSERT INTO machine (institutionId, qtd_itens, statusId, dt_ultima_manutencao, dt_ultimo_abastecimento, aluguel) VALUES (?,?,?,?,?,?)",
+                [institutionId, stock, status, lastMaintenance, lastFill, rent]
             );
             return result.insertId;
         } catch (err) {
@@ -35,11 +35,11 @@ class MachineService {
         }
     }
 
-    async update(institutionId, aluguel, id) {
+    async update(stock, status, lastMaintenance, lastFill, rent, id, institutionId) {
         try {
             const [result] = await db.promise().query(
-                "UPDATE machine SET institutionId = ?, aluguel = ? WHERE id = ?",
-                [institutionId, aluguel, id]
+                "UPDATE machine SET qtd_itens = ?, statusId = ?, dt_ultima_manutencao = ?, dt_ultimo_abastecimento = ?, aluguel = ? WHERE id = ? AND institutionId = ?",
+                [stock, status, lastMaintenance, lastFill, rent, id, institutionId]
             );
             return result.affectedRows;
         } catch (err) {
@@ -48,9 +48,9 @@ class MachineService {
         }
     }
 
-    async delete(id) {
+    async delete(id, institutionId) {
         try {
-            const [result] = await db.promise().query("DELETE FROM machine WHERE id = ?", [id]);
+            const [result] = await db.promise().query("DELETE FROM machine WHERE id = ? AND institutionId = ?", [id, institutionId]);
             return result.affectedRows;
         } catch (err) {
             console.error(`Erro no Service ao deletar máquina ID ${id}:`, err);

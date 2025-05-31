@@ -31,7 +31,6 @@ class FeedbackService {
         }
     }
 
-    // NOVO MÉTODO ADICIONADO
     async findByInstitutionName(name) {
         try {
             const query = `

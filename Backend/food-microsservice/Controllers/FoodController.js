@@ -1,5 +1,5 @@
-import foodService from '../Services/foodService.js'
-
+import foodService from '../Services/FoodService.js';
+import { publishEvent } from '../../event-bus/index.js';
 class FoodController {
 
     async GetAllFoods(req, res) {
@@ -32,7 +32,7 @@ class FoodController {
 
     async Create(req, res) {
         try {
-            const { name, calories, carbs, proteins, fats, weight, imageUrl } = req.body;
+            const { name, calories, carbs, proteins, fats, weight, imageUrl, price } = req.body;
     
             if (!name || name.trim() === "") {
                 return res.status(400).json({ 'Error': 'O nome da comida deve ser preenchido' });
@@ -43,12 +43,16 @@ class FoodController {
             if (foodExists) {
                 return res.status(409).json({ 'Error': 'Já existe uma comida com esse nome' }); // 409: Conflict
             }
+
+            if (price < 0) {
+                return res.status(400).json({ 'Error': 'O preço não pode ser negativo' });
+            }
     
-            await foodService.Create(name.trim(), calories, carbs, proteins, fats, weight, imageUrl);
+            await foodService.Create(name.trim(), calories, carbs, proteins, fats, weight, imageUrl, price);
     
-            const createdFood = await foodService.FindByName(name);
-    
-            return res.status(201).json(createdFood); // status 201 para "Created"
+            const createdFood = await foodService.FindByName(name.trim());
+            publishEvent('food.created', createdFood); 
+            return res.status(201).json(createdFood); 
     
         } catch (error) {
             console.error("Erro ao criar o alimento:", error);
@@ -61,6 +65,7 @@ class FoodController {
         try {
             const id = req.params.id
             await foodService.Delete(id)
+            publishEvent('food.deleted', { id }); 
             return res.status(200).json({'Message': `Alimento com id ${id} deletado com sucesso`}) 
     
         } catch (error) {
@@ -73,17 +78,25 @@ class FoodController {
     async Update(req, res) {
         try {
             const id = req.params.id;
-            const { name, calories, carbs, proteins, fats, weight, imageUrl } = req.body;
+            const { name, calories, carbs, proteins, fats, weight, imageUrl, price } = req.body;
     
             const oldFood = await foodService.FindById(id)
 
             console.log(oldFood)
+            
             if(oldFood[0].name == name){
                 return res.status(400).json({ 'Error': 'Já existe uma comida com esse nome' });
             }
-            await foodService.Update(id, name, calories, carbs, proteins, fats, weight, imageUrl);
-    
+
+            if (price < 0) {
+                return res.status(400).json({ 'Error': 'O preço não pode ser negativo' });
+            }
+
+            await foodService.Update(id, name, calories, carbs, proteins, fats, weight, imageUrl, price);
+
             const updatedFood = await foodService.FindById(id);
+
+            publishEvent('food.updated', updatedFood);
             return res.status(200).json(updatedFood);
         } catch (error) {
             console.error("Erro ao atualizar o alimento:", error);

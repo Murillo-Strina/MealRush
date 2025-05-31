@@ -1,4 +1,5 @@
 import institutionService from '../Services/InstitutionService.js';
+import { publishEvent } from '../../event-bus/index.js';
 
 class InstitutionController {
 
@@ -74,6 +75,7 @@ class InstitutionController {
 
             const createdInstitution = await institutionService.FindByName(name.trim());
 
+            publishEvent('institution.created', createdInstitution);
             return res.status(201).json(createdInstitution);
         } catch (error) {
             console.error("Erro ao criar a instituição:", error);
@@ -85,6 +87,8 @@ class InstitutionController {
         try {
             const id = req.params.id;
             await institutionService.Delete(id);
+
+            publishEvent('institution.deleted', { id });
             return res.status(200).json({ 'Message': `Instituição com id ${id} deletada com sucesso` });
         } catch (error) {
             console.error("Erro ao deletar a instituição:", error);
@@ -110,6 +114,7 @@ class InstitutionController {
             await institutionService.Update(id, name.trim(), registration_number);
 
             const updatedInstitution = await institutionService.FindById(id);
+            publishEvent('institution.updated', updatedInstitution);
             return res.status(200).json(updatedInstitution);
         } catch (error) {
             console.error("Erro ao atualizar a instituição:", error);

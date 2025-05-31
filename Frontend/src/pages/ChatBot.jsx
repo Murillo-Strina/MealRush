@@ -1,5 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import ChatBotUI from '../components/ChatBotUI.jsx';
+
+const API_URL_INSTITUICOES = 'http://localhost:3005/institutions/';
+const API_URL_FEEDBACK = 'http://localhost:3015/feedbacks';
+
+const getMockInstitutions = () => [
+    { id: '1', name: 'Hospital Central' },
+    { id: '2', name: 'Escola Modelo' },
+    { id: '3', name: 'Universidade Alpha' },
+];
 
 const ChatBot = () => {
     const [messages, setMessages] = useState([]);
@@ -15,66 +25,91 @@ const ChatBot = () => {
     });
 
     useEffect(() => {
-        /*
-        fetch('API_PARA_BUSCAR_INSTITUICOES')
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then(data => {
-                if (Array.isArray(data)) {
-                    setInstitutions(data);
-                } else if (Array.isArray(data.rows)) { 
-                    setInstitutions(data.rows);
-                } else {
-                    console.error('Formato inesperado para instituições da API:', data);
-                    setInstitutions([]);
-                }
-            })
-            .catch(err => {
-                console.error("Erro ao buscar instituições da API:", err);
-                setInstitutions([]); 
-            });
-        */
+        const fetchInstitutions = async () => {
+            try {
+                const response = await axios.get(API_URL_INSTITUICOES);
+                const data = response.data;
 
-        const mockInstitutions = [
-            { id: 1, name: "FEI" },
-            { id: 2, name: "IMT" },
-            { id: 3, name: "Igreja do PAPA vinicius" }
-        ];
-        setInstitutions(mockInstitutions);
+                if (Array.isArray(data) && data.length > 0) {
+                    if (data.every(item => item.hasOwnProperty('id') && item.hasOwnProperty('name'))) {
+                        setInstitutions(data);
+                    } else {
+                        setInstitutions(getMockInstitutions());
+                    }
+                } else if (Array.isArray(data) && data.length === 0) {
+                    setInstitutions([]);
+                } else {
+                    setInstitutions(getMockInstitutions());
+                }
+            } catch (err) {
+                setInstitutions(getMockInstitutions());
+            }
+        };
+
+        fetchInstitutions();
     }, []);
 
     useEffect(() => {
         if (step === -1) {
-            setTimeout(() => {
-                console.log("FINAL: Dados do feedback coletados:", feedbackData);
-                /*
-                fetch('API_PARA_SALVAR_FEEDBACK', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(feedbackData),
-                })
-                .then(res => {
-                    if (!res.ok) {
-                        throw new Error(`HTTP error! status: ${res.status}`);
+            const submitFeedback = async () => {
+                if (!feedbackData.experienciaGeral || !feedbackData.instituicao || !feedbackData.data) {
+                    addMessage("Algumas informações necessárias para o feedback estão faltando. Por favor, tente novamente.", true);
+                    return;
+                }
+
+                const selectedInstitutionObject = institutions.find(
+                    inst => inst.name && inst.name.toLowerCase() === feedbackData.instituicao.toLowerCase()
+                );
+
+                if (!selectedInstitutionObject || typeof selectedInstitutionObject.id === 'undefined') {
+                    addMessage(`Não foi possível encontrar o ID para a instituição: ${feedbackData.instituicao}. Verifique se ela foi carregada corretamente.`, true);
+                    return;
+                }
+                const institutionId = selectedInstitutionObject.id;
+
+                const dateParts = feedbackData.data.split('/');
+                let formattedOccurrencyDate = null;
+                if (dateParts.length === 3) {
+                    const day = dateParts[0];
+                    const month = dateParts[1];
+                    const year = dateParts[2];
+                    formattedOccurrencyDate = `${year}-${month}-${day}`;
+                } else {
+                    addMessage("O formato da data fornecida é inválido para envio.", true);
+                    return;
+                }
+
+                const payload = {
+                    comment: feedbackData.experienciaGeral,
+                    occurrency_date: formattedOccurrencyDate,
+                    institutionId: institutionId
+                };
+
+                try {
+                    const response = await axios.post(API_URL_FEEDBACK, payload, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+                } catch (err) {
+                    let errorMessage = "Ocorreu um erro ao enviar seu feedback.";
+                    if (err.response) {
+                        errorMessage += ` (Status: ${err.response.status})`;
+                        if (err.response.data && typeof err.response.data === 'object' && err.response.data.message) {
+                            errorMessage += ` - ${err.response.data.message}`;
+                        } else if (err.response.data && typeof err.response.data === 'string') {
+                            errorMessage += ` - ${err.response.data}`;
+                        }
+                    } else if (err.request) {
+                        errorMessage += " Nenhuma resposta recebida do servidor.";
                     }
-                    return res.json(); 
-                })
-                .then(responseData => {
-                    console.log("Feedback enviado com sucesso:", responseData);
-                })
-                .catch(err => {
-                    console.error("Erro ao enviar feedback para a API:", err);
-                });
-                */
-            }, 0);
+                    addMessage(errorMessage, true);
+                }
+            };
+            
+            setTimeout(submitFeedback, 0);
         }
-    }, [step, feedbackData]); 
+    }, [step, feedbackData, institutions]);
 
 
     const botMessages = {
@@ -87,20 +122,46 @@ const ChatBot = () => {
     };
 
     const stepsMap = {
-        1: { 
+        1: {
             field: "instituicao",
-            validation: (input) => institutions.some(inst => inst.name.toLowerCase() === input.toLowerCase().trim()),
+            validation: (input) => institutions.some(inst => inst.name && inst.name.toLowerCase() === input.toLowerCase().trim()),
             nextMessage: botMessages.data,
-            error: "Instituição não reconhecida."
+            error: "Instituição não reconhecida. Por favor, escolha uma da lista ou digite o nome corretamente."
         },
         2: {
             field: "data",
             validation: (input) => {
-                const isValid = /^\d{2}\/\d{2}\/\d{4}$/.test(input);
-                return isValid;
+                const dateRegex = /^(0[1-9]|[12]\d|3[01])\/(0[1-9]|1[0-2])\/(20\d{2})$/;
+                if (!dateRegex.test(input)) {
+                    return false;
+                }
+
+                const [dayStr, monthStr, yearStr] = input.split('/');
+                const day = parseInt(dayStr, 10);
+                const month = parseInt(monthStr, 10);
+                const year = parseInt(yearStr, 10);
+
+                const inputDate = new Date(year, month - 1, day);
+
+                if (
+                    inputDate.getFullYear() !== year ||
+                    inputDate.getMonth() !== month - 1 ||
+                    inputDate.getDate() !== day
+                ) {
+                    return false;
+                }
+
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                if (inputDate > today) {
+                    return false;
+                }
+                
+                return true;
             },
             nextMessage: botMessages.thankYou,
-            error: "Formato de data inválido! Use DD/MM/AAAA (ex: 01/12/2025)"
+            error: "Data inválida. Use o formato DD/MM/AAAA, com ano a partir de 2000 e não posterior à data de hoje."
         }
     };
 
@@ -108,7 +169,7 @@ const ChatBot = () => {
         const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
         if (typeof content === 'string') {
             setMessages(prev => [...prev, { text: content, isBot, time }]);
-        } else { 
+        } else {
             setMessages(prev => [...prev, { ...content, isBot, time }]);
         }
     };
@@ -118,7 +179,6 @@ const ChatBot = () => {
     useEffect(() => {
         setMessages([]);
         addMessage(botMessages.greeting, true);
-        scrollToBottom();
     }, []);
 
     useEffect(() => scrollToBottom(), [messages]);
@@ -144,17 +204,46 @@ const ChatBot = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!userInput.trim() || step === -1 || step === 1) {
+        if (!userInput.trim() || step === -1) {
             return;
         }
         
-        addMessage(userInput, false);
-        const currentInput = userInput;
+        const currentInput = userInput.trim();
+        
+        if (step === 1) {
+            const currentConfig = stepsMap[step];
+            addMessage(currentInput, false);
+            setUserInput("");
+
+            if (!currentConfig.validation(currentInput)) {
+                currentConfig.error && addMessage(currentConfig.error, true);
+                if (institutions.length > 0) {
+                    const institutionOptions = institutions.map(inst => ({
+                        text: inst.name,
+                        value: inst.name
+                    }));
+                    await delay(800);
+                    addMessage({
+                        messageType: 'options',
+                        questionText: "Por favor, escolha uma das seguintes instituições ou digite o nome corretamente:",
+                        options: institutionOptions
+                    }, true);
+                } else {
+                    addMessage(botMessages.instituicaoQuestion, true);
+                }
+                return;
+            }
+            setFeedbackData(prevData => ({ ...prevData, instituicao: currentInput }));
+            await processBotFlow(1);
+            setStep(2);
+            return;
+        }
+
+        addMessage(currentInput, false);
         setUserInput("");
 
         if (step === 0) {
             setFeedbackData(prevData => ({ ...prevData, experienciaGeral: currentInput }));
-
             await delay(800);
             addMessage(botMessages.stored, true);
             await delay(800);
@@ -175,20 +264,21 @@ const ChatBot = () => {
                 }, true);
             } else {
                 await delay(800);
-                addMessage("Não foi possível carregar a lista de instituições. Por favor, tente novamente mais tarde.", true);
-                setStep(-1); 
-                return;
+                addMessage("Nenhuma instituição carregada. Por favor, digite o nome da instituição.", true);
             }
             setStep(1);
-        } else { 
+        } else {
             const currentConfig = stepsMap[step];
             if (!currentConfig.validation(currentInput)) {
                 currentConfig.error && addMessage(currentConfig.error, true);
+                await delay(400);
+                let questionToRepeat = "";
+                if (step === 2) questionToRepeat = botMessages.data;
+                if(questionToRepeat) addMessage(questionToRepeat, true);
                 return;
             }
             setFeedbackData(prevData => ({ ...prevData, [currentConfig.field]: currentInput }));
-
-            const nextStepValue = stepsMap[step + 1] ? step + 1 : -1;
+            const nextStepValue = (step + 1 < Object.keys(stepsMap).length +1 ) ? step + 1 : -1;
             
             await processBotFlow(step);
             setStep(nextStepValue);
