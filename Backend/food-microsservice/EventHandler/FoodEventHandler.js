@@ -7,5 +7,7 @@ export async function handleFoodEvent(routingKey, data){
         case 'food.deleted':
             console.log('food deleted:',data);
             break;
+            default:
+            console.warn(`Unhandled routing key: ${routingKey}`);
     }
 }
