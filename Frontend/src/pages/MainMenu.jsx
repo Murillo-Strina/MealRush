@@ -118,6 +118,12 @@ const MainMenu = () => {
                                     onMouseOut={e => e.currentTarget.style.color = colors.textSubtleDarkBg}
                                 >Simulação</Link>
                             </li>
+                            <li className="nav-item mx-lg-1">
+                                <Link className="nav-link px-2" to="/chatbot" style={{ color: colors.textSubtleDarkBg, fontWeight: 500, transition: 'color 0.2s ease-in-out' }}
+                                    onMouseOver={e => e.currentTarget.style.color = colors.accent}
+                                    onMouseOut={e => e.currentTarget.style.color = colors.textSubtleDarkBg}
+                                >ChatBot</Link>
+                            </li>
                             <li className="nav-item ms-lg-3 mt-2 mt-lg-0">
                                 <Link className="btn rounded-pill px-4 py-2" to="/login" style={{ backgroundColor: colors.accent, color: colors.darkPrimary, fontWeight: 'bold', transition: 'background-color 0.2s ease, transform 0.2s ease' }}
                                     onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'}

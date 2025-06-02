@@ -171,9 +171,7 @@ const Machine = () => {
                             onConfirm={handleNumpadConfirm}
                             onClear={() => setNumpadValue("")}
                         />
-                        <h1 className='text-center' style={{ marginTop: '70px', color: colors.textLight }}>Powered By:</h1>
-                        <img src={logo} alt="Logo MealRush" className="img-fluid" style={{ maxWidth: '300px', marginTop: '70px' }} />
-                    </div>
+                         </div>
                 </div>
             </div>
         </div>

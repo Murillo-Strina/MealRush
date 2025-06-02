@@ -1,0 +1,23 @@
+{
+  "name": "meu-backend",
+  "version": "1.0.0",
+  "description": "Backend com múltiplos microsserviços",
+  "main": "index.js",
+  "scripts": {
+    "start:auth": "cd auth-microsservice && node index.js",
+    "start:event-bus": "cd event-bus && node index.js",
+    "start:feedback": "cd feedback-microsservice && node index.js",
+    "start:food": "cd food-microsservice && node index.js",
+    "start:institution": "cd institution-microsservice && node index.js",
+    "start:machine": "cd machine-microsservice && node index.js",
+    "dev:all": "concurrently \"npm:start:auth\" \"npm:start:event-bus\" \"npm:start:feedback\" \"npm:start:food\" \"npm:start:institution\" \"npm:start:machine\"",
+    "dev:all:styled": "concurrently -n \"AUTH,EVENT,FEEDBACK,FOOD,INST,MACHINE\" -c \"bgBlue.bold,bgGreen.bold,bgMagenta.bold,bgCyan.bold,bgYellow.bold,bgRed.bold\" \"npm:start:auth\" \"npm:start:event-bus\" \"npm:start:feedback\" \"npm:start:food\" \"npm:start:institution\" \"npm:start:machine\""
+  },
+  "dependencies": {
+    "amqplib": "^0.10.8",
+    "dotenv": "^16.5.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
