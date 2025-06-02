@@ -28,6 +28,16 @@ Os microsserviços da nossa aplicação são:
 - **login-microsservice:** realiza a autenticação do administrador para visualizar suas interfaces exclusivas
 - **feedback-microsservice:** chatbot que coleta as críticas e reclamações dos clientes referente à utilização das máquinas e consumo dos alimentos e os envia para o administrador poder visualizar os comentários do feedback e a instituição em que utilizaram os serviços
 
+# **Barramento de eventos (RabbitMQ)** 🚌
+Para desacoplar a comunicação entre os microsserviços e permitir troca de informações em tempo real (por exemplo, quando uma nova instituição ou máquina é criada), utilizamos um **event bus** baseado em RabbitMQ. Abaixo, as etapas básicas para configurar e rodar o RabbitMQ via Docker, além de como integrar em nossos serviços.
+
+No terminal da máquina que funcionará como broker RabbitMQ, execute:
+
+```bash
+docker run -d --hostname rabbitmq-host --name rabbitmq \ -e RABBITMQ_DEFAULT_USER=<usuário> \ -eRABBITMQ_DEFAULT_PASS=<senha> \ -p 5672:5672 -p 15672:15672 \ rabbitmq:3-management
+  ```
+  Observação: os campos de DEFAULT_USER e DEFAULT_PASS devem ser preenchidos com os nomes de usuário e senha configurados para criar o login no RabbitMQ
+
 # **Contribuidores** 👷‍♂️
 
 - [Felipe Kenzo Ohara Sakae](https://github.com/Sakaef03) | RA: 22.00815-2
