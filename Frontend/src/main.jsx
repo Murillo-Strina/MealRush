@@ -14,10 +14,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import PrivateRoute from './components/PrivateRoute.jsx'
 import ChatBot from './pages/ChatBot.jsx'
-import AdminScreen from './pages/AdminScreen.jsx'
-import ManagementScreen from './pages/ManagementScreen.jsx'
-
-import ForgottenPasswordScreen from './pages/ForgottenPasswordScreen.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
