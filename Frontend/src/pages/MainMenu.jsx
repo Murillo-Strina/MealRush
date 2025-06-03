@@ -12,7 +12,6 @@ import logoSCS from "../assets/images/logo_SCS.jpg";
 import logoSA from "../assets/images/logo_SA.jpg";
 import logoSBC from "../assets/images/logo_SBC.png";
 import vendingMachine from "../assets/images/vending_machine.png";
-import foodExample from "../assets/images/food_example.jpg";
 
 import MenuItemCard from '../components/MenuItemCard';
 import Carousel from '../components/Carousel';

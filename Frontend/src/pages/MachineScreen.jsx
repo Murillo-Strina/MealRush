@@ -70,9 +70,6 @@ const MachineScreen = () => {
                         {error}
                     </div>
                 </div>
-                <Link to="/admin/machines" className="btn rounded-pill mt-4 px-4 py-2" style={{ backgroundColor: colors.accent, color: colors.darkPrimary, fontWeight: 'bold' }}>
-                    Voltar para Máquinas
-                </Link>
             </div>
         );
     }
@@ -81,7 +78,7 @@ const MachineScreen = () => {
         <div style={{ minHeight: '100vh', backgroundColor: colors.darkPrimary, color: colors.textLight }} className="py-4 px-md-3">
             <div className="container-fluid">
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3 px-2">
-                    <Link to="/admin/machines" className="btn rounded-pill d-flex align-items-center px-3 py-2" style={{ backgroundColor: colors.mediumNeutral, color: colors.textDark, fontWeight: 500, textDecoration: 'none' }}>
+                    <Link to="/management" className="btn rounded-pill d-flex align-items-center px-3 py-2" style={{ backgroundColor: colors.mediumNeutral, color: colors.textDark, fontWeight: 500, textDecoration: 'none' }}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-arrow-left-circle-fill me-2" viewBox="0 0 16 16">
                            <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
                         </svg>
