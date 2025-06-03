@@ -2,10 +2,10 @@ import axios from 'axios';
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Meal from "./Meal.jsx";
+import Meal from "../components/Meal.jsx";
 import logo from "../assets/images/logo_mealrush.png";
 import placeholder from "../assets/images/foodplaceholder.png";
-import Numpad from "./Numpad";
+import Numpad from "../components/Numpad";
 import { use } from "react";
 
 const Machine = () => {
