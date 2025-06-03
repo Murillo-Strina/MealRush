@@ -28,15 +28,93 @@ Os microsserviços da nossa aplicação são:
 - **login-microsservice:** realiza a autenticação do administrador para visualizar suas interfaces exclusivas
 - **feedback-microsservice:** chatbot que coleta as críticas e reclamações dos clientes referente à utilização das máquinas e consumo dos alimentos e os envia para o administrador poder visualizar os comentários do feedback e a instituição em que utilizaram os serviços
 
-# **Barramento de eventos (RabbitMQ)** 🚌
-Para desacoplar a comunicação entre os microsserviços e permitir troca de informações em tempo real (por exemplo, quando uma nova instituição ou máquina é criada), utilizamos um **event bus** baseado em RabbitMQ. Abaixo, as etapas básicas para configurar e rodar o RabbitMQ via Docker, além de como integrar em nossos serviços.
+# **Como rodar o projeto?** 🚀
 
-No terminal da máquina que funcionará como broker RabbitMQ, execute:
+## Backend
+
+Abra um terminal na pasta `Backend` e execute os seguintes comandos:
+
+``` bash
+npm install -g
+npm run dev:all
+```
+Este comando irá iniciar todos os microsserviços de uma só vez
+
+Caso opte por executar um microsserviço por vez, vá para a pasta de cada microsserviço e faça os seguintes comandos:
 
 ```bash
-docker run -d --hostname rabbitmq-host --name rabbitmq \ -e RABBITMQ_DEFAULT_USER=<usuário> \ -eRABBITMQ_DEFAULT_PASS=<senha> \ -p 5672:5672 -p 15672:15672 \ rabbitmq:3-management
-  ```
-  Observação: os campos de DEFAULT_USER e DEFAULT_PASS devem ser preenchidos com os nomes de usuário e senha configurados para criar o login no RabbitMQ
+cd <nome-do-microsservico>
+npm install
+node index.js
+```
+
+## Frontend
+
+Abra um terminal na pasta `Frontend` e execute os seguintes comandos:
+
+```bash
+npm install
+node run dev
+```
+
+# **Barramento de eventos (RabbitMQ)** 🐰
+
+Para desacoplar a comunicação entre os microsserviços e permitir troca de informações em tempo real (por exemplo, quando uma nova instituição ou máquina é criada), utilizamos um **event bus** baseado em RabbitMQ.
+
+## Como funciona o barramento de eventos
+
+Cada microsserviço pode publicar eventos relevantes (como criação, atualização ou remoção de entidades) no barramento, e outros microsserviços podem consumir esses eventos para manter seus dados sincronizados ou executar ações específicas.
+
+- **Exchange:** Utilizamos o padrão `topic` para rotear eventos por chave.
+- **Produtores:** Serviços como `food-microsservice`, `machine-microsservice`, `institution-microsservice` publicam eventos como `food.created`, `machine.updated`, `institution.deleted`.
+- **Consumidores:** Outros microsserviços escutam eventos relevantes para atualizar seus próprios bancos ou executar lógicas de negócio.
+
+### Exemplo de fluxo de evento
+
+1. O serviço de instituição cria uma nova instituição e publica o evento `institution.created`.
+2. O serviço de máquinas consome esse evento para atualizar sua lista de instituições disponíveis.
+3. O serviço de feedback pode consumir eventos de instituição ou máquina para garantir integridade dos dados de feedback.
+
+### Exemplo de código de publicação de evento
+
+```js
+// Publicando um evento no barramento
+publishEvent('machine.created', { id: 1, institutionId: 2, ... });
+```
+
+### Exemplo de código de consumo de evento
+
+```js
+// Consumindo eventos do barramento
+await consumeEvent('machine_events_queue', 'machine.*', handleMachineEvent);
+```
+
+### Diagrama simplificado
+
+```
+[food-microsservice]      [machine-microsservice]      [institution-microsservice]
+         |                          |                           |
+         |------(RabbitMQ Exchange - topic)--------------------|
+         |                          |                           |
+         |<----- eventos ---------->|<------ eventos ---------->|
+```
+
+## Como rodar o RabbitMQ
+
+No terminal da máquina que funcionará como broker RabbitMQ, abra o Docker e execute em seu terminal:
+
+```bash
+docker run -d --hostname rabbitmq-host --name rabbitmq \
+  -e RABBITMQ_DEFAULT_USER=<usuário> \
+  -e RABBITMQ_DEFAULT_PASS=<senha> \
+  -p 5672:5672 -p 15672:15672 \
+  rabbitmq:3-management
+```
+Acesse o painel de administração em [http://localhost:15672](http://localhost:15672) com o usuário e senha definidos.
+
+> Observação: os campos de DEFAULT_USER e DEFAULT_PASS devem ser preenchidos com os nomes de usuário e senha configurados para criar o login no RabbitMQ.
+
+---
 
 # **Contribuidores** 👷‍♂️
 
