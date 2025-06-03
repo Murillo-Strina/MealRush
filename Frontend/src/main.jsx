@@ -1,8 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import App from './App.jsx'
-import Machine from './components/Machine.jsx'
+import SimulationScreen from './pages/SimulationScreen.jsx'
 import MainMenu from './pages/MainMenu.jsx'
 import MachineScreen from './pages/MachineScreen.jsx'
 import LoginScreen from './pages/LoginScreen.jsx'
@@ -23,7 +22,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/forgotten-password" element={<ForgottenPasswordScreen />} />
         <Route path="/machine" element={<MachineScreen />} />
-        <Route path="/simulation" element={<Machine />} />
+        <Route path="/simulation" element ={<SimulationScreen />} />
         <Route path="/chatbot" element={<ChatBot />} />
         <Route path="/admin" element={<PrivateRoute><AdminScreen /></PrivateRoute>} />
         <Route path="/feedback" element={<PrivateRoute><AdminFeedbackScreen /></PrivateRoute>} />
