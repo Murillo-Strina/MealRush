@@ -17,14 +17,13 @@ const AdminFeedbackScreen = () => {
     accent:         '#00C9A7',
     mediumNeutral:  '#E2E8F0',
     textDark:       '#2D3748',
-    textLight:      '#00C9A7',
+    textLight:      '#E2E8F0',
     tableHeaderBg:  '#2D3748',
     rowDarkAlt:     '#202733',
     danger:         '#E53E3E',
     dangerText:     '#F87171',
     alertDangerBg:  '#4B1717',
     borderColor:    '#4A5568',
-    inputBg:        '#2D3748'
   };
 
   useEffect(() => {
@@ -101,7 +100,6 @@ const AdminFeedbackScreen = () => {
 
   const filterInputBaseStyle = {
     backgroundColor: colors.inputBg,
-    color:           colors.textLight,
     borderColor:     colors.borderColor,
     outline:         'none',
     boxShadow:       'none'
@@ -251,7 +249,6 @@ const AdminFeedbackScreen = () => {
               className="form-control"
               style={filterInputBaseStyle}
               placeholder="Digite o nome da instituição..."
-              placeholderTextColor={colors.textLight}
               value={searchTermInstitution}
               onChange={e => setSearchTermInstitution(e.target.value)}
             />
@@ -276,8 +273,8 @@ const AdminFeedbackScreen = () => {
               className="btn w-100 d-flex align-items-center justify-content-center"
               onClick={handleClearFilters}
               style={{
-                backgroundColor: colors.mediumNeutral,
-                color:           colors.textDark,
+                backgroundColor: colors.accent,
+                color:           colors.textLight,
                 fontWeight:      500,
                 padding:         '0.55rem 0'
               }}
@@ -317,7 +314,7 @@ const AdminFeedbackScreen = () => {
                     scope="col"
                     className="py-3 px-3 text-uppercase text-nowrap"
                     style={{
-                      color:           colors.textLight,
+                      color:           colors.accent,
                       letterSpacing:   '0.05em',
                       borderBottom:    `3px solid ${colors.accent}`,
                       fontSize:        '0.8rem'
