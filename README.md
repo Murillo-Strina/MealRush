@@ -54,7 +54,7 @@ Abra um terminal na pasta `Frontend` e execute os seguintes comandos:
 
 ```bash
 npm install
-node run dev
+npm run dev
 ```
 
 # **Barramento de eventos (RabbitMQ)** 🐰
@@ -115,6 +115,54 @@ Acesse o painel de administração em [http://localhost:15672](http://localhost:
 > Observação: os campos de DEFAULT_USER e DEFAULT_PASS devem ser preenchidos com os nomes de usuário e senha configurados para criar o login no RabbitMQ.
 
 ---
+## Criando usuários e definindo permissões (caso seja necessário)
+
+Caso queira criar ou gerenciar usuários manualmente (sem Docker), siga estes passos:
+
+- Abra um terminal (prompt de comando no Windows) como **administrador** e vá até a pasta de sbin do RabbitMQ (ex.: C:\Program Files\RabbitMQ Server\rabbitmq_server-<versão>\sbin)
+
+- Crie um novo usuário
+
+``` bash 
+rabbitmqctl add_user <nome_usuario> <senha_usuario>
+```
+
+- Crie (ou selecione) um virtual host (se ainda não existir)
+
+``` bash 
+rabbitmqctl add_host <nome_vhost>
+```
+
+- Defina permissões para o usuário no vhost
+
+``` bash 
+rabbitmqctl set_permissions -p / nome_do_usuario ".*" ".*" ".*"
+```
+
+- (Opcional) Atribua tags de administrador, se precisar de acesso total à UI:
+
+``` bash 
+rabbitmqctl set_user_tags nome_do_usuario administrator
+```
+
+- Reinicie o serviço RabbitMQ para aplicar as mudanças
+
+``` bash 
+net stop RabbitMQ
+net start RabbitMQ
+```
+
+- Adicione no seu .env as informações a respeito  do rabbitMQ
+
+``` bash 
+RABBITMQ_URL=amqp://<nome_usuario>:<senha_usuario>@localhost:5672/
+```
+
+- Abra o navegador e acesse:
+
+``` bash 
+http://localhost:15672
+```
 
 # **Contribuidores** 👷‍♂️
 
