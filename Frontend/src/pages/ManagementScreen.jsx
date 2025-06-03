@@ -350,6 +350,32 @@ const ManagementScreen = () => {
         backgroundColor: isAltRow ? colors.rowDarkAlt : colors.darkPrimary
     });
 
+    const handleManageMachine = () => {
+    if (!selectedInstitution) {
+        alert("Nenhuma instituição selecionada. Selecione uma instituição primeiro.");
+        return;
+    }
+
+    const machineId = parseInt(machineIdInput);
+    if (!machineId || isNaN(machineId)) {
+        alert("Insira um ID de máquina válido.");
+        return;
+    }
+
+    const machine = machines.find(m =>
+        m.id === machineId && m.institutionId === selectedInstitution.id
+    );
+
+    if (!machine) {
+        alert(`Máquina com ID ${machineId} não encontrada para a instituição "${selectedInstitution.name}".`);
+        return;
+    }
+
+    navigate("/machine");
+
+    
+};
+
     return (
         <div style={{ minHeight: '100vh', backgroundColor: colors.darkPrimary, color: colors.textLight }} className="py-4 px-md-3">
             <div className="text-center d-flex align-items-center justify-content-center pt-3">
@@ -417,12 +443,12 @@ const ManagementScreen = () => {
                 />
                 <div className="d-flex flex-wrap justify-content-center gap-3 p-3">
                     <button style={actionButtonStyle('accent')} onClick={() => setShowInstitutionModal(true)}>Cadastrar Instituição</button>
+                    <button style={actionButtonStyle('accent')} onClick={goToMachine}>Gerenciar Máquinas da Instituição</button>
                     <button style={actionButtonStyle('danger')} onClick={() => {
                         const id = parseInt(institutionIdInput);
                         if (!id || isNaN(id)) { alert("Insira um ID válido para remover."); return; }
                         handleRemoveInstitution(id);
                     }}>Remover Instituição</button>
-                    <button style={actionButtonStyle('accent')} onClick={goToMachine}>Gerenciar Máquinas da Instituição</button>
                 </div>
             </div>
 
@@ -475,16 +501,17 @@ const ManagementScreen = () => {
                         />
                         <div className="d-flex flex-wrap justify-content-center gap-3 p-3">
                             <button style={actionButtonStyle('accent')} onClick={() => setShowMachineInputModal(true)}>Adicionar Máquina</button>
-                            <button style={actionButtonStyle('danger')} onClick={() => {
-                                const id = parseInt(machineIdInput);
-                                if (!id || isNaN(id)) { alert("Insira um ID válido para remover."); return; }
-                                handleRemoveMachine(id);
-                            }}>Remover Máquina</button>
                             <button style={actionButtonStyle('accent')} onClick={() => {
                                 const id = parseInt(machineIdInput);
                                 if (!id || isNaN(id)) { alert("Insira um ID válido para atualizar."); return; }
                                 openUpdateMachineModal(id);
                             }}>Atualizar Máquina</button>
+                            <button style={actionButtonStyle('accent')} onClick={handleManageMachine}>Gerenciar Máquina</button>
+                            <button style={actionButtonStyle('danger')} onClick={() => {
+                                const id = parseInt(machineIdInput);
+                                if (!id || isNaN(id)) { alert("Insira um ID válido para remover."); return; }
+                                handleRemoveMachine(id);
+                            }}>Remover Máquina</button>
                         </div>
                     </div>
                 </div>
