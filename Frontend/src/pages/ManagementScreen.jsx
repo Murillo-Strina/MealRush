@@ -20,40 +20,48 @@ const ManagementScreen = () => {
         2: "Em manutenção",
         3: "Aguardando abastecimento"
     };
+
     const navigate = useNavigate();
     const [institutions, setInstitutionsState] = useState([]);
     const [machines, setMachines] = useState([]);
     const [institutionsWithMachinesCount, setInstitutionsWithMachinesCount] = useState([]);
+    const [showMachines, setShowMachines] = useState(false);
+    const [selectedInstitution, setSelectedInstitution] = useState(null);
+    const [institutionIdInput, setInstitutionIdInput] = useState('');
+    const [machineIdInput, setMachineIdInput] = useState('');
+    const machineSectionRef = useRef(null);
+    const [showInstitutionModal, setShowInstitutionModal] = useState(false);
+    const [showMachineInputModal, setShowMachineInputModal] = useState(false);
+    const [showMachineUpdateModal, setShowMachineUpdateModal] = useState(false);
+    const [newInstitution, setNewInstitution] = useState({ name: '', registry: '' });
+    const [newMachine, setNewMachine] = useState({
+        institutionId: '', stock: 30, status: 1,
+        lastMaintenance: new Date().toISOString().split('T')[0],
+        lastFill: new Date().toISOString().split('T')[0], rent: ''
+    });
+    const [updatedMachine, setUpdatedMachine] = useState({
+        id: null, stock: '', status: '', lastMaintenance: '', lastFill: '', rent: ''
+    });
 
     useEffect(() => {
-        const fetchInstitutionsData = async () => {
-            try {
-                const response = await axios.get('http://localhost:3005/institutions');
-                const institutesFromApi = response.data;
-                const formattedInstitutions = institutesFromApi.map((inst) => ({
+        axios.get('http://localhost:3005/institutions')
+            .then(response => {
+                const formattedInstitutions = response.data.map(inst => ({
                     id: inst.id,
                     name: inst.name,
                     registry: inst.registration_number,
                     machines: 0
                 }));
                 setInstitutionsState(formattedInstitutions);
-            } catch (err) {
-                console.error("Erro ao buscar instituições:", err);
-            }
-        };
-        fetchInstitutionsData();
+            })
+            .catch(err => console.error("Erro ao buscar instituições:", err));
     }, []);
 
     useEffect(() => {
-        const fetchMachinesData = async () => {
-            try {
-                const response = await axios.get('http://localhost:3010/machines');
-                const machinesFromApi = response.data;
-                const formatDate = (dateString) => {
-                    if (!dateString) return '';
-                    return new Date(dateString).toISOString().split('T')[0];
-                };
-                const formattedMachines = machinesFromApi.map((machine) => ({
+        axios.get('http://localhost:3010/machines')
+            .then(response => {
+                const formatDate = (dateString) => dateString ? new Date(dateString).toISOString().split('T')[0] : '';
+                const formattedMachines = response.data.map(machine => ({
                     id: machine.id,
                     institutionId: machine.institutionId,
                     stock: machine.qtd_itens,
@@ -63,69 +71,45 @@ const ManagementScreen = () => {
                     rent: machine.aluguel
                 }));
                 setMachines(formattedMachines);
-            } catch (err) {
-                console.error("Erro ao buscar máquinas:", err);
-            }
-        };
-        fetchMachinesData();
+            })
+            .catch(err => console.error("Erro ao buscar máquinas:", err));
     }, []);
 
     useEffect(() => {
-        if (institutions.length > 0 && machines.length > 0) {
+        if (institutions.length > 0) {
             const updatedInstitutions = institutions.map(inst => {
                 const machineCount = machines.filter(machine => machine.institutionId === inst.id).length;
                 return { ...inst, machines: machineCount };
             });
-            setInstitutionsWithMachinesCount(updatedInstitutions);
-        } else if (institutions.length > 0) {
-            const updatedInstitutions = institutions.map(inst => ({ ...inst, machines: 0 }));
             setInstitutionsWithMachinesCount(updatedInstitutions);
         } else {
             setInstitutionsWithMachinesCount([]);
         }
     }, [institutions, machines]);
 
-    const [showMachines, setShowMachines] = useState(false);
-    const [selectedInstitution, setSelectedInstitution] = useState(null);
-
-    const [institutionIdInput, setInstitutionIdInput] = useState('');
-    const [machineIdInput, setMachineIdInput] = useState('');
-
-    const machineSectionRef = useRef(null);
-
     const goToMachine = () => {
         const inputValue = institutionIdInput.trim();
         if (inputValue === '' || isNaN(inputValue)) {
             alert("Insira um ID válido");
-            return false;
+            return;
         }
         const institutionId = parseInt(inputValue);
         const foundInstitution = institutions.find(inst => inst.id === institutionId);
         if (!foundInstitution) {
             alert("Instituição não encontrada");
-            return false;
+            return;
         }
-
         setSelectedInstitution(foundInstitution);
         setShowMachines(true);
-
         setTimeout(() => {
-            if (machineSectionRef.current) {
-                machineSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+            machineSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 300);
     };
-
-    const [showInstitutionModal, setShowInstitutionModal] = useState(false);
-    const [showMachineInputModal, setShowMachineInputModal] = useState(false);
-    const [showMachineUpdateModal, setShowMachineUpdateModal] = useState(false);
-
-    const [newInstitution, setNewInstitution] = useState({ name: '', registry: '' });
 
     const handleInstitutionChange = async () => {
         if (newInstitution.name.trim() === '' || newInstitution.registry.trim() === '') {
             alert("Preencha todos os campos");
-            return false;
+            return;
         }
         try {
             const response = await axios.post('http://localhost:3005/institutions', {
@@ -183,12 +167,6 @@ const ManagementScreen = () => {
         }
     };
 
-    const [newMachine, setNewMachine] = useState({
-        institutionId: '', stock: 30, status: 1,
-        lastMaintenance: new Date().toISOString().split('T')[0],
-        lastFill: new Date().toISOString().split('T')[0], rent: ''
-    });
-
     const handleMachineInput = async () => {
         if (!selectedInstitution) {
             alert("É necessário selecionar uma instituição!");
@@ -208,7 +186,6 @@ const ManagementScreen = () => {
                 lastFill: today,
                 rent: newMachine.rent.toString()
             });
-
             const newMachineFormatted = {
                 id: response.data.id,
                 institutionId: selectedInstitution.id,
@@ -218,7 +195,6 @@ const ManagementScreen = () => {
                 lastFill: today,
                 rent: parseFloat(newMachine.rent)
             };
-
             setMachines(prev => [...prev, newMachineFormatted]);
             setShowMachineInputModal(false);
             setNewMachine({
@@ -232,10 +208,6 @@ const ManagementScreen = () => {
             alert("Erro ao cadastrar máquina");
         }
     };
-
-    const [updatedMachine, setUpdatedMachine] = useState({
-        id: null, stock: '', status: '', lastMaintenance: '', lastFill: '', rent: ''
-    });
 
     const handleMachineUpdate = async () => {
         if (!selectedInstitution) {
@@ -351,30 +323,24 @@ const ManagementScreen = () => {
     });
 
     const handleManageMachine = () => {
-    if (!selectedInstitution) {
-        alert("Nenhuma instituição selecionada. Selecione uma instituição primeiro.");
-        return;
-    }
-
-    const machineId = parseInt(machineIdInput);
-    if (!machineId || isNaN(machineId)) {
-        alert("Insira um ID de máquina válido.");
-        return;
-    }
-
-    const machine = machines.find(m =>
-        m.id === machineId && m.institutionId === selectedInstitution.id
-    );
-
-    if (!machine) {
-        alert(`Máquina com ID ${machineId} não encontrada para a instituição "${selectedInstitution.name}".`);
-        return;
-    }
-
-    navigate("/machine");
-
-    
-};
+        if (!selectedInstitution) {
+            alert("Nenhuma instituição selecionada. Selecione uma instituição primeiro.");
+            return;
+        }
+        const machineId = parseInt(machineIdInput);
+        if (!machineId || isNaN(machineId)) {
+            alert("Insira um ID de máquina válido.");
+            return;
+        }
+        const machine = machines.find(m =>
+            m.id === machineId && m.institutionId === selectedInstitution.id
+        );
+        if (!machine) {
+            alert(`Máquina com ID ${machineId} não encontrada para a instituição "${selectedInstitution.name}".`);
+            return;
+        }
+        navigate("/machine");
+    };
 
     return (
         <div style={{ minHeight: '100vh', backgroundColor: colors.darkPrimary, color: colors.textLight }} className="py-4 px-md-3">
