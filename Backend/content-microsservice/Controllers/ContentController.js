@@ -1,4 +1,5 @@
 import contentService from '../Services/ContentService.js';
+import foodService from '../../food-microsservice/Services/FoodService.js';
 import { publishEvent } from '../../event-bus/index.js';
 
 class ContentController {
@@ -40,6 +41,11 @@ class ContentController {
 
             if (salePrice < 0 || purchasePrice < 0 || quantity < 0 || profit < 0) {
                 return res.status(400).json({ 'error': 'Os valores de preço, quantidade e lucro não podem ser negativos' });
+            }
+
+            const foodExists = await foodService.FindByName(foodName.trim());
+            if (!foodExists) {
+                return res.status(404).json({ 'error': `Comida com nome ${foodName.trim()} não encontrada` });
             }
 
             const insertedId = await contentService.create(foodName.trim(), machineId, institutionId, salePrice, purchasePrice, quantity, profit);
