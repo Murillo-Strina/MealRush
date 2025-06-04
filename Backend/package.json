@@ -10,7 +10,8 @@
     "start:food": "cd food-microsservice && node index.js",
     "start:institution": "cd institution-microsservice && node index.js",
     "start:machine": "cd machine-microsservice && node index.js",
-    "dev:all": "concurrently \"npm:start:auth\" \"npm:start:event-bus\" \"npm:start:feedback\" \"npm:start:food\" \"npm:start:institution\" \"npm:start:machine\"",
+    "start:content": "cd content-microsservice && node index.js",
+    "dev:all": "concurrently \"npm:start:auth\" \"npm:start:event-bus\" \"npm:start:feedback\" \"npm:start:food\" \"npm:start:institution\" \"npm:start:machine\" \"npm:start:content\"",
     "dev:all:styled": "concurrently -n \"AUTH,EVENT,FEEDBACK,FOOD,INST,MACHINE\" -c \"bgBlue.bold,bgGreen.bold,bgMagenta.bold,bgCyan.bold,bgYellow.bold,bgRed.bold\" \"npm:start:auth\" \"npm:start:event-bus\" \"npm:start:feedback\" \"npm:start:food\" \"npm:start:institution\" \"npm:start:machine\""
   },
   "dependencies": {
