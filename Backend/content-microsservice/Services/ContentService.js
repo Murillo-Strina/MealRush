@@ -1,10 +1,10 @@
-import db from "../Database/Database.js";
+import db from "../Database/connection.js";
 
-class ContentService{
+class ContentService {
 
     async findAll() {
         try {
-            const [rows] = await db.query("SELECT * FROM content");
+            const [rows] = await db.promise().query("SELECT * FROM content");
             return rows;
         } catch (err) {
             console.error("Erro ao buscar o conteúdo das máquinas:", err);
@@ -12,9 +12,9 @@ class ContentService{
         }
     }
 
-    async findById(id){
+    async findById(id) {
         try {
-            const [rows] = await db.query("SELECT * FROM content WHERE id = ?", [id]);
+            const [rows] = await db.promise().query("SELECT * FROM content WHERE id = ?", [id]);
             return rows[0];
         } catch (err) {
             console.error(`Erro ao buscar o conteúdo da máquina com ID ${id}:`, err);
@@ -24,7 +24,10 @@ class ContentService{
 
     async findByInstitutionIdAndMachineId(institutionId, machineId) {
         try {
-            const [rows] = await db.query("SELECT * FROM content WHERE institutionId = ? AND machineId = ?", [institutionId, machineId]);
+            const [rows] = await db.promise().query(
+                "SELECT * FROM content WHERE institutionId = ? AND machineId = ?",
+                [institutionId, machineId]
+            );
             return rows;
         } catch (err) {
             console.error(`Erro ao buscar o conteúdo da máquina com Institution ID ${institutionId} e Machine ID ${machineId}:`, err);
@@ -32,10 +35,10 @@ class ContentService{
         }
     }
 
-    async create(foodName, machineId, institutionId, salePrice, purchasePrice, quantity, profit ){
+    async create(foodName, machineId, institutionId, salePrice, purchasePrice, quantity, profit) {
         try {
-            const [result] = await db.query(
-                "INSERT INTO content (foodName, machineId, institutionId, salePrice, purchasePrice, quantity, profit) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            const [result] = await db.promise().query(
+                "INSERT INTO content (food_name, machine_id, institution_id, sale_price, purchase_price, quantity, profit) VALUES (?, ?, ?, ?, ?, ?, ?)",
                 [foodName, machineId, institutionId, salePrice, purchasePrice, quantity, profit]
             );
             return result.insertId;
@@ -45,11 +48,11 @@ class ContentService{
         }
     }
 
-    async update(foodName, machineId, institutionId, salePrice, purchasePrice, quantity, profit, id, machineId, institutionId) {
+    async update(foodName, salePrice, purchasePrice, quantity, profit, id, machineId, institutionId) {
         try {
-            const [result] = await db.query(
-                "UPDATE content SET foodName = ?, machineId = ?, institutionId = ?, salePrice = ?, purchasePrice = ?, quantity = ?, profit = ? WHERE id = ? AND machineId = ? AND institutionId = ?",
-                [foodName, machineId, institutionId, salePrice, purchasePrice, quantity , profit, id, machineId, institutionId]
+            const [result] = await db.promise().query(
+                "UPDATE content SET foodName = ?, salePrice = ?, purchasePrice = ?, quantity = ?, profit = ? WHERE id = ? AND machineId = ? AND institutionId = ?",
+                [foodName, salePrice, purchasePrice, quantity, profit, id, machineId, institutionId]
             );
             return result.affectedRows;
         } catch (err) {
@@ -60,7 +63,7 @@ class ContentService{
 
     async delete(id, machineId, institutionId) {
         try {
-            const [result] = await db.query(
+            const [result] = await db.promise().query(
                 "DELETE FROM content WHERE id = ? AND machineId = ? AND institutionId = ?",
                 [id, machineId, institutionId]
             );

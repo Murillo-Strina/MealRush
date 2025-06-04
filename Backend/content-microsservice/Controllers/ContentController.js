@@ -47,7 +47,7 @@ class ContentController {
             if (!foodExists) {
                 return res.status(404).json({ 'error': `Comida com nome ${foodName.trim()} não encontrada` });
             }
-
+            
             const insertedId = await contentService.create(foodName.trim(), machineId, institutionId, salePrice, purchasePrice, quantity, profit);
 
             if (!insertedId) {

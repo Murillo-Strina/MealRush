@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import contentController from '../Controllers/ContentController';
+import contentController from '../Controllers/ContentController.js';
 
 router.get('/contents', contentController.GetAllContents);
 router.get('/contents/:id', contentController.GetContentById);
