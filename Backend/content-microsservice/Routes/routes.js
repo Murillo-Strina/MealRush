@@ -2,11 +2,10 @@ import express from 'express';
 const router = express.Router();
 import contentController from '../Controllers/ContentController.js';
 
-router.get('/contents', contentController.GetAllContents);
-router.get('/contents/:id', contentController.GetContentById);
-router.get('/contents/institution/:institutionId/machine/:machineId', contentController.GetContentByInstitutionIDAndMachineID);
-router.post('/contents', contentController.Create);
-router.put('/contents/:id', contentController.Update);
-router.delete('/contents/:id', contentController.Delete);
+router.get('/contents', contentController.getAllContents);
+router.get('/contents/:id', contentController.getContentById);
+router.post('/contents', contentController.create);
+router.put('/contents/:id', contentController.update);
+router.delete('/contents/:id', contentController.delete);
 
 export default router;

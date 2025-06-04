@@ -14,7 +14,7 @@
         async FindByName(name) {
             try {
                 const [rows] = await db.promise().query("SELECT * FROM foods WHERE name = ?", [name]);
-                return rows[0]; // retorna diretamente o primeiro item ou undefined
+                return rows[0];
             } catch (err) {
                 throw err;
             }
