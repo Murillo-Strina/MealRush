@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const Meal = ({ foodId, name, img, price, stock, getInfo, selectFood, styles }) => {
+const Meal = ({ foodId, name, img, sellprice, stock, getInfo, selectFood, styles }) => {
     const isOutOfStock = stock === 0;
 
     const defaultStyles = { 
@@ -55,7 +55,7 @@ const Meal = ({ foodId, name, img, price, stock, getInfo, selectFood, styles }) 
             </div>
             
             <div style={s.priceStyle}>
-                R$ {price}
+                R$ {sellprice}
             </div>
         </motion.div>
     );

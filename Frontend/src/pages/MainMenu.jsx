@@ -53,7 +53,7 @@ const MainMenu = () => {
                     id: food.id,
                     name: food.name,
                     image: food.imageUrl,
-                    price: food.price 
+                    sellprice: food.sellprice 
                 }));
 
                 setFoodItemsList(formattedFoods);
@@ -224,7 +224,7 @@ const MainMenu = () => {
                                     id={food.id}
                                     name={food.name}
                                     image={food.image}
-                                    price={food.price}
+                                    sellprice={food.sellprice}
                                     styles={menuItemCardStyles}
                                 />
                             </motion.div>

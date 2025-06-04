@@ -38,19 +38,19 @@
             }
         }
 
-        async Create(name, calories, carbs, proteins, fats, weight, imageUrl, price) {
+        async Create(name, calories, carbs, proteins, fats, weight, imageUrl, sellprice, buyprice ) {
             try {
-                return await db.promise().query("INSERT INTO foods(name, calories, carbs, proteins, fats, weight, imageUrl, price) values (?, ?, ?, ?, ?, ?, ?, ?)",
-                    [name, calories, carbs, proteins, fats, weight, imageUrl, price]);
+                return await db.promise().query("INSERT INTO foods(name, calories, carbs, proteins, fats, weight, imageUrl, sellprice, buyprice) values (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    [name, calories, carbs, proteins, fats, weight, imageUrl, sellprice, buyprice]);
             } catch (err) {
                 throw err;
             }
         }
 
-        async Update(id, name, calories, carbs, proteins, fats, weight, imageUrl, price) {
+        async Update(id, name, calories, carbs, proteins, fats, weight, imageUrl, sellprice, buyprice) {
             try {
-                return await db.promise().query("UPDATE foods SET name = ?, calories = ?, carbs = ?, proteins = ?, fats = ?, weight = ?, imageUrl = ?, price = ? where id = ?",
-                    [name, calories, carbs, proteins, fats, weight, imageUrl, price, id]);
+                return await db.promise().query("UPDATE foods SET name = ?, calories = ?, carbs = ?, proteins = ?, fats = ?, weight = ?, imageUrl = ?, sellprice = ?, buyprice = ? where id = ?",
+                    [name, calories, carbs, proteins, fats, weight, imageUrl, sellprice, buyprice, id]);
             } catch (err) {
                 throw err;
             }

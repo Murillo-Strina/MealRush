@@ -21,7 +21,7 @@ const Machine = () => {
 
     const getFoodInfo = (displayId, foodName) => {
         const foodItem = foodItemsData.find((f,i) => String(i+1) === displayId);
-        alert(`Detalhes de ${foodName}:\nID: ${displayId}\nPreço: R$ ${foodItem?.price}\nEstoque: ${foodItem?.stock}\nPeso: ${foodItem?.weight}g\nCalorias: ${foodItem?.calories}\nCarboidratos: ${foodItem?.carbs}g\nProteínas: ${foodItem?.proteins}g\nGorduras: ${foodItem?.fats}g`);
+        alert(`Detalhes de ${foodName}:\nID: ${displayId}\nPreço: R$ ${foodItem?.sellprice}\nEstoque: ${foodItem?.stock}\nPeso: ${foodItem?.weight}g\nCalorias: ${foodItem?.calories}\nCarboidratos: ${foodItem?.carbs}g\nProteínas: ${foodItem?.proteins}g\nGorduras: ${foodItem?.fats}g`);
     };
 
     const selectFoodOnNumpad = (foodId) => {
@@ -57,7 +57,7 @@ const Machine = () => {
                 fats: food.fats,
                 weight: food.weight,
                 image: food.imageUrl,
-                price: food.price,
+                sellprice: food.sellprice,
                 stock: Math.floor(Math.random() * 11)
                })); 
 
@@ -151,7 +151,7 @@ const Machine = () => {
                                             foodId={item.displayId}
                                             name={item.name}
                                             img={item.image}
-                                            price={item.price}
+                                            sellprice={item.sellprice}
                                             stock={item.stock}
                                             getInfo={() => getFoodInfo(item.displayId, item.name)}
                                             selectFood={() => selectFoodOnNumpad(item.displayId)}
