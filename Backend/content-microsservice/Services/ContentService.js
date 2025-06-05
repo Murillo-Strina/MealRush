@@ -20,15 +20,15 @@ class ContentService {
         }
     }
 
-    async create(qtdItens, sales, machineId, institutionId, foodName, sellprice, buyprice) {
+    async create(qtdItens, sales, machineId, foodName, sellprice, buyprice) {
         const totalRevenue = sales * sellprice;
         const profit = totalRevenue - (buyprice * qtdItens);
         try {
             const [result] = await db.promise().query(
                 `INSERT INTO content 
-                (qtd_itens, sales, machineId, institutionId, foodName, sellprice, buyprice, total_revenue, profit)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [qtdItens, sales, machineId, institutionId, foodName, sellprice, buyprice, totalRevenue, profit]
+                (qtd_itens, sales, machineId, foodName, sellprice, buyprice, total_revenue, profit)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                [qtdItens, sales, machineId, foodName, sellprice, buyprice, totalRevenue, profit]
             );
             return result.insertId;
         } catch (err) {
@@ -36,7 +36,7 @@ class ContentService {
         }
     }
 
-    async update(qtdItens, sales, foodName, sellprice, buyprice, id, machineId, institutionId) {
+    async update(qtdItens, sales, foodName, sellprice, buyprice, id, machineId) {
         const totalRevenue = sales * sellprice;
         const profit = totalRevenue - (buyprice * qtdItens);
         try {
@@ -44,8 +44,8 @@ class ContentService {
                 `UPDATE content 
                 SET qtd_itens = ?, sales = ?, foodName = ?, sellprice = ?, buyprice = ?, 
                     total_revenue = ?, profit = ?
-                WHERE id = ? AND machineId = ? AND institutionId = ?`,
-                [qtdItens, sales, foodName, sellprice, buyprice, totalRevenue, profit, id, machineId, institutionId]
+                WHERE id = ? AND machineId = ?`,
+                [qtdItens, sales, foodName, sellprice, buyprice, totalRevenue, profit, id, machineId]
             );
             return result;
         } catch (err) {
@@ -74,8 +74,7 @@ class ContentService {
                     cont.buyprice + 0.0 AS buyprice, 
                     cont.total_revenue + 0.0 AS total_revenue, 
                     cont.profit + 0.0 AS profit,
-                    mach.id AS machineId, 
-                    mach.institutionId 
+                    mach.id AS machineId
                 FROM content cont 
                 INNER JOIN machine mach ON cont.machineId = mach.id 
                 WHERE cont.machineId = ?

@@ -1,5 +1,6 @@
 import contentService from '../Services/ContentService.js';
 import foodService from '../../food-microsservice/Services/FoodService.js';
+import machineService from '../../machine-microsservice/Services/MachineService.js';
 import { publishEvent } from '../../event-bus/index.js';
 
 class ContentController {
@@ -32,10 +33,15 @@ class ContentController {
 
     async create(req, res) {
         try {
-            const { qtdItens, sales, machineId, institutionId, foodName, sellprice, buyprice } = req.body;
+            const { qtdItens, sales, machineId, foodName, sellprice, buyprice } = req.body;
 
-            if ([qtdItens, sales, sellprice, buyprice, machineId, institutionId].some(v => v < 0)) {
+            if ([qtdItens, sales, sellprice, buyprice, machineId].some(v => v < 0)) {
                 return res.status(400).json({ 'Error': 'Valores não podem ser negativos' });
+            }
+
+            const machine = await machineService.findById(machineId);
+            if (!machine) {
+                return res.status(404).json({ 'Error': `Máquina com id ${machineId} não encontrada` });
             }
 
             const food = await foodService.FindByName(foodName.trim());
@@ -49,7 +55,7 @@ class ContentController {
                 });
             }
 
-            const insertedId = await contentService.create(qtdItens, sales, machineId, institutionId, foodName, sellprice, buyprice);
+            const insertedId = await contentService.create(qtdItens, sales, machineId, foodName, sellprice, buyprice);
 
             const contentCreated = await contentService.findById(insertedId);
             if (!contentCreated) {
@@ -67,7 +73,7 @@ class ContentController {
 
    async update(req, res) {
         try {
-            const { id, machineId, institutionId } = req.params;
+            const { id, machineId} = req.params;
             const { qtdItens, sales, foodName, sellprice, buyprice } = req.body;
 
             const content = await contentService.findById(id);
@@ -77,6 +83,11 @@ class ContentController {
 
             if ([qtdItens, sales, sellprice, buyprice].some(v => v < 0)) {
                 return res.status(400).json({ 'Error': 'Valores não podem ser negativos' });
+            }
+
+            const machine = await machineService.findById(machineId);
+            if (!machine) {
+                return res.status(404).json({ 'Error': `Máquina com id ${machineId} não encontrada` });
             }
 
             const food = await foodService.FindByName(foodName.trim());
@@ -90,7 +101,7 @@ class ContentController {
                 });
             }
 
-            await contentService.update(qtdItens, sales, foodName, sellprice, buyprice, id, machineId, institutionId);
+            await contentService.update(qtdItens, sales, foodName, sellprice, buyprice, id, machineId);
             const updatedContent = await contentService.findById(id);
 
             publishEvent('content.updated', updatedContent);
