@@ -114,6 +114,20 @@ class ContentController {
             return res.status(500).json({ 'Error': 'Erro ao deletar o conteúdo' });
         }
     }
+
+    async getContentsByMachineId(req, res) {
+        try {
+            const machineId = req.params.machineId;
+            const contents = await contentService.findContentByMachineId(machineId);
+            if (contents.length === 0) {
+                return res.status(404).json({ 'Error': `Nenhum conteúdo encontrado para a máquina com id ${machineId}` });
+            }
+            return res.status(200).json(contents);
+        } catch (err) {
+            console.error("Erro ao buscar conteúdos por máquina:", err);
+            return res.status(500).json({ 'Error': 'Erro ao buscar os dados' });
+        }
+    }
 }
 
 export default new ContentController();
