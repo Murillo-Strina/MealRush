@@ -64,7 +64,7 @@ class ContentService {
 
     async findContentByMachineId(machineId) {
         try {
-            const [rows] = await db.promise().query("SELECT cont.id, cont.foodName, cont.qtd_itens, cont.sales, cont.total_revenue, cont.profit, mach.id, as machineId mach.institutionId FROM content cont INNER JOIN machine mach ON (cont.machineId = mach.id) WHERE cont.machineId = ?", [machineId]);
+            const [rows] = await db.promise().query("SELECT cont.id, cont.foodName, cont.qtd_itens, cont.sales, cont.total_revenue, cont.profit, mach.id as machineId, mach.institutionId FROM content cont INNER JOIN machine mach ON (cont.machineId = mach.id) WHERE cont.machineId = ?", [machineId]);
             return rows;
         } catch (err) {
             throw err;
