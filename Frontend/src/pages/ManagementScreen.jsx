@@ -339,7 +339,7 @@ const ManagementScreen = () => {
             alert(`Máquina com ID ${machineId} não encontrada para a instituição "${selectedInstitution.name}".`);
             return;
         }
-        navigate("/machine");
+        navigate(`/machine/${machineId}`);
     };
 
     return (
