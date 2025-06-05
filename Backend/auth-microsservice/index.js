@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import router from "./Routes/routes.js";
 import cors from "cors";
 import { initRabbitMQ } from "../event-bus/index.js"; 
+import { consumeEvent } from "../event-bus/index.js";
+import { handleAuthEvent } from "./EventHandler/AuthEventHandler.js";
 
 dotenv.config();
 const app = express();
@@ -19,6 +21,7 @@ app.use("/", router);
   try{
     await initRabbitMQ();
     console.log("RabbitMQ inicializado com sucesso!");
+    await consumeEvent('auth_events_queue', 'auth.*', handleAuthEvent);
     app.listen(3020, () => {
       console.log("Auth: Servidor rodando na porta 3020");
     });
