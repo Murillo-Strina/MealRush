@@ -12,7 +12,7 @@ const MachineScreen = () => {
     const colors = {
         darkPrimary: '#1A202C', accent: '#00C9A7', lightNeutral: '#F7FAFC',
         mediumNeutral: '#E2E8F0', textDark: '#2D3748', textLight: '#F7FAFC',
-        textSubtleDarkBg: '#A0AEC0', tableHeaderBg: '#2D3748', rowDarkAlt: '#202733',
+        textSubtleDarkBg: '#00C9A7', tableHeaderBg: '#2D3748', rowDarkAlt: '#202733',
         danger: '#E53E3E', successText: '#4ADE80', dangerText: '#F87171',
     };
 
