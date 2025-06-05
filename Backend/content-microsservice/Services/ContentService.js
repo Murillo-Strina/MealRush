@@ -20,23 +20,34 @@ class ContentService {
         }
     }
 
-    async create(qtdItens, sales, revenue, profit, machineId, institutionId, foodName) {
+    async create(qtdItens, sales, machineId, institutionId, foodName, sellprice, buyprice) {
+        const totalRevenue = sales * sellprice;
+        const profit = totalRevenue - (buyprice * qtdItens);
         try {
-            return await db.promise().query(
-                "INSERT INTO content (qtd_itens, sales, revenue, profit, machineId, institutionId, foodName) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                [qtdItens, sales, revenue, profit, machineId, institutionId, foodName]
+            const [result] = await db.promise().query(
+                `INSERT INTO content 
+                (qtd_itens, sales, machineId, institutionId, foodName, sellprice, buyprice, total_revenue, profit)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [qtdItens, sales, machineId, institutionId, foodName, sellprice, buyprice, totalRevenue, profit]
             );
+            return result.insertId;
         } catch (err) {
             throw err;
         }
     }
 
-    async update(id, qtdItens, sales, revenue, profit, foodName, machineId, institutionId) {
+    async update(qtdItens, sales, foodName, sellprice, buyprice, id, machineId, institutionId) {
+        const totalRevenue = sales * sellprice;
+        const profit = totalRevenue - (buyprice * qtdItens);
         try {
-            return await db.promise().query(
-                "UPDATE content SET qtd_itens = ?, sales = ?, revenue = ?, profit = ?, foodName = ? WHERE id = ? AND machineId = ? AND institutionId = ?",
-                [qtdItens, sales, revenue, profit, foodName, machineId, institutionId, id]
+            const [result] = await db.promise().query(
+                `UPDATE content 
+                SET qtd_itens = ?, sales = ?, foodName = ?, sellprice = ?, buyprice = ?, 
+                    total_revenue = ?, profit = ?
+                WHERE id = ? AND machineId = ? AND institutionId = ?`,
+                [qtdItens, sales, foodName, sellprice, buyprice, totalRevenue, profit, id, machineId, institutionId]
             );
+            return result;
         } catch (err) {
             throw err;
         }
@@ -44,7 +55,8 @@ class ContentService {
 
     async delete(id) {
         try {
-            await db.promise().query("DELETE FROM content WHERE id = ?", [id]);
+            const [result] = await db.promise().query("DELETE FROM content WHERE id = ?", [id]);
+            return result;
         } catch (err) {
             throw err;
         }
