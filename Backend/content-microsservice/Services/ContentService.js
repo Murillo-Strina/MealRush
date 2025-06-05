@@ -84,6 +84,18 @@ class ContentService {
             throw err;
         }
     }
+
+    async findContentByMachineIdAndFoodName(machineId, foodName) {
+        try {
+            const [rows] = await db.promise().query(`
+                SELECT * FROM content 
+                WHERE machineId = ? AND foodName = ?
+            `, [machineId, foodName]);
+            return rows[0];
+        } catch (err) {
+            throw err;
+        }
+    }
 }
 
 export default new ContentService();

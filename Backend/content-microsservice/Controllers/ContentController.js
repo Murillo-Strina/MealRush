@@ -55,6 +55,12 @@ class ContentController {
                 });
             }
 
+            const existingContent = await contentService.findContentByMachineIdAndFoodName(machineId, foodName);
+
+            if(existingContent) {
+                return res.status(400).json({ 'Error': `Conteúdo com comida '${foodName}' já existe para a máquina com id ${machineId}` }); 
+            }
+
             const insertedId = await contentService.create(qtdItens, sales, machineId, foodName, sellprice, buyprice);
 
             const contentCreated = await contentService.findById(insertedId);
@@ -93,6 +99,11 @@ class ContentController {
             const food = await foodService.FindByName(foodName.trim());
             if (!food) {
                 return res.status(404).json({ 'Error': `Comida com nome '${foodName}' não encontrada` });
+            }
+
+            const existingContent = await contentService.findContentByMachineIdAndFoodName(machineId, foodName);
+            if (existingContent && existingContent.id !== id) {
+                return res.status(400).json({ 'Error': `Conteúdo com comida '${foodName}' já existe para a máquina com id ${machineId}` });
             }
 
             if (Number(food.sellprice) !== Number(sellprice) || Number(food.buyprice) !== Number(buyprice)) {
