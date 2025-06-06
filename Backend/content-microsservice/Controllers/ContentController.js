@@ -102,7 +102,7 @@ class ContentController {
             }
 
             const existingContent = await contentService.findContentByMachineIdAndFoodName(machineId, foodName);
-            if (existingContent && existingContent.id !== id) {
+            if (existingContent && existingContent.id !== Number(id)) {
                 return res.status(400).json({ 'Error': `Conteúdo com comida '${foodName}' já existe para a máquina com id ${machineId}` });
             }
 

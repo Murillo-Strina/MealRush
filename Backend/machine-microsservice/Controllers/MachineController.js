@@ -14,7 +14,7 @@ class MachineController {
             res.status(200).json(machines);
             
     } catch (err) {
-        console.error("Erro no Controller ao buscar as máquinas:", err.message); // VERIFIQUE ESTA SAÍDA NO SEU CONSOLE
+        console.error("Erro no Controller ao buscar as máquinas:", err.message); 
         return res.status(500).json({ 'error': 'Erro interno ao buscar os dados das máquinas' });
     }
     }

@@ -22,7 +22,7 @@ class ContentService {
 
     async create(qtdItens, sales, machineId, foodName, sellprice, buyprice) {
         const totalRevenue = sales * sellprice;
-        const profit = totalRevenue - (buyprice * qtdItens);
+        const profit = (sales * sellprice) - (sales * buyprice);
         try {
             const [result] = await db.promise().query(
                 `INSERT INTO content 
@@ -38,7 +38,7 @@ class ContentService {
 
     async update(qtdItens, sales, foodName, sellprice, buyprice, id, machineId) {
         const totalRevenue = sales * sellprice;
-        const profit = totalRevenue - (buyprice * qtdItens);
+        const profit = (sales * sellprice) - (sales * buyprice);
         try {
             const [result] = await db.promise().query(
                 `UPDATE content 
@@ -92,6 +92,32 @@ class ContentService {
                 WHERE machineId = ? AND foodName = ?
             `, [machineId, foodName]);
             return rows[0];
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async updateSales(id, newSalesQuantity) {
+        try {
+            const [rows] = await db.promise().query("SELECT sellprice, buyprice FROM content WHERE id = ?", [id]);
+            
+            if (!rows || rows.length === 0) {
+                throw new Error("Item não encontrado.");
+            }
+            const item = rows[0];
+
+            const totalRevenue = newSalesQuantity * item.sellprice;
+            const profit = (newSalesQuantity * item.sellprice) - (newSalesQuantity * item.buyprice);
+            
+            const [result] = await db.promise().query(
+                `UPDATE content 
+                 SET sales = ?, total_revenue = ?, profit = ?
+                 WHERE id = ?`,
+                [newSalesQuantity, totalRevenue, profit, id]
+            );
+
+            return result;
+
         } catch (err) {
             throw err;
         }
