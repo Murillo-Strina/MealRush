@@ -31,6 +31,18 @@ class ContentController {
         }
     }
 
+    async getDetails(req, res) {
+        try {
+            const { id } = req.params;
+            const contentDetails = await contentService.getDetailsWithInstitution(id);
+
+
+            return res.status(200).json(contentDetails);
+        } catch (err) {
+            return res.status(500).json({ 'Error': 'Erro ao buscar os detalhes do conteúdo' });
+        }
+    }
+
     async create(req, res) {
         try {
             const { qtdItens, sales, machineId, foodName, sellprice, buyprice } = req.body;

@@ -101,17 +101,23 @@ class InstitutionController {
             const id = req.params.id;
             const { name, registration_number } = req.body;
 
-            const oldInstitution = await institutionService.FindById(id);
+            const institutionToUpdate = await institutionService.FindById(id);
 
-            if (!oldInstitution) {
+            if (!institutionToUpdate) {
                 return res.status(404).json({ 'Error': 'Instituição não encontrada para atualização' });
             }
 
-            if (oldInstitution.name === name) {
-                return res.status(400).json({ 'Error': 'Já existe uma instituição com esse nome' });
+            if (name) { 
+                const existingInstitution = await institutionService.FindByName(name.trim());
+                if (existingInstitution && existingInstitution.id !== Number(id)) {
+                    return res.status(409).json({ 'Error': 'Já existe outra instituição com esse nome' });
+                }
             }
 
-            await institutionService.Update(id, name.trim(), registration_number);
+            const newName = name ? name.trim() : institutionToUpdate.name;
+            const newRegistrationNumber = registration_number || institutionToUpdate.registration_number;
+
+            await institutionService.Update(id, newName, newRegistrationNumber);
 
             const updatedInstitution = await institutionService.FindById(id);
             publishEvent('institution.updated', updatedInstitution);
