@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-const Numpad = ({ colors, onConfirm, onClear, initialValue = "", maxDisplayLength = 2 }) => {
+const Numpad = ({ onConfirm, onClear, initialValue = "", maxDisplayLength = 2 }) => {
     const [displayValue, setDisplayValue] = useState(initialValue);
 
     useEffect(() => {

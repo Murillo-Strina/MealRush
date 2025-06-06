@@ -15,7 +15,6 @@ const connection = createConnection({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME || 'mealrush',
   ssl: {
-    // IMPORTANTE: só usar em DESENVOLVIMENTO
     rejectUnauthorized: false
   }
 });

@@ -1,11 +1,10 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 
 const MenuItemCard = ({
     id,
     name,
     image,
-    price,
+    sellprice,
     styles, 
     selectAction, 
     infoAction,
@@ -39,7 +38,7 @@ const MenuItemCard = ({
             <img src={image} className="card-img-top" alt={name} style={s.imageStyle} />
             <div className="card-body d-flex flex-column p-3 p-md-4">
                 <h5 className="card-title" style={s.titleStyle}>{name}</h5>
-                <p className="mb-3 fs-5" style={s.priceStyle}>R$ {price}</p>
+                <p className="mb-3 fs-5" style={s.priceStyle}>R$ {sellprice}</p>
                 <div className="mt-auto"> 
                     <div className="d-grid gap-2">
                         {selectAction && (

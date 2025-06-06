@@ -6,7 +6,6 @@ dotenv.config({ path: '../.env' });
 
 class LoginService {
   hashPassword(password) {
-    // Usa HMAC com SHA256 e o segredo do .env
     return crypto
       .createHmac("sha256", process.env.LOGIN_PASSWORD_JWT_SECRET)
       .update(password)
@@ -16,7 +15,6 @@ class LoginService {
   async login(email, password) {
     const hashedPassword = this.hashPassword(password);
 
-    // Busca usuário no banco
     const [users] = await db.promise().query(
       "SELECT * FROM users WHERE email = ? AND hashedPassword = ?",
       [email, hashedPassword]
@@ -26,7 +24,6 @@ class LoginService {
       throw new Error("Usuário ou senha inválidos");
     }
 
-    // Gera JWT
     const token = jwt.sign(
       { id: users[0].id, email: users[0].email },
       process.env.LOGIN_PASSWORD_JWT_SECRET,
@@ -39,7 +36,6 @@ class LoginService {
   async register(email, password) {
     const hashedPassword = this.hashPassword(password);
 
-    // Verifica se o usuário já existe
     const [existingUsers] = await db.promise().query(
       "SELECT * FROM users WHERE email = ?",
       [email]
@@ -49,7 +45,6 @@ class LoginService {
       throw new Error("Usuário já existe");
     }
 
-    // Insere novo usuário no banco
     await db.promise().query(
       "INSERT INTO users (email, hashedPassword) VALUES (?, ?)",
       [email, hashedPassword]
@@ -61,7 +56,6 @@ class LoginService {
   async deleteUser(email, password) {
     const hashedPassword = this.hashPassword(password);
 
-    // Verifica se o usuário existe e a senha está correta
     const [users] = await db.promise().query(
       "SELECT * FROM users WHERE email = ? AND hashedPassword = ?",
       [email, hashedPassword]

@@ -13,7 +13,7 @@ class InstitutionService {
     async FindByName(name) {
         try {
             const [rows] = await db.promise().query("SELECT * FROM institution WHERE name = ?", [name]);
-            return rows[0]; // retorna diretamente o primeiro item
+            return rows[0]; 
         } catch (err) {
             throw err;
         }
@@ -22,7 +22,7 @@ class InstitutionService {
     async FindById(id) {
         try {
             const [rows] = await db.promise().query("SELECT * FROM institution WHERE id = ?", [id]);
-            return rows[0]; // retorna diretamente o primeiro item
+            return rows[0]; 
         } catch (err) {
             throw err;
         }

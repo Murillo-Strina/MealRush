@@ -1,15 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import ChatBotUI from '../components/ChatBotUI.jsx';
 
 const API_URL_INSTITUICOES = 'http://localhost:3005/institutions/';
 const API_URL_FEEDBACK = 'http://localhost:3015/feedbacks';
-
-const getMockInstitutions = () => [
-    { id: '1', name: 'Hospital Central' },
-    { id: '2', name: 'Escola Modelo' },
-    { id: '3', name: 'Universidade Alpha' },
-];
 
 const ChatBot = () => {
     const [messages, setMessages] = useState([]);
@@ -33,8 +27,6 @@ const ChatBot = () => {
                 if (Array.isArray(data) && data.length > 0) {
                     if (data.every(item => item.hasOwnProperty('id') && item.hasOwnProperty('name'))) {
                         setInstitutions(data);
-                    } else {
-                        setInstitutions(getMockInstitutions());
                     }
                 } else if (Array.isArray(data) && data.length === 0) {
                     setInstitutions([]);

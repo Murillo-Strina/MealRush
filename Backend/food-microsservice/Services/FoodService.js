@@ -14,7 +14,7 @@
         async FindByName(name) {
             try {
                 const [rows] = await db.promise().query("SELECT * FROM foods WHERE name = ?", [name]);
-                return rows[0]; // retorna diretamente o primeiro item ou undefined
+                return rows[0];
             } catch (err) {
                 throw err;
             }
@@ -38,19 +38,19 @@
             }
         }
 
-        async Create(name, calories, carbs, proteins, fats, weight, imageUrl, price) {
+        async Create(name, calories, carbs, proteins, fats, weight, imageUrl, sellprice, buyprice ) {
             try {
-                return await db.promise().query("INSERT INTO foods(name, calories, carbs, proteins, fats, weight, imageUrl, price) values (?, ?, ?, ?, ?, ?, ?, ?)",
-                    [name, calories, carbs, proteins, fats, weight, imageUrl, price]);
+                return await db.promise().query("INSERT INTO foods(name, calories, carbs, proteins, fats, weight, imageUrl, sellprice, buyprice) values (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    [name, calories, carbs, proteins, fats, weight, imageUrl, sellprice, buyprice]);
             } catch (err) {
                 throw err;
             }
         }
 
-        async Update(id, name, calories, carbs, proteins, fats, weight, imageUrl, price) {
+        async Update(id, name, calories, carbs, proteins, fats, weight, imageUrl, sellprice, buyprice) {
             try {
-                return await db.promise().query("UPDATE foods SET name = ?, calories = ?, carbs = ?, proteins = ?, fats = ?, weight = ?, imageUrl = ?, price = ? where id = ?",
-                    [name, calories, carbs, proteins, fats, weight, imageUrl, price, id]);
+                return await db.promise().query("UPDATE foods SET name = ?, calories = ?, carbs = ?, proteins = ?, fats = ?, weight = ?, imageUrl = ?, sellprice = ?, buyprice = ? where id = ?",
+                    [name, calories, carbs, proteins, fats, weight, imageUrl, sellprice, buyprice, id]);
             } catch (err) {
                 throw err;
             }

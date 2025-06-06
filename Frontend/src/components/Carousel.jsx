@@ -1,6 +1,4 @@
-import React from 'react';
-
-const Carousel = ({ images, accentColor = '#00C9A7', itemsPerGroup = 1 }) => {
+const Carousel = ({ images, accentColor = '#00C9A7'}) => {
     if (!images || images.length === 0) {
         return <p className="text-center" style={{ color: '#718096' }}>Nenhuma imagem de parceiro disponível.</p>;
     }

@@ -32,8 +32,8 @@ class FoodController {
 
     async Create(req, res) {
         try {
-            const { name, calories, carbs, proteins, fats, weight, imageUrl, price } = req.body;
-    
+            const { name, calories, carbs, proteins, fats, weight, imageUrl, sellprice, buyprice } = req.body;
+
             if (!name || name.trim() === "") {
                 return res.status(400).json({ 'Error': 'O nome da comida deve ser preenchido' });
             }
@@ -44,11 +44,11 @@ class FoodController {
                 return res.status(409).json({ 'Error': 'Já existe uma comida com esse nome' }); // 409: Conflict
             }
 
-            if (price < 0) {
+            if (sellprice,buyprice < 0) {
                 return res.status(400).json({ 'Error': 'O preço não pode ser negativo' });
             }
     
-            await foodService.Create(name.trim(), calories, carbs, proteins, fats, weight, imageUrl, price);
+            await foodService.Create(name.trim(), calories, carbs, proteins, fats, weight, imageUrl, sellprice,buyprice);
     
             const createdFood = await foodService.FindByName(name.trim());
             publishEvent('food.created', createdFood); 
@@ -78,7 +78,7 @@ class FoodController {
     async Update(req, res) {
         try {
             const id = req.params.id;
-            const { name, calories, carbs, proteins, fats, weight, imageUrl, price } = req.body;
+            const { name, calories, carbs, proteins, fats, weight, imageUrl, sellprice, buyprice } = req.body;
     
             const oldFood = await foodService.FindById(id)
 
@@ -88,11 +88,11 @@ class FoodController {
                 return res.status(400).json({ 'Error': 'Já existe uma comida com esse nome' });
             }
 
-            if (price < 0) {
+            if (sellprice,buyprice < 0) {
                 return res.status(400).json({ 'Error': 'O preço não pode ser negativo' });
             }
 
-            await foodService.Update(id, name, calories, carbs, proteins, fats, weight, imageUrl, price);
+            await foodService.Update(id, name, calories, carbs, proteins, fats, weight, imageUrl, sellprice, buyprice);
 
             const updatedFood = await foodService.FindById(id);
 

@@ -5,14 +5,14 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { initRabbitMQ } from "../event-bus/index.js";
 import { consumeEvent } from "../event-bus/index.js";
-import { handleMachineEvent } from "./EventHandler/MachineEventHandler.js";
+import { handleContentEvent } from "./EventHandler/ContentEventHandler.js";
 
 dotenv.config();
 const app = express();
 const { urlencoded, json } = bodyParser;
 
 app.use(cors());
-app.use(urlencoded({ extended: false }));
+app.use(urlencoded({ extended: true }));
 app.use(json());
 
 app.use("/", router);
@@ -21,9 +21,9 @@ app.use("/", router);
   try {
     await initRabbitMQ();
     console.log("RabbitMQ inicializado com sucesso!");
-    await consumeEvent('machine_events_queue', 'machine.*', handleMachineEvent);
-    app.listen(3010, () => {
-      console.log("Machine: Servidor rodando na porta 3010");
+    await consumeEvent('content_events_queue', 'content.*', handleContentEvent);
+    app.listen(3025, () => {
+      console.log("Content: Servidor rodando na porta 3025");
     });
   } catch (err) {
     console.error("Erro ao inicializar o RabbitMQ:", err);

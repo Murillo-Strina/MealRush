@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { color, motion } from 'framer-motion';
+import {motion } from 'framer-motion';
 import logo from "../assets/images/logo_mealrush.png";
 import logoIMT from "../assets/images/logo-IMT.png";
 import logoFEI from "../assets/images/logo_fei_color-01.svg";
@@ -53,7 +53,7 @@ const MainMenu = () => {
                     id: food.id,
                     name: food.name,
                     image: food.imageUrl,
-                    price: food.price 
+                    sellprice: food.sellprice 
                 }));
 
                 setFoodItemsList(formattedFoods);
@@ -224,7 +224,7 @@ const MainMenu = () => {
                                     id={food.id}
                                     name={food.name}
                                     image={food.image}
-                                    price={food.price}
+                                    sellprice={food.sellprice}
                                     styles={menuItemCardStyles}
                                 />
                             </motion.div>

@@ -21,7 +21,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<MainMenu />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/forgotten-password" element={<ForgottenPasswordScreen />} />
-        <Route path="/machine" element={<MachineScreen />} />
+        <Route path="/machine/:machineId" element={<PrivateRoute><MachineScreen /></PrivateRoute>} />
         <Route path="/simulation" element ={<SimulationScreen />} />
         <Route path="/chatbot" element={<ChatBot />} />
         <Route path="/admin" element={<PrivateRoute><AdminScreen /></PrivateRoute>} />
