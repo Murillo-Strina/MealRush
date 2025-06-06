@@ -41,7 +41,7 @@ class FoodController {
             const foodExists = await foodService.FindByName(name.trim());
 
             if (foodExists) {
-                return res.status(409).json({ 'Error': 'Já existe uma comida com esse nome' }); // 409: Conflict
+                return res.status(409).json({ 'Error': 'Já existe uma comida com esse nome' }); 
             }
 
             if (sellprice,buyprice < 0) {
