@@ -7,8 +7,6 @@ A MealRush é uma empresa responsável por desenvolver máquinas de venda que pr
 - Backend: Back-end folder | Node.js struct
 - Frontend: Front-end folder | React struct
 
-*** Este projeto foi desenvolvido em Javascript
-
 # **Funcionalidades** 🔍
 
 - **Visualizar informações das refeições:** Durante a navegação do site informativo, os usuários podem conhecer um pouco mais sobre os nossos serviços, algumas das principais refeições oferecidas, além de conhecer as parcerias estabelecidas com instituições acadêmicas, aeroportos e prefeituras para utilização dos nossos serviços em parques.
@@ -22,18 +20,19 @@ A MealRush é uma empresa responsável por desenvolver máquinas de venda que pr
 # **Microsserviços** 💼
 
 Os microsserviços da nossa aplicação são:
-- **food-microsservice:** responsável pela aquisição dos dados das refeições oferecidas para visualização tanto no menu principal como na simulação virtual da máquina
-- **machine-microsservice:** responsável pela aquisição dos dados das máquinas disponíveis em cada instituição parceira
-- **institution-microsservice:** responsável pela aquisição dos dados das instituições parceiras
-- **login-microsservice:** realiza a autenticação do administrador para visualizar suas interfaces exclusivas
-- **feedback-microsservice:** chatbot que coleta as críticas e reclamações dos clientes referente à utilização das máquinas e consumo dos alimentos e os envia para o administrador poder visualizar os comentários do feedback e a instituição em que utilizaram os serviços
-- **content-microsservice:** responsável pela visualização do conteúdo das máquinas, como refeições contidas na máquina, quantidade no estoque, preço de venda e compra, receita total e lucro obtido, além da possibilidade de inserir alimento novo e atualizar estoque
+- **food-microsservice:** Responsável pela aquisição dos dados das refeições oferecidas para visualização tanto no menu principal como na simulação virtual da máquina
+- **machine-microsservice:** Responsável pela aquisição dos dados das máquinas disponíveis em cada instituição parceira
+- **institution-microsservice:** Responsável pela aquisição dos dados das instituições parceiras
+- **login-microsservice:** Realiza a autenticação do administrador para visualizar suas interfaces exclusivas
+- **feedback-microsservice:** Chatbot que coleta as críticas e reclamações dos clientes referente à utilização das máquinas e consumo dos alimentos e os envia para o administrador poder visualizar os comentários do feedback e a instituição em que utilizaram os serviços
+- **content-microsservice:** Responsável por orquestrar a lógica de negócio. Ele se comunica com os microsserviços food e machine para associar uma refeição a uma máquina específica. Sua função principal é gerenciar os dados de desempenho de cada item, como o controle de vendas e o cálculo da receita e do lucro.
 
 # **Banco de dados** 📦
 
-O banco de dados escolhido para o projeto foi relacional e hospedado utilizando o Microsoft Azure SQL Database, o que permite proporcionar alta disponibilidade, escalabilidade e segurança. A conexão com o banco foi implementada utilizando o pacote `mysql2`, com suporte a variáveis de ambiente para manter as credenciais seguras. Toda a configuração do banco, como nome de usuário, senha e host é feito através de um arquivo `.env`.
+O banco de dados escolhido para o projeto foi o **Azure Database for MySQL**, uma solução de banco de dados relacional gerenciada pela Microsoft Azure que proporciona alta disponibilidade, escalabilidade e segurança. A gestão e visualização dos dados foram realizadas utilizando a ferramenta **MySQL Workbench**.
 
-Também foi utilizado SSL na conexão com o banco hospedado na Azure para garantir segurança na transmissão de dados `(rejectUnauthorized: false)`.
+A conexão da aplicação com o banco foi implementada utilizando o pacote `mysql2`, compatível com o ecossistema MySQL. Todas as credenciais de acesso, como nome de usuário, senha e host, são configuradas de forma segura através de um arquivo `.env`.
+Para garantir a integridade e a confidencialidade dos dados em trânsito, a conexão com o banco hospedado na Azure utiliza **SSL** (`rejectUnauthorized: false`).
 
 # **Como rodar o projeto?** 🚀
 
@@ -42,7 +41,7 @@ Também foi utilizado SSL na conexão com o banco hospedado na Azure para garant
 Abra um terminal na pasta `Backend` e execute os seguintes comandos:
 
 ``` bash
-npm install -g
+npm install
 npm run dev:all
 ```
 Este comando irá iniciar todos os microsserviços de uma só vez
@@ -101,7 +100,7 @@ await consumeEvent('machine_events_queue', 'machine.*', handleMachineEvent);
 ```
 [food-microsservice]      [machine-microsservice]      [institution-microsservice]
          |                          |                           |
-         |------(RabbitMQ Exchange - topic)--------------------|
+         |------(RabbitMQ Exchange - topic)---------------------|
          |                          |                           |
          |<----- eventos ---------->|<------ eventos ---------->|
 ```
