@@ -2,7 +2,7 @@
 
 A MealRush é uma empresa responsável por desenvolver máquinas de venda que preparam refeições saudáveis, nutritivas e de forma rápida, buscando sempre satisfazer o cliente oferecendo um serviço prático e sem a necessidade de longas esperas. E neste projeto, o objetivo é apresentar nossa aplicação, através de um site informativo que contém informações sobre a empresa, sobre as refeições oferecidas e uma simulação de uma máquina de venda, bem como uma seção de envio de feedbacks na qual os clientes poderão enviar suas opiniões e críticas à respeito dos serviços das máquinas. Além disso, nossa aplicação também tera uma versão para utilização exclusiva de nossos administradores. 
 
-# **Folders** 📂
+# **Folders** 📂 
 
 - Backend: Back-end folder | Node.js struct
 - Frontend: Front-end folder | React struct
