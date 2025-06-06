@@ -1,4 +1,3 @@
-import React from "react";
 import { motion } from "framer-motion";
 
 const Meal = ({ foodId, name, img, sellprice, stock, getInfo, selectFood, styles }) => {

@@ -1,5 +1,4 @@
 import db from "../Database/connection.js";
-import axios from "axios";
 
 class ContentService {
 
@@ -65,38 +64,23 @@ class ContentService {
 
     async findContentByMachineId(machineId) {
         try {
-            const [contentsFromDB] = await db.promise().query(
+            const [rows] = await db.promise().query(
                 `SELECT * FROM content WHERE machineId = ?`, 
                 [machineId]
             );
+            return rows;
+        } catch (err) {
+            throw err;
+        }
+    }
 
-            if (contentsFromDB.length === 0) {
-                return [];
-            }
-
-            const enrichedContents = await Promise.all(
-                contentsFromDB.map(async (content) => {
-                    try {
-                        const foodResponse = await axios.get(`http://localhost:3000/foods/name/${encodeURIComponent(content.foodName)}`);
-                        const foodDetails = foodResponse.data;
-
-                        return {
-                            ...content,
-                            food_image_url: foodDetails.image_url,
-                            food_weight: foodDetails.weight,
-                            food_calories: foodDetails.calories,
-                            food_carbs: foodDetails.carbohydrates,
-                            food_proteins: foodDetails.proteins,
-                            food_fats: foodDetails.fats
-                        };
-                    } catch (error) {
-                        return content;
-                    }
-                })
+    async findContentByMachineIdAndFoodName(machineId, foodName) {
+        try {
+            const [rows] = await db.promise().query(
+                `SELECT * FROM content WHERE machineId = ? AND foodName = ?`,
+                [machineId, foodName]
             );
-
-            return enrichedContents;
-
+            return rows[0];
         } catch (err) {
             throw err;
         }
@@ -122,27 +106,6 @@ class ContentService {
             );
 
             return result;
-
-        } catch (err) {
-            throw err;
-        }
-    }
-
-    async getDetailsWithInstitution(contentId) {
-        try {
-            const content = await this.findById(contentId);
-
-            if (!content) {
-                throw new Error(`Conteúdo com ID ${contentId} não encontrado.`);
-            }
-
-            const machineId = content.machineId;
-            const machineResponse = await axios.get(`http://localhost:3010/machines/${machineId}`);
-            const institutionId = machineResponse.data.institutionId;
-            return {
-                ...content,
-                institutionId: institutionId
-            };
 
         } catch (err) {
             throw err;

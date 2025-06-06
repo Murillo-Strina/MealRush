@@ -12,11 +12,11 @@ class MachineController {
             }
 
             res.status(200).json(machines);
-            
-    } catch (err) {
-        console.error("Erro no Controller ao buscar as máquinas:", err.message); 
-        return res.status(500).json({ 'error': 'Erro interno ao buscar os dados das máquinas' });
-    }
+
+        } catch (err) {
+            console.error("Erro no Controller ao buscar as máquinas:", err.message);
+            return res.status(500).json({ 'error': 'Erro interno ao buscar os dados das máquinas' });
+        }
     }
 
     async GetMachineById(req, res) {
@@ -48,7 +48,7 @@ class MachineController {
             if (!insertedId) {
                 return res.status(500).json({ 'error': 'Falha ao criar a máquina, ID não retornado.' });
             }
-            
+
             const createdMachine = await machineService.findById(insertedId);
 
             if (!createdMachine) {
@@ -85,31 +85,31 @@ class MachineController {
 
     async Update(req, res) {
         try {
-            const { id , institutionId} = req.params;
-            const { stock, status, lastMaintenance, lastFill, rent } = req.body;
+            const { id, institutionId } = req.params;
+            const { qtd_itens, statusId, dt_ultima_manutencao, dt_ultimo_abastecimento, aluguel } = req.body;
 
-            if (stock === undefined && status === undefined && lastMaintenance === undefined && lastFill === undefined && rent === undefined) {
+            if (qtd_itens === undefined && statusId === undefined && dt_ultima_manutencao === undefined && dt_ultimo_abastecimento === undefined && aluguel === undefined) {
                 return res.status(400).json({ 'error': 'Nenhum dado fornecido para atualização.' });
             }
-            
+
             const existingMachine = await machineService.findById(id);
             if (!existingMachine) {
                 return res.status(404).json({ 'message': `A máquina com id ${id} não foi encontrada para atualizar` });
             }
 
-            const newstock = stock !== undefined ? stock : existingMachine.qtd_itens;
-            const newStatus = status !== undefined ? status : existingMachine.status;
-            const newLastMaintenance = lastMaintenance !== undefined ? lastMaintenance : existingMachine.lastMaintenance;
-            const newLastFill = lastFill !== undefined ? lastFill : existingMachine.lastFill;
-            const newRent = rent !== undefined ? rent : existingMachine.rent;
+            const newStock = qtd_itens !== undefined ? qtd_itens : existingMachine.qtd_itens;
+            const newStatus = statusId !== undefined ? statusId : existingMachine.statusId;
+            const newLastMaintenance = dt_ultima_manutencao !== undefined ? dt_ultima_manutencao : existingMachine.dt_ultima_manutencao;
+            const newLastFill = dt_ultimo_abastecimento !== undefined ? dt_ultimo_abastecimento : existingMachine.dt_ultimo_abastecimento;
+            const newRent = aluguel !== undefined ? aluguel : existingMachine.aluguel;
 
-            const affectedRows = await machineService.update(newstock, newStatus, newLastMaintenance, newLastFill, newRent, id, institutionId);
+            const affectedRows = await machineService.update(newStock, newStatus, newLastMaintenance, newLastFill, newRent, id, institutionId);
 
             if (affectedRows === 0) {
-                 const notActuallyUpdatedMachine = await machineService.findById(id);
-                 return res.status(200).json(notActuallyUpdatedMachine);
+                const notActuallyUpdatedMachine = await machineService.findById(id);
+                return res.status(200).json(notActuallyUpdatedMachine);
             }
-            
+
             const updatedMachine = await machineService.findById(id);
 
             publishEvent('machine.updated', updatedMachine);
@@ -122,6 +122,7 @@ class MachineController {
             return res.status(500).json({ 'error': 'Erro interno ao atualizar a máquina' });
         }
     }
+
 
     async GetMachinesByInstitutionId(req, res) {
         try {

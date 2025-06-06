@@ -92,7 +92,6 @@ const SimulationScreen = () => {
 
             const formattedFoods = contentsFromApi.slice(0, 9).map((contentItem, index) => {
                 const foodDetails = allFoods.find(food => food.name === contentItem.foodName);
-
                 return {
                     contentId: contentItem.id,
                     displayId: String(index + 1),
@@ -101,10 +100,10 @@ const SimulationScreen = () => {
                     sales: Number(contentItem.sales),
                     sellprice: Number(contentItem.sellprice),
                     buyprice: Number(contentItem.buyprice),
-                    image: foodDetails?.imageUrl,      
+                    image: foodDetails?.imageUrl,
                     weight: foodDetails?.weight,
                     calories: foodDetails?.calories,
-                    carbs: foodDetails?.carbs,          
+                    carbs: foodDetails?.carbs,
                     proteins: foodDetails?.proteins,
                     fats: foodDetails?.fats
                 };

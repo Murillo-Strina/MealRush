@@ -88,7 +88,6 @@ class ContentController {
         }
     }
 
-
    async update(req, res) {
         try {
             const { id, machineId} = req.params;
@@ -134,8 +133,6 @@ class ContentController {
             return res.status(500).json({ 'Error': 'Erro ao atualizar o conteúdo' });
         }
     }
-
-
 
     async delete(req, res) {
         try {

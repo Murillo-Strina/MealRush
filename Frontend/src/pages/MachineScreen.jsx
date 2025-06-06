@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import Modal from '../components/ModalMachine.jsx';
@@ -20,7 +20,7 @@ const MachineScreen = () => {
         textSubtleDarkBg: '#00C9A7', tableHeaderBg: '#2D3748', rowDarkAlt: '#202733',
         danger: '#E53E3E', successText: '#4ADE80', dangerText: '#F87171',
     };
-    
+
     const formInputStyle = {
         backgroundColor: colors.tableHeaderBg, color: colors.textLight,
         border: `1px solid ${colors.mediumNeutral}`, borderRadius: '0.375rem',
@@ -30,7 +30,7 @@ const MachineScreen = () => {
     const fetchItems = useCallback(async () => {
         if (!machineId) {
             setError("ID da máquina não especificado.");
-            setLoading(false); 
+            setLoading(false);
             return;
         }
         setLoading(true);
@@ -75,7 +75,7 @@ const MachineScreen = () => {
         };
         fetchAllFoods();
     }, [showRestockModal]);
-    
+
     const handleOpenUpdateModal = (item) => {
         setSelectedItem(item);
         setUpdateQuantity(item.quantity);
@@ -111,7 +111,7 @@ const MachineScreen = () => {
             window.alert(errorMessage);
         }
     };
-    
+
     const handleRestockSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
@@ -165,10 +165,44 @@ const MachineScreen = () => {
 
     if (error && items.length === 0) {
         return (
-            <div className="d-flex flex-column justify-content-center align-items-center text-center p-4" style={{ minHeight: '100vh', backgroundColor: colors.darkPrimary, color: colors.textLight }}>
-                <div className="alert d-flex align-items-center shadow" role="alert" style={{ backgroundColor: '#4B1717', borderColor: colors.danger, color: '#F8D7DA', maxWidth: '500px', borderRadius: '0.75rem' }}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-x-octagon-fill flex-shrink-0 me-3" viewBox="0 0 16 16"><path d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zm-6.106 4.5L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/></svg>
-                    <div><strong className="d-block fs-5">Falha ao Carregar Dados</strong>{error}</div>
+            <div
+                className="d-flex flex-column justify-content-center align-items-center text-center p-4"
+                style={{
+                    minHeight: '100vh',
+                    backgroundColor: colors.darkPrimary,
+                    color: colors.textLight
+                }}
+            >
+                <div
+                    className="alert d-flex align-items-center shadow"
+                    role="alert"
+                    style={{
+                        backgroundColor: '#4B1717',
+                        borderColor: colors.danger,
+                        color: '#F8D7DA',
+                        maxWidth: '500px',
+                        borderRadius: '0.75rem'
+                    }}
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        className="bi bi-x-octagon-fill flex-shrink-0 me-3"
+                        viewBox="0 0 16 16"
+                    >
+                    <path
+                        d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zm-6.106 4.5L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"
+                    />
+                    </svg>
+
+                    <div>
+                        <strong className="d-block fs-5">
+                            Falha ao Carregar Dados
+                        </strong>
+                        {error}
+                    </div>
                 </div>
             </div>
         );
@@ -179,19 +213,19 @@ const MachineScreen = () => {
             <div className="container-fluid">
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3 px-2">
                     <Link to="/management" className="btn rounded-pill d-flex align-items-center px-3 py-2" style={{ backgroundColor: colors.mediumNeutral, color: colors.textDark, fontWeight: 500, textDecoration: 'none' }}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-arrow-left-circle-fill me-2" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-arrow-left-circle-fill me-2" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" /></svg>
                         Voltar
                     </Link>
                     <h1 className="fw-bolder m-0 fs-4 lh-base text-center" style={{ color: colors.accent }}>Relatório da Máquina <br className="d-md-none" />{machineId}</h1>
                     <div style={{ minWidth: '220px' }} className="text-end">
                         <button className="btn rounded-pill d-flex align-items-center gap-2 px-3 py-2" style={{ backgroundColor: colors.accent, color: colors.darkPrimary, fontWeight: 'bold' }} onClick={() => setShowRestockModal(true)}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" /></svg>
                             Cadastrar Abastecimento
                         </button>
                     </div>
                 </div>
-                 {error && items.length > 0 && (
-                    <div className="alert alert-danger mx-2" role="alert" style={{backgroundColor: '#4B1717', color: '#F8D7DA', borderColor: colors.danger}}>
+                {error && items.length > 0 && (
+                    <div className="alert alert-danger mx-2" role="alert" style={{ backgroundColor: '#4B1717', color: '#F8D7DA', borderColor: colors.danger }}>
                         Ocorreu um erro: {error}. Alguns dados podem não estar atualizados.
                     </div>
                 )}
@@ -227,7 +261,7 @@ const MachineScreen = () => {
                                 <tr>
                                     <td colSpan="8" className="text-center py-5" style={{ backgroundColor: colors.rowDarkAlt }}>
                                         <p className="fs-5 mb-0" style={{ color: colors.textSubtleDarkBg }}>Nenhum item encontrado para esta máquina.</p>
-                                        {loading && <p className="fs-6 mt-2" style={{color: colors.textLight}}>Verificando...</p>}
+                                        {loading && <p className="fs-6 mt-2" style={{ color: colors.textLight }}>Verificando...</p>}
                                     </td>
                                 </tr>
                             )}
@@ -235,7 +269,7 @@ const MachineScreen = () => {
                     </table>
                 </div>
             </div>
-            
+
             <Modal show={showRestockModal} onClose={handleCloseModals} title="Cadastrar Novo Abastecimento">
                 <form onSubmit={handleRestockSubmit}>
                     <div className="mb-3">
@@ -254,22 +288,22 @@ const MachineScreen = () => {
                         <input type="number" name="quantity" id="quantity-input" style={formInputStyle} placeholder="Ex: 50" min="1" required />
                     </div>
                     <div className="d-flex justify-content-end gap-2 mt-4">
-                        <button type="button" className="btn" style={{backgroundColor: colors.mediumNeutral, color: colors.textDark}} onClick={handleCloseModals}>Cancelar</button>
-                        <button type="submit" className="btn" style={{backgroundColor: colors.accent, color: colors.darkPrimary, fontWeight: 'bold'}}>Salvar</button>
+                        <button type="button" className="btn" style={{ backgroundColor: colors.mediumNeutral, color: colors.textDark }} onClick={handleCloseModals}>Cancelar</button>
+                        <button type="submit" className="btn" style={{ backgroundColor: colors.accent, color: colors.darkPrimary, fontWeight: 'bold' }}>Salvar</button>
                     </div>
                 </form>
             </Modal>
-            
+
             {selectedItem && (
-                 <Modal show={showUpdateModal} onClose={handleCloseModals} title={`Atualizar Estoque: ${selectedItem.name}`}>
+                <Modal show={showUpdateModal} onClose={handleCloseModals} title={`Atualizar Estoque: ${selectedItem.name}`}>
                     <div>
                         <div className="mb-3">
                             <label htmlFor="update-quantity-input" className="form-label">Nova Quantidade em Estoque</label>
-                            <input type="number" id="update-quantity-input" style={formInputStyle} value={updateQuantity} onChange={(e) => setUpdateQuantity(e.target.value)} min="0" required/>
+                            <input type="number" id="update-quantity-input" style={formInputStyle} value={updateQuantity} onChange={(e) => setUpdateQuantity(e.target.value)} min="0" required />
                         </div>
                         <div className="d-flex justify-content-end gap-2 mt-4">
-                            <button type="button" className="btn" style={{backgroundColor: colors.mediumNeutral, color: colors.textDark}} onClick={handleCloseModals}>Cancelar</button>
-                            <button type="button" className="btn" style={{backgroundColor: colors.accent, color: colors.darkPrimary, fontWeight: 'bold'}} onClick={handleUpdateStockSubmit}>Atualizar</button>
+                            <button type="button" className="btn" style={{ backgroundColor: colors.mediumNeutral, color: colors.textDark }} onClick={handleCloseModals}>Cancelar</button>
+                            <button type="button" className="btn" style={{ backgroundColor: colors.accent, color: colors.darkPrimary, fontWeight: 'bold' }} onClick={handleUpdateStockSubmit}>Atualizar</button>
                         </div>
                     </div>
                 </Modal>

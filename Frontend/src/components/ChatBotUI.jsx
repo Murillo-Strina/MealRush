@@ -1,11 +1,4 @@
-import React from 'react';
 import { useNavigate } from "react-router-dom";
-
-const mainMenu = () => {
-  navigate("/");
-}
-
-
 
 const ChatBotUI = ({
   messages,
@@ -16,9 +9,8 @@ const ChatBotUI = ({
   step,
   handleOptionClick
 }) => {
-  const navigate = useNavigate(); // Chame o hook DENTRO do componente funcional
+  const navigate = useNavigate(); 
 
-  // Defina a função que usa 'navigate' DENTRO do componente
   const handleGoToMainMenu = () => {
     navigate("/");
   };
@@ -41,7 +33,6 @@ const ChatBotUI = ({
         flexDirection: 'column',
         margin: 'auto',
       }}>
-        {/* Cabeçalho */}
         <div className='p-3 border-bottom text-center'
           style={{ borderColor: '#424242' }}>
           <h5 style={{
@@ -61,8 +52,6 @@ const ChatBotUI = ({
             Conte com a gente para otimizar sua experiência!
           </small>
         </div>
-
-        {/* Área de Mensagens */}
         <div style={{
           flex: 1,
           overflowY: 'auto',
@@ -80,7 +69,6 @@ const ChatBotUI = ({
                 display: 'flex',
                 flexDirection: 'column'
               }}>
-                {/* Conteúdo da Mensagem (Texto ou Botões) */}
                 <div>
                   {msg.messageType === 'options' && msg.options ? (
                     <>
@@ -121,7 +109,6 @@ const ChatBotUI = ({
                     </p>
                   )}
                 </div>
-                {/* Timestamp */}
                 <small style={{
                   fontSize: '12px',
                   color: msg.isBot ? '#A0A0A0' : '#BDBDBD',
@@ -135,8 +122,6 @@ const ChatBotUI = ({
           ))}
           <div ref={messagesEndRef} />
         </div>
-
-        {/* Área de Input */}
         <div className='p-3 border-top'
           style={{ borderColor: '#424242' }}>
           <form className='d-flex gap-2' onSubmit={handleSubmit}>
