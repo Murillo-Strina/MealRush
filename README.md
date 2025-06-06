@@ -22,11 +22,18 @@ A MealRush é uma empresa responsável por desenvolver máquinas de venda que pr
 # **Microsserviços** 💼
 
 Os microsserviços da nossa aplicação são:
-- **food-microsservice:** responsável pela aquisição dos dados das refeições oferecidas pela empresa
+- **food-microsservice:** responsável pela aquisição dos dados das refeições oferecidas para visualização tanto no menu principal como na simulação virtual da máquina
 - **machine-microsservice:** responsável pela aquisição dos dados das máquinas disponíveis em cada instituição parceira
 - **institution-microsservice:** responsável pela aquisição dos dados das instituições parceiras
 - **login-microsservice:** realiza a autenticação do administrador para visualizar suas interfaces exclusivas
 - **feedback-microsservice:** chatbot que coleta as críticas e reclamações dos clientes referente à utilização das máquinas e consumo dos alimentos e os envia para o administrador poder visualizar os comentários do feedback e a instituição em que utilizaram os serviços
+- **content-microsservice:** responsável pela visualização do conteúdo das máquinas, como refeições contidas na máquina, quantidade no estoque, preço de venda e compra, receita total e lucro obtido, além da possibilidade de inserir alimento novo e atualizar estoque
+
+# **Banco de dados** 📦
+
+O banco de dados escolhido para o projeto foi relacional e hospedado utilizando o Microsoft Azure SQL Database, o que permite proporcionar alta disponibilidade, escalabilidade e segurança. A conexão com o banco foi implementada utilizando o pacote `mysql2`, com suporte a variáveis de ambiente para manter as credenciais seguras. Toda a configuração do banco, como nome de usuário, senha e host é feito através de um arquivo `.env`.
+
+Também foi utilizado SSL na conexão com o banco hospedado na Azure para garantir segurança na transmissão de dados `(rejectUnauthorized: false)`.
 
 # **Como rodar o projeto?** 🚀
 
