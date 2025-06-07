@@ -22,7 +22,7 @@ app.use("/", router);
     console.log("RabbitMQ inicializado com sucesso!");
     await consumeEvent('feedback_events_queue', 'feedback.*', handleFeedbackEvent);
     app.listen(3015, () => {
-      console.log("Food: Servidor rodando na porta 3015");
+      console.log("Feedback: Servidor rodando na porta 3015");
     });
   } catch (err) {
     console.error("Erro ao inicializar o RabbitMQ:", err);
