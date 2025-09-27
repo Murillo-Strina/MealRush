@@ -13,7 +13,7 @@ COPY event-bus/ ../event-bus/
 
 COPY .env ../.env
 
-EXPOSE 3020
+EXPOSE 3010
 ENV NODE_ENV=production
 
 CMD ["node", "index.js"]
