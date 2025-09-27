@@ -6,8 +6,13 @@ import cors from "cors";
 import { initRabbitMQ } from "../event-bus/index.js"; 
 import { consumeEvent } from "../event-bus/index.js";
 import { handleAuthEvent } from "./EventHandler/AuthEventHandler.js";
+import { fileURLToPath } from 'url';
+import path from 'path';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 const app = express();
 const { urlencoded, json } = bodyParser;
 
@@ -22,8 +27,9 @@ app.use("/", router);
     await initRabbitMQ();
     console.log("RabbitMQ inicializado com sucesso!");
     await consumeEvent('auth_events_queue', 'auth.*', handleAuthEvent);
-    app.listen(3020, () => {
-      console.log("Auth: Servidor rodando na porta 3020");
+    const PORT = process.env.PORT || 3020;
+    app.listen(PORT, () => {
+      console.log(`Auth: Servidor rodando na porta ${PORT}`);
     });
   } catch (err) {
     console.error("Erro ao inicializar o servidor:", err);

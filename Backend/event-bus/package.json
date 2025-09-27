@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "amqp": "^0.2.7",
+    "amqplib": "^0.10.3",
     "dotenv": "^16.5.0"
   }
 }
