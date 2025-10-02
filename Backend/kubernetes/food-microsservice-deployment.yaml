@@ -14,7 +14,7 @@ spec:
         app: food-microsservice
     spec:
       containers:
-        - name: lembretes
+        - name: food-microsservice
           image: docker.io/lucascrapino/food-microsservice:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
