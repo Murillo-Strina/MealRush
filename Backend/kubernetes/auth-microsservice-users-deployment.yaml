@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-microsservice-users
+  labels:
+    app: auth-microsservice-users
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-microsservice-users
+  template:
+    metadata:
+      labels:
+        app: auth-microsservice-users
+    spec:
+      containers:
+        - name: auth-users
+          image: mealrush/auth-microsservice-users:latest
+          ports:
+            - containerPort: 8081
+          env:
+            - name: DB_HOST
+              value: "mysql"
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_USER
+              value: "root"
+            - name: DB_PASSWORD
+              value: "senha"
+            - name: DB_NAME
+              value: "mealrush"
+            - name: LOGIN_PASSWORD_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: login_password_jwt_secret
