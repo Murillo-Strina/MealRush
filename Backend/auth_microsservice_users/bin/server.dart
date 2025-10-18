@@ -23,8 +23,7 @@ Response _echoHandler(Request request) {
 late final LoginService loginService;
 
 void main(List<String> args) async {
-  final dot = DotEnv(includePlatformEnvironment: true)
-    ..load(['../../.env']); // Backend/.env (mantendo seu padrão atual)
+  final dot = DotEnv(includePlatformEnvironment: true)..load();
 
   final dbHost = dot['DB_HOST'] ?? '127.0.0.1';
   final dbPort = int.tryParse(dot['DB_PORT'] ?? '3306') ?? 3306;
