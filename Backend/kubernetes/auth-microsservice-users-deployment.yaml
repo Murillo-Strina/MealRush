@@ -2,8 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: auth-microsservice-users
-  labels:
-    app: auth-microsservice-users
+  namespace: mealrush
 spec:
   replicas: 1
   selector:
@@ -15,23 +14,32 @@ spec:
         app: auth-microsservice-users
     spec:
       containers:
-        - name: auth-users
-          image: mealrush/auth-microsservice-users:latest
+        - name: auth-microsservice-users
+          image: docker.io/lucascrapino/auth-microsservice-users:1.0.0
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8081
-          env:
-            - name: DB_HOST
-              value: "mysql"
-            - name: DB_PORT
-              value: "3306"
-            - name: DB_USER
-              value: "root"
-            - name: DB_PASSWORD
-              value: "senha"
-            - name: DB_NAME
-              value: "mealrush"
-            - name: LOGIN_PASSWORD_JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-secret
-                  key: login_password_jwt_secret
+          envFrom:
+            - secretRef:
+                name: auth-users-env
+          resources:
+            limits:
+              memory: 256Mi
+              cpu: 1
+            requests:
+              memory: 256Mi
+              cpu: 1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-microsservice-users
+  namespace: mealrush
+spec:
+  selector:
+    app: auth-microsservice-users
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+  type: NodePort
