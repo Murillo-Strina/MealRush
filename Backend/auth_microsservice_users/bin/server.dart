@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
-import 'package:mysql1/mysql1.dart';
 import 'package:dotenv/dotenv.dart';
+import 'package:mysql_client/mysql_client.dart'; // <-- mysql_client
 import 'package:auth_microsservice_users/login_service.dart';
 import 'package:auth_microsservice_users/rabbitmq_service.dart';
 
@@ -31,17 +31,30 @@ void main(List<String> args) async {
   final dbPassword = dot['DB_PASSWORD'] ?? '';
   final dbName = dot['DB_NAME'] ?? 'mealrush';
 
+  // mysql_client não usa "JWT_SECRET" pra nada; só repasso ao LoginService
   final jwtSecret = dot['LOGIN_PASSWORD_JWT_SECRET'] ?? 'secret';
 
-  final dbSettings = ConnectionSettings(
+  // Ativa/desativa TLS/SSL (mysql_client usa "secure")
+  final useSSL = (dot['DB_SSL'] ?? 'true').toLowerCase() == 'true';
+
+  // Pool de conexões do mysql_client
+  final dbPool = MySQLConnectionPool(
     host: dbHost,
     port: dbPort,
-    user: dbUser,
+    userName: dbUser,
     password: dbPassword,
-    db: dbName,
-    useSSL: true,
-    timeout: const Duration(seconds: 5),
+    databaseName: dbName,
+    maxConnections: 10,
+    secure: useSSL, // equivalente ao useSSL:true do mysql1
   );
+
+  // (Opcional) smoke test pra garantir que conectou
+  try {
+    await dbPool.execute('SELECT 1;');
+  } catch (e) {
+    stderr.writeln('Erro ao conectar ao MySQL: $e');
+    exit(1);
+  }
 
   RabbitMQService? rabbit;
   try {
@@ -51,7 +64,9 @@ void main(List<String> args) async {
     rabbit = null;
   }
 
-  loginService = LoginService(dbSettings, jwtSecret, rabbit);
+  // >>>> ALTERAÇÃO: passe o pool para o LoginService
+  // Você precisará ajustar o construtor do LoginService para aceitar MySQLConnectionPool
+  loginService = LoginService(dbPool, jwtSecret, rabbit);
 
   _router.get('/', _rootHandler);
   _router.get('/echo/<message>', _echoHandler);
@@ -126,12 +141,17 @@ void main(List<String> args) async {
 
   // Bind
   final ip = InternetAddress.anyIPv4;
-  final handler = Pipeline()
-      .addMiddleware(logRequests())
-      .addHandler(_router.call);
+  final handler = Pipeline().addMiddleware(logRequests()).addHandler(_router.call);
 
-  // Respeita a env PORT (seus testes setam 8080)
   final port = int.parse(Platform.environment['PORT'] ?? '8081');
   final server = await serve(handler, ip, port);
   print('Server listening on port ${server.port}');
+
+  // Fechamento limpo do pool ao encerrar o processo
+  ProcessSignal.sigint.watch().listen((_) async {
+    print('Encerrando...');
+    await dbPool.close();
+    await server.close(force: true);
+    exit(0);
+  });
 }

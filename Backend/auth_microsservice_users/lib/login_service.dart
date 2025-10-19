@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
-import 'package:mysql1/mysql1.dart';
+import 'package:mysql_client/mysql_client.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:auth_microsservice_users/rabbitmq_service.dart';
 
 class LoginService {
-  final ConnectionSettings dbSettings;
+  final MySQLConnectionPool pool;
   final String jwtSecret;
   final RabbitMQService? rabbit;
 
-  LoginService(this.dbSettings, this.jwtSecret, [this.rabbit]);
+  LoginService(this.pool, this.jwtSecret, [this.rabbit]);
 
-  // Usa Base64 para caber no VARCHAR(45) do campo `password`
+  /// Usa Base64 para caber no VARCHAR(45) do campo `password`
   String hashPassword(String password) {
     final key = utf8.encode(jwtSecret);
     final bytes = utf8.encode(password);
@@ -20,44 +20,54 @@ class LoginService {
     return base64Encode(digestBytes); // 44 chars (com "=="), cabe em 45
   }
 
-  Future<Results> _query(String sql, [List<Object?>? params]) async {
-    final conn = await MySqlConnection.connect(dbSettings);
+  /// Executa query com mysql_client (params nomeados: :nome)
+  Future<IResultSet> _query(String sql, [Map<String, Object?> params = const {}]) async {
     try {
-      return await conn.query(sql, params);
-    } finally {
-      await conn.close();
+      return await pool.execute(sql, params);
+    } catch (e) {
+      // Propaga como Exception padrão para manter tratamento anterior
+      throw Exception('Erro de banco de dados: $e');
     }
   }
 
   Future<Map<String, dynamic>> login(String username, String password) async {
     final hashed = hashPassword(password);
-    final rows = await _query(
-      'SELECT id_user, username FROM users WHERE username = ? AND password = ?',
-      [username, hashed],
+
+    final rs = await _query(
+      'SELECT id_user, username FROM users WHERE username = :u AND password = :p LIMIT 1',
+      {'u': username, 'p': hashed},
     );
-    if (rows.isEmpty) {
+
+    if (rs.rows.isEmpty) {
       throw Exception('Usuário ou senha inválidos');
     }
-    final row = rows.first;
-    final jwt = JWT({'id_user': row['id_user'], 'username': row['username']});
+
+    final row = rs.rows.first;
+    final idUserStr = row.colByName('id_user');
+    final uname = row.colByName('username');
+
+    final idUser = (idUserStr == null) ? null : int.tryParse(idUserStr);
+    final jwt = JWT({'id_user': idUser, 'username': uname});
     final token = jwt.sign(SecretKey(jwtSecret), expiresIn: const Duration(hours: 1));
+
     return {
       'token': token,
-      'user': {'id_user': row['id_user'], 'username': row['username']}
+      'user': {'id_user': idUser, 'username': uname}
     };
   }
 
   Future<void> register(String username, String password) async {
     final hashed = hashPassword(password);
+
     final exists = await _query(
-      'SELECT id_user FROM users WHERE username = ?',
-      [username],
+      'SELECT id_user FROM users WHERE username = :u LIMIT 1',
+      {'u': username},
     );
-    if (exists.isNotEmpty) throw Exception('Usuário já existe');
+    if (exists.rows.isNotEmpty) throw Exception('Usuário já existe');
 
     await _query(
-      'INSERT INTO users (username, password) VALUES (?, ?)',
-      [username, hashed],
+      'INSERT INTO users (username, password) VALUES (:u, :p)',
+      {'u': username, 'p': hashed},
     );
 
     try {
@@ -65,19 +75,24 @@ class LoginService {
         await rabbit!.publish('user.registered', {'username': username});
       }
     } catch (e) {
+      // Não derruba o fluxo por falha no evento
       print('Aviso: falha ao publicar evento user.registered: $e');
     }
   }
 
   Future<void> deleteUser(String username, String password) async {
     final hashed = hashPassword(password);
-    final found = await _query(
-      'SELECT id_user FROM users WHERE username = ? AND password = ?',
-      [username, hashed],
-    );
-    if (found.isEmpty) throw Exception('Usuário ou senha inválidos');
 
-    await _query('DELETE FROM users WHERE username = ?', [username]);
+    final found = await _query(
+      'SELECT id_user FROM users WHERE username = :u AND password = :p LIMIT 1',
+      {'u': username, 'p': hashed},
+    );
+    if (found.rows.isEmpty) throw Exception('Usuário ou senha inválidos');
+
+    await _query(
+      'DELETE FROM users WHERE username = :u',
+      {'u': username},
+    );
 
     try {
       if (rabbit != null) {
@@ -91,18 +106,26 @@ class LoginService {
   Future<void> updatePassword(String username, String newPassword) async {
     final hashed = hashPassword(newPassword);
     await _query(
-      'UPDATE users SET password = ? WHERE username = ?',
-      [hashed, username],
+      'UPDATE users SET password = :p WHERE username = :u',
+      {'p': hashed, 'u': username},
     );
   }
 
   Future<Map<String, dynamic>?> findUserByUsername(String username) async {
-    final rows = await _query(
-      'SELECT id_user, username FROM users WHERE username = ?',
-      [username],
+    final rs = await _query(
+      'SELECT id_user, username FROM users WHERE username = :u LIMIT 1',
+      {'u': username},
     );
-    if (rows.isEmpty) return null;
-    final r = rows.first;
-    return {'id_user': r['id_user'], 'username': r['username']};
+
+    if (rs.rows.isEmpty) return null;
+
+    final r = rs.rows.first;
+    final idStr = r.colByName('id_user');
+    final name = r.colByName('username');
+
+    return {
+      'id_user': idStr == null ? null : int.tryParse(idStr),
+      'username': name,
+    };
   }
 }
