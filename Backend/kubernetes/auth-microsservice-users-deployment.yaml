@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-microsservice
+  name: auth-microsservice-users
   namespace: mealrush
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth-microsservice
+      app: auth-microsservice-users
   template:
     metadata:
       labels:
-        app: auth-microsservice
+        app: auth-microsservice-users
     spec:
       containers:
-        - name: auth-microsservice
-          image: docker.io/lucascrapino/auth-microsservice:1.0.0
+        - name: auth-microsservice-users
+          image: docker.io/lucascrapino/auth-microsservice-users:1.0.1
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 3020
+            - containerPort: 8081
           envFrom:
             - secretRef:
-                name: auth-env
+                name: auth-users-env
           resources:
             limits:
               memory: 256Mi
@@ -33,13 +33,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-microsservice
+  name: auth-microsservice-users
   namespace: mealrush
 spec:
   selector:
-    app: auth-microsservice
+    app: auth-microsservice-users
   ports:
     - protocol: TCP
-      port: 3020
-      targetPort: 3020
+      port: 8081
+      targetPort: 8081
   type: NodePort
