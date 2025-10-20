@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: auth-microsservice-users
-          image: docker.io/lucascrapino/auth-microsservice-users:1.0.0
+          image: docker.io/lucascrapino/auth-microsservice-users:1.0.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8081

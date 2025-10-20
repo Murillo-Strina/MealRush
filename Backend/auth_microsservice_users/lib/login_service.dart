@@ -34,7 +34,7 @@ class LoginService {
     final hashed = hashPassword(password);
 
     final rs = await _query(
-      'SELECT id_user, username FROM users WHERE username = :u AND password = :p LIMIT 1',
+      'SELECT id_user, username FROM app_users WHERE username = :u AND password = :p LIMIT 1',
       {'u': username, 'p': hashed},
     );
 
@@ -60,13 +60,13 @@ class LoginService {
     final hashed = hashPassword(password);
 
     final exists = await _query(
-      'SELECT id_user FROM users WHERE username = :u LIMIT 1',
+      'SELECT id_user FROM app_users WHERE username = :u LIMIT 1',
       {'u': username},
     );
     if (exists.rows.isNotEmpty) throw Exception('Usuário já existe');
 
     await _query(
-      'INSERT INTO users (username, password) VALUES (:u, :p)',
+      'INSERT INTO app_users (username, password) VALUES (:u, :p)',
       {'u': username, 'p': hashed},
     );
 
@@ -84,13 +84,13 @@ class LoginService {
     final hashed = hashPassword(password);
 
     final found = await _query(
-      'SELECT id_user FROM users WHERE username = :u AND password = :p LIMIT 1',
+      'SELECT id_user FROM app_users WHERE username = :u AND password = :p LIMIT 1',
       {'u': username, 'p': hashed},
     );
     if (found.rows.isEmpty) throw Exception('Usuário ou senha inválidos');
 
     await _query(
-      'DELETE FROM users WHERE username = :u',
+      'DELETE FROM app_users WHERE username = :u',
       {'u': username},
     );
 
@@ -106,14 +106,14 @@ class LoginService {
   Future<void> updatePassword(String username, String newPassword) async {
     final hashed = hashPassword(newPassword);
     await _query(
-      'UPDATE users SET password = :p WHERE username = :u',
+      'UPDATE app_users SET password = :p WHERE username = :u',
       {'p': hashed, 'u': username},
     );
   }
 
   Future<Map<String, dynamic>?> findUserByUsername(String username) async {
     final rs = await _query(
-      'SELECT id_user, username FROM users WHERE username = :u LIMIT 1',
+      'SELECT id_user, username FROM app_users WHERE username = :u LIMIT 1',
       {'u': username},
     );
 
