@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
+import 'screens/login_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -7,12 +7,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Meu App',
+      title: 'MealRush Club',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      home: const LoginScreen(),
     );
   }
 }
