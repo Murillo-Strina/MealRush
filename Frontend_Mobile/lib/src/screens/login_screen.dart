@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'registration_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -34,7 +35,7 @@ class LoginScreen extends StatelessWidget {
                         constraints: BoxConstraints(maxWidth: 400),
                         padding: const EdgeInsets.all(12.0),
                         decoration: BoxDecoration(
-                          color: Colors.orange[300],
+                          color: Colors.orange,
                           borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: Column(
@@ -94,6 +95,13 @@ class LoginScreen extends StatelessWidget {
                                       minimumSize: Size(0, 48),
                                     ),
                                     onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const RegistrationScreen(),
+                                        ),
+                                      );
                                     },
                                     child: Text('Criar conta'),
                                   ),
@@ -114,4 +122,3 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
-
