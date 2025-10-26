@@ -98,7 +98,19 @@ class RegistrationScreen extends StatelessWidget {
                                   foregroundColor: Colors.orange,
                                   minimumSize: Size(0, 48),
                                 ),
-                                onPressed: () {},
+                                onPressed: () async {
+                                          try {
+                                            await _auth.register(_emailController.text, _passwordController.text);
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(content: Text('Conta criada com sucesso!')),
+                                            );
+                                            Navigator.pop(context); // volta pra tela de login
+                                          } catch (e) {
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(content: Text('Erro: $e')),
+                                            );
+                                          }
+                                        },
                                 child: Text('Criar conta'),
                               ),
                             ),
