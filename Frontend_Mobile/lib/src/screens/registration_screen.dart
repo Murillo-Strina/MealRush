@@ -1,12 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:mealrush_club/src/services/auth_service.dart';
 
-class RegistrationScreen extends StatelessWidget {
+class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
+
+  @override
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
+}
+
+class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _auth = AuthService();
+
+  bool _loading = false;
+  String? _errorMessage;
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _register() async {
+    setState(() {
+      _loading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      await _auth.register(
+        _usernameController.text,
+        _passwordController.text,
+      );
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Conta criada com sucesso!')),
+      );
+      Navigator.pop(context);
+    } catch (e) {
+      setState(() => _errorMessage = e.toString().replaceFirst('Exception: ', ''));
+    } finally {
+      if (mounted) {
+        setState(() => _loading = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.grey[800]),
+      ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
           return SingleChildScrollView(
@@ -20,7 +72,7 @@ class RegistrationScreen extends StatelessWidget {
                   vertical: 24.0,
                 ),
                 child: Align(
-                  alignment: Alignment(0.0, -0.2),
+                  alignment: const Alignment(0.0, -0.2),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -31,7 +83,7 @@ class RegistrationScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 24.0),
                       Container(
-                        constraints: BoxConstraints(maxWidth: 400),
+                        constraints: const BoxConstraints(maxWidth: 400),
                         padding: const EdgeInsets.all(12.0),
                         decoration: BoxDecoration(
                           color: Colors.orange,
@@ -41,10 +93,11 @@ class RegistrationScreen extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             TextFormField(
-                              keyboardType: TextInputType.emailAddress,
-                              style: TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                hintText: 'Insira seu nome',
+                              controller: _usernameController,
+                              keyboardType: TextInputType.text,
+                              style: const TextStyle(color: Colors.white),
+                              decoration: const InputDecoration(
+                                hintText: 'Insira seu usuário',
                                 hintStyle: TextStyle(color: Colors.white70),
                                 icon: Icon(
                                   Icons.account_circle_outlined,
@@ -53,33 +106,16 @@ class RegistrationScreen extends StatelessWidget {
                                 border: InputBorder.none,
                               ),
                             ),
-                            Divider(
+                            const Divider(
                               color: Colors.white54,
                               thickness: 1,
                               height: 20,
                             ),
                             TextFormField(
-                              keyboardType: TextInputType.emailAddress,
-                              style: TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                hintText: 'Insira seu email',
-                                hintStyle: TextStyle(color: Colors.white70),
-                                icon: Icon(
-                                  Icons.email_outlined,
-                                  color: Colors.white,
-                                ),
-                                border: InputBorder.none,
-                              ),
-                            ),
-                            Divider(
-                              color: Colors.white54,
-                              thickness: 1,
-                              height: 20,
-                            ),
-                            TextFormField(
+                              controller: _passwordController,
                               obscureText: true,
-                              style: TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
+                              style: const TextStyle(color: Colors.white),
+                              decoration: const InputDecoration(
                                 hintText: 'Insira sua senha',
                                 hintStyle: TextStyle(color: Colors.white70),
                                 icon: Icon(
@@ -89,29 +125,33 @@ class RegistrationScreen extends StatelessWidget {
                                 border: InputBorder.none,
                               ),
                             ),
-                            SizedBox(height: 15),
+                            const SizedBox(height: 15),
+                            if (_errorMessage != null)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: Text(
+                                  _errorMessage!,
+                                  style: const TextStyle(
+                                      color: Colors.redAccent,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
                                   foregroundColor: Colors.orange,
-                                  minimumSize: Size(0, 48),
+                                  minimumSize: const Size(0, 48),
                                 ),
-                                onPressed: () async {
-                                          try {
-                                            await _auth.register(_emailController.text, _passwordController.text);
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(content: Text('Conta criada com sucesso!')),
-                                            );
-                                            Navigator.pop(context); // volta pra tela de login
-                                          } catch (e) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(content: Text('Erro: $e')),
-                                            );
-                                          }
-                                        },
-                                child: Text('Criar conta'),
+                                onPressed: _loading ? null : _register,
+                                child: _loading
+                                    ? const CircularProgressIndicator(
+                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+                                      )
+                                    : const Text('Criar conta'),
                               ),
                             ),
                           ],
@@ -128,4 +168,3 @@ class RegistrationScreen extends StatelessWidget {
     );
   }
 }
-

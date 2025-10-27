@@ -1,4 +1,6 @@
-import 'package:auth_microsservice_users/services/auth_service.dart';
+import 'package:flutter/material.dart';
+import 'package:mealrush_club/src/screens/registration_screen.dart';
+import 'package:mealrush_club/src/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -8,12 +10,19 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _auth = AuthService();
 
   bool _loading = false;
   String? _errorMessage;
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   void _login() async {
     setState(() {
@@ -23,20 +32,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       final result = await _auth.login(
-        _emailController.text,
+        _usernameController.text,
         _passwordController.text,
       );
       print('Token: ${result['token']}');
 
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login bem-sucedido!')),
       );
 
       // TODO: redirecionar para próxima tela
     } catch (e) {
-      setState(() => _errorMessage = e.toString());
+      setState(() => _errorMessage = e.toString().replaceFirst('Exception: ', ''));
     } finally {
-      setState(() => _loading = false);
+      if (mounted) {
+        setState(() => _loading = false);
+      }
     }
   }
 
@@ -74,15 +86,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Column(
                           children: [
                             TextField(
-                              controller: _emailController,
+                              controller: _usernameController,
                               style: const TextStyle(color: Colors.white),
                               decoration: const InputDecoration(
-                                hintText: 'Insira seu email',
+                                hintText: 'Insira seu usuário',
                                 hintStyle: TextStyle(color: Colors.white70),
-                                icon: Icon(Icons.email_outlined,
+                                icon: Icon(Icons.account_circle_outlined,
                                     color: Colors.white),
                                 border: InputBorder.none,
                               ),
+                              keyboardType: TextInputType.text,
                             ),
                             const Divider(color: Colors.white54, thickness: 1),
                             TextField(
@@ -99,10 +112,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 15),
                             if (_errorMessage != null)
-                              Text(
-                                _errorMessage!,
-                                style: const TextStyle(
-                                    color: Colors.red, fontSize: 14),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: Text(
+                                  _errorMessage!,
+                                  style: const TextStyle(
+                                      color: Colors.redAccent,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             Row(
                               children: [
@@ -115,7 +134,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                     onPressed: _loading ? null : _login,
                                     child: _loading
-                                        ? const CircularProgressIndicator()
+                                        ? const CircularProgressIndicator(
+                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+                                        )
                                         : const Text('Entrar'),
                                   ),
                                 ),
@@ -127,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       foregroundColor: Colors.orange,
                                       minimumSize: const Size(0, 48),
                                     ),
-                                    onPressed: () {
+                                    onPressed: _loading ? null : () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
