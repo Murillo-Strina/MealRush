@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// O nome do seu widget de card foi alterado para FoodCard
 import '../widgets/food_card.dart';
 
 class HomeScreen extends StatelessWidget {
