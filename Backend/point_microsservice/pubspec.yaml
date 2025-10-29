@@ -1,16 +1,19 @@
 name: point_microsservice
-description: A sample command-line application.
+description: A server app using the shelf package and Docker.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
 
 environment:
-  sdk: ^3.9.2
+  sdk: ^3.8.1
 
-# Add regular dependencies here.
 dependencies:
-  path: ^1.9.0
-  http: ^1.5.0
+  crypto: ^3.0.6
+  dotenv: ^4.2.0
+  mysql_client: 0.0.27
+  shelf: ^1.4.0
+  shelf_router: ^1.1.0
+  dart_amqp: ^0.3.1
 
 dev_dependencies:
-  lints: ^6.0.0
-  test: ^1.25.6
+  http: ^1.1.0
+  lints: ^5.0.0
+  test: ^1.24.0
