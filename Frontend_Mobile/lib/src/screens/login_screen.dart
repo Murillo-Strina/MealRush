@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mealrush_club/src/screens/home_screen.dart';
 import 'package:mealrush_club/src/screens/registration_screen.dart';
 import 'package:mealrush_club/src/services/auth_service.dart';
 
@@ -30,6 +31,15 @@ class _LoginScreenState extends State<LoginScreen> {
       _errorMessage = null;
     });
 
+    if (_usernameController.text.trim().isEmpty ||
+        _passwordController.text.trim().isEmpty) {
+      setState(() {
+        _loading = false;
+        _errorMessage = 'Preencha usuário e senha';
+      });
+      return;
+    }
+
     try {
       final result = await _auth.login(
         _usernameController.text,
@@ -38,13 +48,19 @@ class _LoginScreenState extends State<LoginScreen> {
       print('Token: ${result['token']}');
 
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login bem-sucedido!')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Login bem-sucedido!')));
 
-      // TODO: redirecionar para próxima tela
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        (route) => false,
+      );
     } catch (e) {
-      setState(() => _errorMessage = e.toString().replaceFirst('Exception: ', ''));
+      setState(
+        () => _errorMessage = e.toString().replaceFirst('Exception: ', ''),
+      );
     } finally {
       if (mounted) {
         setState(() => _loading = false);
@@ -64,8 +80,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 minHeight: viewportConstraints.maxHeight,
               ),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 24,
+                ),
                 child: Align(
                   alignment: const Alignment(0.0, -0.2),
                   child: Column(
@@ -91,8 +109,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               decoration: const InputDecoration(
                                 hintText: 'Insira seu usuário',
                                 hintStyle: TextStyle(color: Colors.white70),
-                                icon: Icon(Icons.account_circle_outlined,
-                                    color: Colors.white),
+                                icon: Icon(
+                                  Icons.account_circle_outlined,
+                                  color: Colors.white,
+                                ),
                                 border: InputBorder.none,
                               ),
                               keyboardType: TextInputType.text,
@@ -105,8 +125,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               decoration: const InputDecoration(
                                 hintText: 'Insira sua senha',
                                 hintStyle: TextStyle(color: Colors.white70),
-                                icon: Icon(Icons.lock_outline_rounded,
-                                    color: Colors.white),
+                                icon: Icon(
+                                  Icons.lock_outline_rounded,
+                                  color: Colors.white,
+                                ),
                                 border: InputBorder.none,
                               ),
                             ),
@@ -117,9 +139,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text(
                                   _errorMessage!,
                                   style: const TextStyle(
-                                      color: Colors.redAccent,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),
+                                    color: Colors.redAccent,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -135,8 +158,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                     onPressed: _loading ? null : _login,
                                     child: _loading
                                         ? const CircularProgressIndicator(
-                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
-                                        )
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                  Colors.orange,
+                                                ),
+                                          )
                                         : const Text('Entrar'),
                                   ),
                                 ),
@@ -148,15 +174,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                       foregroundColor: Colors.orange,
                                       minimumSize: const Size(0, 48),
                                     ),
-                                    onPressed: _loading ? null : () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const RegistrationScreen(),
-                                        ),
-                                      );
-                                    },
+                                    onPressed: _loading
+                                        ? null
+                                        : () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const RegistrationScreen(),
+                                              ),
+                                            );
+                                          },
                                     child: const Text('Criar conta'),
                                   ),
                                 ),

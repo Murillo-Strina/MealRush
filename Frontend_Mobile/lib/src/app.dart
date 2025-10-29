@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:mealrush_club/src/screens/home_screen.dart';
+import 'package:mealrush_club/src/screens/registration_screen.dart';
 import 'screens/login_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -17,7 +19,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginScreen(),
+      
+      routes: {
+        '/login': (_) => const LoginScreen(),
+        '/home': (_) => const HomeScreen(),
+        '/register': (_) => const RegistrationScreen(),
+      },
+
+      initialRoute: '/login',
     );
   }
 }

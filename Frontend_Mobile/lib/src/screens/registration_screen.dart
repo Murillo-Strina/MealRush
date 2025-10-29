@@ -29,20 +29,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       _errorMessage = null;
     });
 
+    if (_usernameController.text.trim().isEmpty ||
+        _passwordController.text.trim().isEmpty) {
+      setState(() {
+        _loading = false;
+        _errorMessage = 'Preencha usuário e senha';
+      });
+      return;
+    }
+
     try {
-      await _auth.register(
-        _usernameController.text,
-        _passwordController.text,
-      );
+      await _auth.register(_usernameController.text, _passwordController.text);
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Conta criada com sucesso!')),
+        const SnackBar(
+          content: Text(
+            'Conta criada com sucesso! Redirecionando para login...',
+          ),
+        ),
       );
-      Navigator.pop(context);
+
+      await Future.delayed(const Duration(milliseconds: 1500));
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
     } catch (e) {
-      setState(() => _errorMessage = e.toString().replaceFirst('Exception: ', ''));
+      setState(
+        () => _errorMessage = e.toString().replaceFirst('Exception: ', ''),
+      );
     } finally {
       if (mounted) {
         setState(() => _loading = false);
@@ -132,9 +146,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 child: Text(
                                   _errorMessage!,
                                   style: const TextStyle(
-                                      color: Colors.redAccent,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),
+                                    color: Colors.redAccent,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -149,7 +164,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 onPressed: _loading ? null : _register,
                                 child: _loading
                                     ? const CircularProgressIndicator(
-                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                              Colors.orange,
+                                            ),
                                       )
                                     : const Text('Criar conta'),
                               ),
