@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mealrush_club/src/screens/home_screen.dart';
 import 'package:mealrush_club/src/screens/registration_screen.dart';
 import 'package:mealrush_club/src/services/auth_service.dart';
+import 'package:mealrush_club/src/services/session_manager.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -45,7 +46,19 @@ class _LoginScreenState extends State<LoginScreen> {
         _usernameController.text,
         _passwordController.text,
       );
-      print('Token: ${result['token']}');
+      
+      final token = result['token'] as String?;
+      final user = result['user'] as Map<String, dynamic>?;
+      final idUser = user?['id_user'] as int?;
+      final username = user?['username'] as String?;
+
+      if(token == null) throw Exception('Token não recebido');
+
+      await SessionManager.saveSession(
+        token: token,
+        userId: idUser,
+        username: username,
+      );
 
       if (!mounted) return;
       ScaffoldMessenger.of(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mealrush_club/src/services/session_manager.dart';
 import '../widgets/food_card.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -23,6 +24,8 @@ class HomeScreen extends StatelessWidget {
       ),
     );
     if (confirm != true) return;
+
+    await SessionManager.clearSession();
 
     Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
