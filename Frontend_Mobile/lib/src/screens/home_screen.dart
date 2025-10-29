@@ -4,6 +4,29 @@ import '../widgets/food_card.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  Future<void> _logout(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Sair'),
+        content: const Text('Tem certeza que deseja sair?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Sair'),
+          ),
+        ],
+      ),
+    );
+    if (confirm != true) return;
+
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,6 +34,16 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('MealRush', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.orange,
+        actions: [
+          IconButton(
+            tooltip: 'Sair',
+            icon: const Icon(
+              Icons.logout,
+              color: Color.fromARGB(255, 204, 33, 33),
+            ),
+            onPressed: () => _logout(context),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -19,7 +52,7 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Nossas Marmitas',
+                'Estes são os pratos que você pode pedir hoje! Troque seus pontos por deliciosas refeições.',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
