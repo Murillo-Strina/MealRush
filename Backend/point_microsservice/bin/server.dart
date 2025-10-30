@@ -30,7 +30,7 @@ void main(List<String> args) async {
   final dbPassword = dot['DB_PASSWORD'] ?? '';
   final dbName = dot['DB_NAME'] ?? 'mealrush';
 
-    final useSSL = (dot['DB_SSL'] ?? 'true').toLowerCase() == 'true';
+  final useSSL = (dot['DB_SSL'] ?? 'true').toLowerCase() == 'true';
 
   final dbPool = MySQLConnectionPool(
     host: dbHost,
@@ -41,7 +41,7 @@ void main(List<String> args) async {
     maxConnections: 10,
     secure: useSSL,
   );
-  
+
   try {
     await dbPool.execute('SELECT 1;');
   } catch (e) {
@@ -62,7 +62,11 @@ void main(List<String> args) async {
   _router.get('/', _rootHandler);
   _router.get('/echo/<message>', _echoHandler);
 
-  _router.post('/points/<userId>/add/<points>', (Request request, String userId, String points) async {
+  _router.post('/points/<userId>/add/<points>', (
+    Request request,
+    String userId,
+    String points,
+  ) async {
     final uid = int.tryParse(userId);
     final pts = int.tryParse(points);
     if (uid == null || pts == null) {
@@ -72,11 +76,17 @@ void main(List<String> args) async {
       await pointService.addPoints(uid, pts);
       return Response.ok('Pontos adicionados com sucesso\n');
     } catch (e) {
-      return Response.internalServerError(body: 'Erro ao adicionar pontos: $e\n');
+      return Response.internalServerError(
+        body: 'Erro ao adicionar pontos: $e\n',
+      );
     }
   });
 
-  _router.post('/points/<userId>/remove/<points>', (Request request, String userId, String points) async {
+  _router.post('/points/<userId>/remove/<points>', (
+    Request request,
+    String userId,
+    String points,
+  ) async {
     final uid = int.tryParse(userId);
     final pts = int.tryParse(points);
     if (uid == null || pts == null) {
@@ -97,13 +107,16 @@ void main(List<String> args) async {
     }
     try {
       final pointsData = await pointService.getPointsByUserId(uid);
-      return Response.ok('${pointsData['points']}\n');
+      return Response.ok('Pontos: ${pointsData['points']}\n');
     } catch (e) {
       return Response.internalServerError(body: 'Erro ao obter pontos: $e\n');
     }
   });
 
-  _router.post('/points/<userId>/reset', (Request request, String userId) async {
+  _router.post('/points/<userId>/reset', (
+    Request request,
+    String userId,
+  ) async {
     final uid = int.tryParse(userId);
     if (uid == null) {
       return Response.badRequest(body: 'Parâmetros inválidos\n');
@@ -125,12 +138,16 @@ void main(List<String> args) async {
       await pointService.deleteUserPoints(uid);
       return Response.ok('Pontos do usuário deletados com sucesso\n');
     } catch (e) {
-      return Response.internalServerError(body: 'Erro ao deletar pontos do usuário: $e\n');
+      return Response.internalServerError(
+        body: 'Erro ao deletar pontos do usuário: $e\n',
+      );
     }
   });
 
   final ip = InternetAddress.anyIPv4;
-  final handler = Pipeline().addMiddleware(logRequests()).addHandler(_router.call);
+  final handler = Pipeline()
+      .addMiddleware(logRequests())
+      .addHandler(_router.call);
 
   final port = int.parse(Platform.environment['PORT'] ?? '8082');
   final server = await serve(handler, ip, port);
