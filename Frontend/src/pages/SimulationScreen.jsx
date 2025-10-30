@@ -47,7 +47,7 @@ const SimulationScreen = () => {
     useEffect(() => {
         const fetchAllFoods = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/foods');
+                const response = await axios.get('http://localhost:32718/foods');
                 setAllFoods(response.data);
             } catch (err) {
                 console.error("Erro ao buscar a lista de todas as comidas:", err);

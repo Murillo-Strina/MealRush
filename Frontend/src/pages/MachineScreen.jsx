@@ -65,7 +65,7 @@ const MachineScreen = () => {
         const fetchAllFoods = async () => {
             if (showRestockModal) {
                 try {
-                    const response = await axios.get('http://localhost:3000/foods');
+                    const response = await axios.get('http://localhost:32718/foods');
                     setAllFoodItems(response.data);
                 } catch (err) {
                     console.error("Erro ao buscar a lista de alimentos:", err);
