@@ -21,7 +21,7 @@ spec:
             - containerPort: 3000
           envFrom:
             - secretRef:
-                name: food-env
+                name: auth-users-env # trocar para food-env
           resources:
             limits:
               memory: 256Mi

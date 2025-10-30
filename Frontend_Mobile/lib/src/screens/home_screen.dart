@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mealrush_club/src/services/session_manager.dart';
-import 'package:mealrush_club/src/services/point_service.dart'; // <-- ajuste o import se necessário
+import 'package:mealrush_club/src/services/point_service.dart';
+import 'package:mealrush_club/src/services/food_service.dart';
 import '../widgets/food_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,15 +13,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _pointsApi = PointService();
+  final _foodSvc = FoodService();
 
   String _username = '';
   int? _points;
   bool _loadingPoints = true;
   String? _pointsError;
 
+  late Future<List<Food>> _foodsFuture;
+
   @override
   void initState() {
     super.initState();
+    _foodsFuture = _foodSvc.fetchFoods();
     _loadUserAndPoints();
   }
 
@@ -82,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
   PopupMenuItem _profileCard(BuildContext context) {
     return PopupMenuItem(
       padding: EdgeInsets.zero,
+      enabled: false,
       child: Container(
         width: 280,
         padding: const EdgeInsets.all(12),
@@ -103,7 +109,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             const SizedBox(height: 8),
-            // avatar + nome
             Row(
               children: [
                 CircleAvatar(
@@ -112,7 +117,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text(
                     _initialOf(_username),
                     style: const TextStyle(
-                      fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -127,7 +135,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             const SizedBox(height: 12),
-            // cartão de pontos
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(12),
@@ -145,7 +152,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     )
                   : (_pointsError != null)
-                      ? Text('Erro ao buscar pontos, tente novamente mais tarde.', style: const TextStyle(color: Colors.red))
+                      ? const Text(
+                          'Erro ao buscar pontos, tente novamente mais tarde.',
+                          style: TextStyle(color: Colors.red),
+                        )
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -158,7 +168,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
             ),
             const SizedBox(height: 12),
-            // ação de logout
             Row(
               children: [
                 Expanded(
@@ -188,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           PopupMenuButton(
             tooltip: 'Perfil',
-            position: PopupMenuPosition.under, // abre embaixo, alinhado à direita
+            position: PopupMenuPosition.under,
             offset: const Offset(0, 8),
             itemBuilder: (ctx) => [_profileCard(ctx)],
             child: Padding(
@@ -230,22 +239,57 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.orange,
                   borderRadius: BorderRadius.circular(16.0),
                 ),
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisSpacing: 24,
-                  mainAxisSpacing: 24,
-                  children: List.generate(4, (index) {
-                    return FoodCard(
-                      title: 'Marmita ${index + 1}',
-                      imagePath: 'assets/images/foodplaceholder.png',
-                      buttonText: 'Pedir',
-                      onPress: () {
+                child: FutureBuilder<List<Food>>(
+                  future: _foodsFuture,
+                  builder: (context, snap) {
+                    if (snap.connectionState != ConnectionState.done) {
+                      return const Padding(
+                        padding: EdgeInsets.all(24.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    }
+                    if (snap.hasError) {
+                      return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Erro ao carregar comidas:\n${snap.error}',
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      );
+                    }
+                    final items = snap.data ?? const <Food>[];
+                    if (items.isEmpty) {
+                      return const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text(
+                          'Nenhum prato disponível no momento.',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      );
+                    }
 
+                    return GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 24,
+                        mainAxisSpacing: 24,
+                        childAspectRatio: 3 / 4,
+                      ),
+                      itemCount: items.length,
+                      itemBuilder: (_, i) {
+                        final f = items[i];
+                        return FoodCard(
+                          imagePath: f.imageUrl,
+                          title: f.name,
+                          price: '',
+                          buttonText: 'Pedir',
+                          onPress: () {},
+                        );
                       },
                     );
-                  }),
+                  },
                 ),
               ),
             ],

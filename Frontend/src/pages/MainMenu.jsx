@@ -47,7 +47,7 @@ const MainMenu = () => {
     useEffect(() => {
         const fetchFoods = async () =>{
             try {
-                const response = await axios.get('http://localhost:3000/foods');
+                const response = await axios.get('http://localhost:32718/foods');
                 const foodsFromAPI = response.data;
                 const formattedFoods = foodsFromAPI.slice(0, 6).map(food => ({
                     id: food.id,
