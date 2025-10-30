@@ -16,9 +16,14 @@ class _HomeScreenState extends State<HomeScreen> {
   final _foodSvc = FoodService();
 
   String _username = '';
+  int? _userId;
   int? _points;
   bool _loadingPoints = true;
   String? _pointsError;
+
+  static const int _foodCost = 25;
+  static const int _couponBonus = 250;
+  static const List<String> _couponCodes = ['MEALRUSH250', 'BONUSRUSH', 'DELICIA250', 'SAUDAVEL'];
 
   late Future<List<Food>> _foodsFuture;
 
@@ -33,11 +38,10 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final uname = await SessionManager.getUsername() ?? '';
       final uid = await SessionManager.getUserId();
-
       setState(() {
         _username = uname;
+        _userId = uid;
       });
-
       if (uid == null) {
         setState(() {
           _pointsError = 'Usuário não identificado';
@@ -45,7 +49,6 @@ class _HomeScreenState extends State<HomeScreen> {
         });
         return;
       }
-
       final p = await _pointsApi.getPointsByUserId(uid);
       setState(() {
         _points = p;
@@ -77,9 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     if (confirm != true) return;
-
     await SessionManager.clearSession();
-
     if (!mounted) return;
     Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
@@ -96,10 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Row(
               children: [
-                Image.asset(
-                  'assets/images/logo_mealrush_transparent.png',
-                  height: 36,
-                ),
+                Image.asset('assets/images/logo_mealrush_transparent.png', height: 36),
                 const Spacer(),
                 IconButton(
                   visualDensity: VisualDensity.compact,
@@ -116,11 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   backgroundColor: Colors.orange.shade700,
                   child: Text(
                     _initialOf(_username),
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -152,18 +146,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     )
                   : (_pointsError != null)
-                      ? const Text(
-                          'Erro ao buscar pontos, tente novamente mais tarde.',
-                          style: TextStyle(color: Colors.red),
-                        )
+                      ? const Text('Erro ao buscar pontos, tente novamente mais tarde.', style: TextStyle(color: Colors.red))
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text('Seus pontos', style: TextStyle(fontWeight: FontWeight.w500)),
-                            Text(
-                              '${_points ?? 0}',
-                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
+                            Text('${_points ?? 0}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                           ],
                         ),
             ),
@@ -185,6 +173,85 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Future<void> _onInsertCoupon() async {
+    if (_userId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Sessão inválida')));
+      return;
+    }
+
+    final controller = TextEditingController();
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Inserir cupom'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(hintText: 'Digite seu cupom'),
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Aplicar')),
+        ],
+      ),
+    );
+
+    if (ok != true) return;
+
+    final code = controller.text.trim();
+    if (code.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Informe um cupom')));
+      return;
+    }
+
+    final normalized = code.toUpperCase();
+    final isValid = _couponCodes.any((c) => c.toUpperCase() == normalized);
+
+    if (!isValid) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Cupom inválido')));
+      return;
+    }
+
+    try {
+      await _pointsApi.addPoints(_userId!, _couponBonus);
+      setState(() => _points = (_points ?? 0) + _couponBonus);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$_couponBonus pontos adicionados!')));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao aplicar cupom: $e')));
+    }
+  }
+
+  Future<void> _onSpendPoints(String foodName) async {
+    if (_userId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Sessão inválida')));
+      return;
+    }
+    if ((_points ?? 0) < _foodCost) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pontos insuficientes')));
+      return;
+    }
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Confirmar'),
+        content: Text('Deseja gastar pontos com $foodName?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Confirmar')),
+        ],
+      ),
+    );
+    if (confirm != true) return;
+
+    try {
+      await _pointsApi.removePoints(_userId!, _foodCost);
+      setState(() => _points = (_points ?? 0) - _foodCost);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Você gastou $_foodCost pontos em "$foodName"')));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao gastar pontos: $e')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final initial = _initialOf(_username);
@@ -195,6 +262,21 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('MealRush', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.orange,
         actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: ElevatedButton.icon(
+              onPressed: _onInsertCoupon,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.orange,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                textStyle: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              icon: const Icon(Icons.card_giftcard),
+              label: const Text('Inserir cupom'),
+            ),
+          ),
+          const SizedBox(width: 8),
           PopupMenuButton(
             tooltip: 'Perfil',
             position: PopupMenuPosition.under,
@@ -226,19 +308,12 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const Text(
                 'Estes são os pratos que você pode pedir hoje! Troque seus pontos por deliciosas refeições.',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
               ),
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(12.0),
-                decoration: BoxDecoration(
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
+                decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(16.0)),
                 child: FutureBuilder<List<Food>>(
                   future: _foodsFuture,
                   builder: (context, snap) {
@@ -251,20 +326,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (snap.hasError) {
                       return Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          'Erro ao carregar comidas:\n${snap.error}',
-                          style: const TextStyle(color: Colors.white),
-                        ),
+                        child: Text('Erro ao carregar comidas:\n${snap.error}', style: const TextStyle(color: Colors.white)),
                       );
                     }
                     final items = snap.data ?? const <Food>[];
                     if (items.isEmpty) {
                       return const Padding(
                         padding: EdgeInsets.all(16.0),
-                        child: Text(
-                          'Nenhum prato disponível no momento.',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child: Text('Nenhum prato disponível no momento.', style: TextStyle(color: Colors.white)),
                       );
                     }
 
@@ -283,9 +352,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         return FoodCard(
                           imagePath: f.imageUrl,
                           title: f.name,
-                          price: '',
-                          buttonText: 'Pedir',
-                          onPress: () {},
+                          price: '$_foodCost pontos',
+                          buttonText: 'Gastar pontos',
+                          onPress: () => _onSpendPoints(f.name),
                         );
                       },
                     );
