@@ -1,11 +1,13 @@
 # **MealRush** 🥣
 
-A MealRush é uma empresa responsável por desenvolver máquinas de venda que preparam refeições saudáveis, nutritivas e de forma rápida, buscando sempre satisfazer o cliente oferecendo um serviço prático e sem a necessidade de longas esperas. E neste projeto, o objetivo é apresentar nossa aplicação, através de um site informativo que contém informações sobre a empresa, sobre as refeições oferecidas e uma simulação de uma máquina de venda, bem como uma seção de envio de feedbacks na qual os clientes poderão enviar suas opiniões e críticas à respeito dos serviços das máquinas. Além disso, nossa aplicação também tera uma versão para utilização exclusiva de nossos administradores. 
+A MealRush é uma empresa responsável por desenvolver máquinas de venda que preparam refeições saudáveis, nutritivas e de forma rápida, buscando sempre satisfazer o cliente oferecendo um serviço prático e sem a necessidade de longas esperas. E neste projeto, o objetivo é apresentar nossa aplicação, através de um site informativo que contém informações sobre a empresa, sobre as refeições oferecidas e uma simulação de uma máquina de venda, bem como uma seção de envio de feedbacks na qual os clientes poderão enviar suas opiniões e críticas à respeito dos serviços das máquinas. Além disso, o site também tera uma versão para utilização exclusiva de nossos administradores.
+
+Além do site informativo, haverá também um aplicativo de clube de pontos da MealRush, onde os pontos obtidos por meio de cupons ou compras nas máquinas podem ser trocados por descontos nas refeições, podendo até adquirir refeições de graça. 
 
 # **Folders** 📂 
 
-- Backend: Back-end folder | Node.js struct
-- Frontend: Front-end folder | React struct
+- Backend: Back-end folder | Node.js struct | Dart struct
+- Frontend: Front-end folder - React struct | Front-end-mobile folder - Flutter struct
 
 # **Funcionalidades** 🔍
 
@@ -17,15 +19,19 @@ A MealRush é uma empresa responsável por desenvolver máquinas de venda que pr
 
 - **Versão de administrador:** Ao acessar o menu principal, haverá uma opção de login de administrador, na qual será responsável por encaminhar a uma seção exclusiva para administradores, na qual serão responsáveis por fazer o gerenciamento, atualização e remoção das máquinas de comida e das instituições em que as máquinas estão instaladas, além de visualizar os feedbacks dos clientes quanto ao uso das máquinas.
 
+- **Trocar pontos por refeições:** Ao acessar o aplicativo, o usuário poderá trocar seus pontos, adquiridos por meio de cupons de desconto que podem ser digitados no próprio aplicativo ou comprando os alimentos nas próprias máquinas de vendas. Bastando criar um cadastro no aplicativo para utilizar os pontos adquiridos.
+
 # **Microsserviços** 💼
 
 Os microsserviços da nossa aplicação são:
 - **food-microsservice:** Responsável pela aquisição dos dados das refeições oferecidas para visualização tanto no menu principal como na simulação virtual da máquina
 - **machine-microsservice:** Responsável pela aquisição dos dados das máquinas disponíveis em cada instituição parceira
 - **institution-microsservice:** Responsável pela aquisição dos dados das instituições parceiras
-- **login-microsservice:** Realiza a autenticação do administrador para visualizar suas interfaces exclusivas
+- **auth-microsservice:** Realiza a autenticação do administrador para visualizar suas interfaces exclusivas
 - **feedback-microsservice:** Chatbot que coleta as críticas e reclamações dos clientes referente à utilização das máquinas e consumo dos alimentos e os envia para o administrador poder visualizar os comentários do feedback e a instituição em que utilizaram os serviços
 - **content-microsservice:** Responsável por orquestrar a lógica de negócio. Ele se comunica com os microsserviços food e machine para associar uma refeição a uma máquina específica. Sua função principal é gerenciar os dados de desempenho de cada item, como o controle de vendas e o cálculo da receita e do lucro.
+- **auth-microsservice-users:** Realiza a autenticação do usuário no aplicativo do clube de pontos
+- **point-microsservice:** Responsável pela lógica do clube de pontos do aplicativo, permitindo ao usuário adicionar pontos em sua conta com base em cupons de desconto disponibilizados pelo próprio aplicativo, além de remoção de pontos ao trocar a pontuação com as marmitas oferecidas
 
 # **Banco de dados** 📦
 
@@ -169,6 +175,10 @@ RABBITMQ_URL=amqp://<nome_usuario>:<senha_usuario>@localhost:5672/
 ``` bash 
 http://localhost:15672
 ```
+
+# **Docker/Kubernetes**
+
+Cada microsserviço possui um arquvio DockerFile, responsável pela criação da imagem Docker do microsserviço, para executá-lo, siga estes passos:
 
 # **Contribuidores** 👷‍♂️
 
