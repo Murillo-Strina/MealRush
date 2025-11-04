@@ -178,7 +178,37 @@ http://localhost:15672
 
 # **Docker/Kubernetes**
 
+## **Docker**
+
 Cada microsserviço possui um arquvio DockerFile, responsável pela criação da imagem Docker do microsserviço, para executá-lo, siga estes passos:
+``` bash
+docker build -t <nome_imagem>:<versão> . # caso queira utilizar uma versão mais recente, troque por latest
+```
+Para enviar a imagem remotamente para o DockerHub:
+``` bash
+docker push <nome_imagem>:<versão>  # caso queira utilizar uma versão mais recente, troque por latest
+```
+
+## **Kubernetes**
+
+Em relação ao Kubernetes, é necessário executar o arquivo .yaml, mas para fins de organização, criou-se o namespace próprio do projeto:
+``` bash
+kubectl create namespace mealrush
+```
+Em seguida, caso possua variáveis de ambiente locais, adicione um secrets:
+``` bash
+kubectl create secret generic <nome-do-secret> --from-literal=<chave1>=<valor1> --from-literal=<chave2>=<valor2>
+```
+
+Para colocar o pod em execução, execute:
+``` bash
+kubectl -n <namespace> apply <nome-microsserviço>-deployment.yaml
+```
+
+Caso tenha problemas em executar o pod, execute o seguinte comando, que limita a quantidade de memória alocada e cpu para o pod
+```bash
+kubectl -n mealrush set resources deploy food-microsservice --requests=cpu=50m,memory=128Mi --limits=cpu=200m,memory=256Mi
+```
 
 # **Contribuidores** 👷‍♂️
 
