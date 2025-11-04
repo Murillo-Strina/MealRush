@@ -176,7 +176,7 @@ RABBITMQ_URL=amqp://<nome_usuario>:<senha_usuario>@localhost:5672/
 http://localhost:15672
 ```
 
-# **Docker/Kubernetes**
+# **Docker/Kubernetes**⚙
 
 ## **Docker**
 
@@ -205,9 +205,9 @@ Para colocar o pod em execução, execute:
 kubectl -n <namespace> apply <nome-microsserviço>-deployment.yaml
 ```
 
-Caso tenha problemas em executar o pod, execute o seguinte comando, que limita a quantidade de memória alocada e cpu para o pod
+Caso tenha problemas em executar o pod, execute o seguinte comando, que limita a quantidade de memória alocada e cpu para o pod:
 ```bash
-kubectl -n mealrush set resources deploy food-microsservice --requests=cpu=50m,memory=128Mi --limits=cpu=200m,memory=256Mi
+kubectl -n mealrush set resources deploy <nome_pod> --requests=cpu=50m,memory=128Mi --limits=cpu=200m,memory=256Mi
 ```
 
 # **Contribuidores** 👷‍♂️
