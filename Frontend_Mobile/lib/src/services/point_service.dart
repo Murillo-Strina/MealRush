@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class PointService {
-  final String baseUrl = 'http://localhost:31108';
+  final String baseUrl = 'http://localhost:30800';
 
   Future<int> getPointsByUserId(int userId) async {
     final response = await http.get(

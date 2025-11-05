@@ -14,17 +14,17 @@ class Food {
     final idParsed = rawId is int ? rawId : int.tryParse('$rawId') ?? 0;
 
     final img = json['imageUrl'] ?? json['image_url'] ?? json['image'] ?? '';
-    
+
     return Food(
       id: idParsed,
       name: json['name'] as String,
-      imageUrl: img as String, 
+      imageUrl: img as String,
     );
   }
 }
 
 class FoodService {
-  final String baseUrl = 'http://localhost:32718';
+  final String baseUrl = 'http://localhost:32585';
 
   Future<List<Food>> fetchFoods() async {
     final response = await http.get(
