@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
               width: double.infinity,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.orange.shade50,
+                color: Color(0xFF1B202D),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.orange.shade200),
               ),
@@ -257,18 +257,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final initial = _initialOf(_username);
 
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Color(0xFF1B202D),
       appBar: AppBar(
         title: const Text('MealRush', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.orange,
+        backgroundColor: Color(0xFF00C9A7),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: ElevatedButton.icon(
               onPressed: _onInsertCoupon,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.orange,
+                backgroundColor: Color(0xFF1B202D),
+                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 textStyle: const TextStyle(fontWeight: FontWeight.w600),
               ),
@@ -289,7 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 backgroundColor: Colors.white,
                 child: CircleAvatar(
                   radius: 14,
-                  backgroundColor: const Color(0xFFFF9800),
+                  backgroundColor: const Color(0xFF00C9A7),
                   child: Text(
                     initial,
                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -308,12 +308,12 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const Text(
                 'Estes são os pratos que você pode pedir hoje! Troque seus pontos por deliciosas refeições.',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
               ),
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(12.0),
-                decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(16.0)),
+                decoration: BoxDecoration(color: Color(0xFF00C9A7), borderRadius: BorderRadius.circular(16.0)),
                 child: FutureBuilder<List<Food>>(
                   future: _foodsFuture,
                   builder: (context, snap) {
