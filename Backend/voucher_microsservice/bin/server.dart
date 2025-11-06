@@ -23,7 +23,7 @@ void main() async {
 
   final voucherService = VoucherService(
     db,
-    pointsBaseUrl: dot['POINTS_BASE_URL'] ?? 'http://point-microsservice:30800',
+    pointsBaseUrl: dot['POINTS_BASE_URL'] ?? 'http://point-microsservice:8083',
   );
   final voucherController = VoucherController(voucherService);
 

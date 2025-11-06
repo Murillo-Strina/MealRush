@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: food-microsservice
-          image: docker.io/lucascrapino/food-microsservice:1.0.0
+          image: docker.io/lucascrapino/food-microsservice:1.0.1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000

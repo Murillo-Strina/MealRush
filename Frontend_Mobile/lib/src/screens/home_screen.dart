@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mealrush_club/src/services/session_manager.dart';
 import 'package:mealrush_club/src/services/point_service.dart';
 import 'package:mealrush_club/src/services/food_service.dart';
+import 'package:mealrush_club/src/services/voucher_service.dart';
 import '../widgets/food_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _pointsApi = PointService();
   final _foodSvc = FoodService();
+  final _voucherSvc = VoucherService();
 
   String _username = '';
   int? _userId;
@@ -221,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _onSpendPoints(String foodName) async {
+  Future<void> _onSpendPoints(Food food) async {
     if (_userId == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Sessão inválida')));
       return;
@@ -234,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Confirmar'),
-        content: Text('Deseja gastar pontos com $foodName?'),
+        content: Text('Deseja gastar pontos com ${food.name}?'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
           TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Confirmar')),
@@ -246,7 +248,52 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       await _pointsApi.removePoints(_userId!, _foodCost);
       setState(() => _points = (_points ?? 0) - _foodCost);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Você gastou $_foodCost pontos em "$foodName"')));
+
+      String voucherCode;
+      try {
+        voucherCode = await _voucherSvc.criarVoucher(
+          userId: _userId!,
+          foodId: food.id,
+          cost: _foodCost,
+        );
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Pontos debitados, mas erro ao gerar voucher: $e')),
+        );
+        return;
+      }
+
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('Voucher gerado'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/qr_code_model.png',
+                height: 120,
+              ),
+              const SizedBox(height: 12),
+              const Text('Use este código na máquina:'),
+              const SizedBox(height: 8),
+              SelectableText(
+                voucherCode,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Fechar'),
+            ),
+          ],
+        ),
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao gastar pontos: $e')));
     }
@@ -354,7 +401,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           title: f.name,
                           price: '$_foodCost pontos',
                           buttonText: 'Gastar pontos',
-                          onPress: () => _onSpendPoints(f.name),
+                          onPress: () => _onSpendPoints(f),
                         );
                       },
                     );
