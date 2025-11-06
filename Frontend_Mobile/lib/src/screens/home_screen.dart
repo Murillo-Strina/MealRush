@@ -152,8 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Seus pontos', style: TextStyle(fontWeight: FontWeight.w500)),
-                            Text('${_points ?? 0}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                            const Text('Seus pontos:', style: TextStyle(fontWeight: FontWeight.w500, color: Colors.white)),
+                            Text('${_points ?? 0}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
                           ],
                         ),
             ),
