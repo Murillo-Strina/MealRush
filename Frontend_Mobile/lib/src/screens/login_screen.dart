@@ -3,6 +3,7 @@ import 'package:mealrush_club/src/screens/home_screen.dart';
 import 'package:mealrush_club/src/screens/registration_screen.dart';
 import 'package:mealrush_club/src/services/auth_service.dart';
 import 'package:mealrush_club/src/services/session_manager.dart';
+import '../widgets/rounded_image.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -84,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Color(0xFF1B202D),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
           return SingleChildScrollView(
@@ -102,16 +103,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Image.asset(
-                        'assets/images/logo_mealrush_transparent.png',
-                        width: 300,
-                      ),
-                      const SizedBox(height: 24),
+                      RoundedImage(imagePath: 'assets/images/logo_mealrush.png'),
+                      const SizedBox(height: 48),
                       Container(
                         constraints: const BoxConstraints(maxWidth: 400),
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.orange,
+                          color: Color(0xFF00C9A7),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Column(
@@ -152,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text(
                                   _errorMessage!,
                                   style: const TextStyle(
-                                    color: Colors.redAccent,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                   ),
@@ -164,8 +162,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Expanded(
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white,
-                                      foregroundColor: Colors.orange,
+                                      backgroundColor: Color(0xFF1B202D),
+                                      foregroundColor: Colors.white,
                                       minimumSize: const Size(0, 48),
                                     ),
                                     onPressed: _loading ? null : _login,
@@ -173,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ? const CircularProgressIndicator(
                                             valueColor:
                                                 AlwaysStoppedAnimation<Color>(
-                                                  Colors.orange,
+                                                  Color(0xFF1B202D),
                                                 ),
                                           )
                                         : const Text('Entrar'),
@@ -183,8 +181,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Expanded(
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white,
-                                      foregroundColor: Colors.orange,
+                                      backgroundColor: Color(0xFF1B202D),
+                                      foregroundColor: Colors.white,
                                       minimumSize: const Size(0, 48),
                                     ),
                                     onPressed: _loading

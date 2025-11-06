@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mealrush_club/src/services/auth_service.dart';
+import 'package:mealrush_club/src/widgets/rounded_image.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -67,7 +68,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Color(0xFF1B202D),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -91,16 +92,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        'assets/images/logo_mealrush_transparent.png',
-                        width: 300,
-                      ),
-                      const SizedBox(height: 24.0),
+                      RoundedImage(imagePath: 'assets/images/logo_mealrush.png'),
+                      const SizedBox(height: 48.0),
                       Container(
                         constraints: const BoxConstraints(maxWidth: 400),
                         padding: const EdgeInsets.all(12.0),
                         decoration: BoxDecoration(
-                          color: Colors.orange,
+                          color: Color(0xFF00C9A7),
                           borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: Column(
@@ -146,7 +144,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 child: Text(
                                   _errorMessage!,
                                   style: const TextStyle(
-                                    color: Colors.redAccent,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                   ),
@@ -157,8 +155,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               width: double.infinity,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: Colors.orange,
+                                  backgroundColor: Color(0xFF1B202D),
+                                  foregroundColor: Colors.white,
                                   minimumSize: const Size(0, 48),
                                 ),
                                 onPressed: _loading ? null : _register,
