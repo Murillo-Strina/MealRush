@@ -1,0 +1,16 @@
+.dart_tool/
+build/
+.git
+.gitignore
+.env
+pubspec.lock
+test/
+.dockerignore
+Dockerfile
+build/
+.dart_tool/
+.git/
+.github/
+.gitignore
+.idea/
+.packages
