@@ -15,29 +15,37 @@ class VoucherQrDialog extends StatelessWidget {
 
     return AlertDialog(
       title: const Text('Seu voucher'),
-      content: SingleChildScrollView(
+      content: SizedBox( 
+        width: 240,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (hasCode)
               QrImageView(
                 data: qrCode,
-                size: 200,
+                size: 200, 
               )
             else
               const Icon(
                 Icons.error_outline,
-                size: 48,
+                size: 64,
                 color: Colors.red,
               ),
             const SizedBox(height: 12),
             Text(
               hasCode
-                  ? qrCode
+                  ? 'Apresente este QR na maquina para resgatar seu voucher.'
                   : 'Não foi possível gerar o código.',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
             ),
+            if (hasCode) ...[
+              const SizedBox(height: 8),
+              Text(
+                qrCode,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+            ],
           ],
         ),
       ),
