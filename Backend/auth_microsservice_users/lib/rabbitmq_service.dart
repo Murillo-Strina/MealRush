@@ -16,7 +16,6 @@ class RabbitMQService {
 
     ConnectionSettings settings;
     if (rabbitUrl.isNotEmpty && rabbitUrl.startsWith('amqp')) {
-      // dart_amqp accepts host/user/password/port separately; we'll do a naive parse
       final uri = Uri.parse(rabbitUrl);
       final username = uri.userInfo.isNotEmpty ? uri.userInfo.split(':').first : null;
       final password = uri.userInfo.isNotEmpty && uri.userInfo.split(':').length > 1 ? uri.userInfo.split(':')[1] : null;
