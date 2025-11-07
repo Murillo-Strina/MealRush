@@ -11,21 +11,18 @@ class LoginService {
 
   LoginService(this.pool, this.jwtSecret, [this.rabbit]);
 
-  /// Usa Base64 para caber no VARCHAR(45) do campo `password`
   String hashPassword(String password) {
     final key = utf8.encode(jwtSecret);
     final bytes = utf8.encode(password);
     final hmacSha256 = Hmac(sha256, key);
-    final digestBytes = hmacSha256.convert(bytes).bytes; // 32 bytes
-    return base64Encode(digestBytes); // 44 chars (com "=="), cabe em 45
+    final digestBytes = hmacSha256.convert(bytes).bytes;
+    return base64Encode(digestBytes); 
   }
 
-  /// Executa query com mysql_client (params nomeados: :nome)
   Future<IResultSet> _query(String sql, [Map<String, Object?> params = const {}]) async {
     try {
       return await pool.execute(sql, params);
     } catch (e) {
-      // Propaga como Exception padrão para manter tratamento anterior
       throw Exception('Erro de banco de dados: $e');
     }
   }
@@ -75,7 +72,6 @@ class LoginService {
         await rabbit!.publish('user.registered', {'username': username});
       }
     } catch (e) {
-      // Não derruba o fluxo por falha no evento
       print('Aviso: falha ao publicar evento user.registered: $e');
     }
   }

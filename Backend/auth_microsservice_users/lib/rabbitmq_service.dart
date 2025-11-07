@@ -11,11 +11,9 @@ class RabbitMQService {
   RabbitMQService._(this._client, this._exchange);
 
   static Future<RabbitMQService> connect({String? url, String exchangeName = 'events'}) async {
-    // url format amqp://user:pass@host:port
     final dot = DotEnv(includePlatformEnvironment: true)..load();
     final rabbitUrl = url ?? dot['RABBITMQ_URL'] ?? '';
 
-    // parse basic parts if provided as amqp://
     ConnectionSettings settings;
     if (rabbitUrl.isNotEmpty && rabbitUrl.startsWith('amqp')) {
       // dart_amqp accepts host/user/password/port separately; we'll do a naive parse
@@ -32,7 +30,6 @@ class RabbitMQService {
         settings = ConnectionSettings(host: uri.host, port: uri.hasPort ? uri.port : 5672);
       }
     } else {
-      // fallback to localhost cluster
       settings = ConnectionSettings(host: 'rabbitmq', port: 5672);
     }
 
