@@ -1,3 +1,28 @@
+# **Introdução**
+
+Este projeto foi desenvolvido para as seguintes disciplinas da faculdade **Instituto Mauá de Tecnologia (IMT)**:
+- **ECM516**: Arquitetura de Sistemas Computacionais
+- **ECM252**: Linguagens de Programação II
+
+# **Table of Contents** 📚
+
+1. [MealRush](#mealrush-)
+2. [Folders](#folders-)
+3. [Funcionalidades](#funcionalidades-)
+4. [Microsserviços](#microsserviços-)
+5. [Banco de dados](#banco-de-dados-)
+6. [Como rodar o projeto?](#como-rodar-o-projeto-)
+   - [Backend](#backend)
+   - [Frontend](#frontend)
+   - [Frontend - Mobile](#frontend---mobile)
+7. [Barramento de eventos (RabbitMQ)](#barramento-de-eventos-rabbitmq-)
+8. [Docker/Kubernetes](#dockerkubernetes)
+   - [Docker](#docker)
+   - [Kubernetes](#kubernetes)
+9. [Contribuidores](#contribuidores-)
+
+---
+
 # **MealRush** 🥣
 
 A MealRush é uma empresa responsável por desenvolver máquinas de venda que preparam refeições saudáveis, nutritivas e de forma rápida, buscando sempre satisfazer o cliente oferecendo um serviço prático e sem a necessidade de longas esperas. E neste projeto, o objetivo é apresentar nossa aplicação, através de um site informativo que contém informações sobre a empresa, sobre as refeições oferecidas e uma simulação de uma máquina de venda, bem como uma seção de envio de feedbacks na qual os clientes poderão enviar suas opiniões e críticas à respeito dos serviços das máquinas. Além disso, o site também tera uma versão para utilização exclusiva de nossos administradores.
@@ -19,19 +44,20 @@ Além do site informativo, haverá também um aplicativo de clube de pontos da M
 
 - **Versão de administrador:** Ao acessar o menu principal, haverá uma opção de login de administrador, na qual será responsável por encaminhar a uma seção exclusiva para administradores, na qual serão responsáveis por fazer o gerenciamento, atualização e remoção das máquinas de comida e das instituições em que as máquinas estão instaladas, além de visualizar os feedbacks dos clientes quanto ao uso das máquinas.
 
-- **Trocar pontos por refeições:** Ao acessar o aplicativo, o usuário poderá trocar seus pontos, adquiridos por meio de cupons de desconto que podem ser digitados no próprio aplicativo ou comprando os alimentos nas próprias máquinas de vendas. Bastando criar um cadastro no aplicativo para utilizar os pontos adquiridos.
+- **Trocar pontos por refeições:** Ao acessar o aplicativo, o usuário poderá trocar seus pontos, adquiridos por meio de cupons de desconto que podem ser digitados no próprio aplicativo ou comprando os alimentos nas próprias máquinas de vendas. Bastando criar um cadastro no aplicativo para utilizar os pontos adquiridos. Ao gastar os pontos, um voucher com um código e um QR Code é gerado para que o usuário possa utilizá-lo em uma máquina de venda física para obter descontos com as refeições.
 
 # **Microsserviços** 💼
 
 Os microsserviços da nossa aplicação são:
-- **food-microsservice:** Responsável pela aquisição dos dados das refeições oferecidas para visualização tanto no menu principal como na simulação virtual da máquina
-- **machine-microsservice:** Responsável pela aquisição dos dados das máquinas disponíveis em cada instituição parceira
-- **institution-microsservice:** Responsável pela aquisição dos dados das instituições parceiras
-- **auth-microsservice:** Realiza a autenticação do administrador para visualizar suas interfaces exclusivas
-- **feedback-microsservice:** Chatbot que coleta as críticas e reclamações dos clientes referente à utilização das máquinas e consumo dos alimentos e os envia para o administrador poder visualizar os comentários do feedback e a instituição em que utilizaram os serviços
+- **food-microsservice:** Responsável pela aquisição dos dados das refeições oferecidas para visualização tanto no menu principal como na simulação virtual da máquina.
+- **machine-microsservice:** Responsável pela aquisição dos dados das máquinas disponíveis em cada instituição parceira.
+- **institution-microsservice:** Responsável pela aquisição dos dados das instituições parceiras.
+- **auth-microsservice:** Realiza a autenticação do administrador para visualizar suas interfaces exclusivas.
+- **feedback-microsservice:** Chatbot que coleta as críticas e reclamações dos clientes referente à utilização das máquinas e consumo dos alimentos e os envia para o administrador poder visualizar os comentários do feedback e a instituição em que utilizaram os serviços.
 - **content-microsservice:** Responsável por orquestrar a lógica de negócio. Ele se comunica com os microsserviços food e machine para associar uma refeição a uma máquina específica. Sua função principal é gerenciar os dados de desempenho de cada item, como o controle de vendas e o cálculo da receita e do lucro.
 - **auth-microsservice-users:** Realiza a autenticação do usuário no aplicativo do clube de pontos
-- **point-microsservice:** Responsável pela lógica do clube de pontos do aplicativo, permitindo ao usuário adicionar pontos em sua conta com base em cupons de desconto disponibilizados pelo próprio aplicativo, além de remoção de pontos ao trocar a pontuação com as marmitas oferecidas
+- **point-microsservice:** Responsável pela lógica do clube de pontos do aplicativo, permitindo ao usuário adicionar pontos em sua conta com base em cupons de desconto disponibilizados pelo próprio aplicativo, além de remoção de pontos ao trocar a pontuação com as marmitas oferecidas.
+- **voucher-microsservice:** Gera um código toda vez que o usuário gasta seus pontos em uma refeição, para poder obter descontos ao utilizar a máquina de venda física.
 
 # **Banco de dados** 📦
 
@@ -39,6 +65,8 @@ O banco de dados escolhido para o projeto foi o **Azure Database for MySQL**, um
 
 A conexão da aplicação com o banco foi implementada utilizando o pacote `mysql2`, compatível com o ecossistema MySQL. Todas as credenciais de acesso, como nome de usuário, senha e host, são configuradas de forma segura através de um arquivo `.env`.
 Para garantir a integridade e a confidencialidade dos dados em trânsito, a conexão com o banco hospedado na Azure utiliza **SSL** (`rejectUnauthorized: false`).
+
+Atualização: Pelo limite grátis utilizando o Azure ter sido atingido, optou-se por migrar o banco de dados para o **Amazon Relational Database Service (RDS)**,  um serviço da **Amazon Web Services (AWS)** que simplifica a configuração, opeação e o escalonamento de bancos de dados relacionais. A gestão para a visualização dos dados continuou sendo feita pelo **MySQL Workbench**, bem como o pacote `mysql2` para os microsserviços feitos em Javascript e o pacote `mysql_client` para os microsserviços feitos em Dart.
 
 # **Como rodar o projeto?** 🚀
 
@@ -68,6 +96,22 @@ Abra um terminal na pasta `Frontend` e execute os seguintes comandos:
 npm install
 npm run dev
 ```
+
+## Frontend - Mobile
+
+Abra um terminal na pasta `Frontend_Mobile` e execute o seguinte comando:
+
+```bash
+flutter run 
+```
+
+Não se esqueça de informar o navegador de sua preferência. Caso seja o Chrome, como o projeto foi desenvolvido localmente, é necessário executar:
+
+```bash
+flutter run -d chrome --web-browser-flag="--disable-web-security"
+```
+
+Isso resolverá os problemas de Cors (Cross-Origin Resource Sharing) desabilitando a política de segurança do navegador, permitindo que o frontend e o backend possam se comunicar sem restrições durante o desenvolvimento.
 
 # **Barramento de eventos (RabbitMQ)** 🐰
 
@@ -191,7 +235,7 @@ docker push <nome_imagem>:<versão>  # caso queira utilizar uma versão mais rec
 
 ## **Kubernetes**
 
-Em relação ao Kubernetes, é necessário executar o arquivo .yaml, mas para fins de organização, criou-se o namespace próprio do projeto:
+Em relação ao Kubernetes, é necessário executar o arquivo .yaml, e para fins de organização, criou-se o namespace próprio do projeto, por isso, execute primeiro:
 ``` bash
 kubectl create namespace mealrush
 ```
@@ -205,7 +249,7 @@ Para colocar o pod em execução, execute:
 kubectl -n <namespace> apply <nome-microsserviço>-deployment.yaml
 ```
 
-Caso tenha problemas em executar o pod, execute o seguinte comando, que limita a quantidade de memória alocada e cpu para o pod:
+Caso tenha problemas de capacidade computacional em executar o pod, execute o seguinte comando, que limita a quantidade de memória alocada e cpu para o pod:
 ```bash
 kubectl -n mealrush set resources deploy <nome_pod> --requests=cpu=50m,memory=128Mi --limits=cpu=200m,memory=256Mi
 ```
