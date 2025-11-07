@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class FoodCard extends StatelessWidget {
-  final String imagePath;      
-  final String title;          
-  final String buttonText;     
-  final VoidCallback onPress;  
+  final String imagePath;
+  final String title;
+  final String buttonText;
+  final VoidCallback onPress;
+  final String price;
   final double imageWidth;
   final double imageHeight;
-  final String price;
 
   const FoodCard({
     super.key,
@@ -15,7 +15,7 @@ class FoodCard extends StatelessWidget {
     required this.title,
     required this.buttonText,
     required this.onPress,
-    this.price = "25 pontos",
+    required this.price,
     this.imageWidth = 200.0,
     this.imageHeight = 200.0,
   });
@@ -24,118 +24,104 @@ class FoodCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2), 
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: _isNetwork
-                ? Image.network(
-                    imagePath,
-                    height: imageHeight,
-                    width: imageWidth,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, progress) {
-                      if (progress == null) return child;
-                      return Container(
-                        height: imageHeight,
-                        width: imageWidth,
-                        color: Colors.orange.shade50,
-                        alignment: Alignment.center,
-                        child: const SizedBox(
-                          height: 28,
-                          width: 28,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      );
-                    },
-                    errorBuilder: (_, __, ___) => Container(
-                      height: imageHeight,
-                      width: imageWidth,
-                      color: Colors.orange.shade100,
-                      alignment: Alignment.center,
-                      child: const Icon(
-                        Icons.broken_image,
-                        size: 48,
-                        color: Colors.orange,
-                      ),
-                    ),
-                  )
-                : Image.asset(
-                    imagePath,
-                    height: imageHeight,
-                    width: imageWidth,
-                    fit: BoxFit.contain,
-                  ),
-          ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double maxW = constraints.maxWidth;
+        final double imgH = (maxW * 0.55).clamp(110, 180);
 
-          const SizedBox(height: 12),
-
-          SizedBox(
-            width: imageWidth,
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+        Widget imageWidget;
+        if (_isNetwork) {
+          imageWidget = Image.network(
+            imagePath,
+            fit: BoxFit.cover,
+            loadingBuilder: (context, child, progress) {
+              if (progress == null) return child;
+              return Container(
+                color: Colors.orange.shade50,
+                alignment: Alignment.center,
+                child: const SizedBox(
+                  height: 28,
+                  width: 28,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              );
+            },
+            errorBuilder: (_, __, ___) => Container(
+              color: Colors.orange.shade100,
+              alignment: Alignment.center,
+              child: const Icon(
+                Icons.broken_image,
+                size: 48,
+                color: Colors.orange,
               ),
             ),
-          ),
+          );
+        } else {
+          imageWidget = Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
+          );
+        }
 
-          const SizedBox(height: 5),
-
-          if (price.isNotEmpty) ...[
-            const SizedBox(height: 12),
-            SizedBox(
-              width: imageWidth,
-              child: Text(
-                price,
-                textAlign: TextAlign.center,
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),
+                child: SizedBox(
+                  height: imgH,
+                  width: double.infinity,
+                  child: imageWidget,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                title,
+                textAlign: TextAlign.left,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-          ],
-
-          const SizedBox(height: 20),
-
-          ElevatedButton(
-            onPressed: onPress,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepOrange,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              textStyle: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+              if (price.isNotEmpty) ...[
+                const SizedBox(height: 6),
+                Text(
+                  price,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: onPress,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepOrange,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    textStyle: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(buttonText),
+                ),
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            child: Text(buttonText),
+              const SizedBox(height: 4), 
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
