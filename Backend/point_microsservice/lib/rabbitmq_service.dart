@@ -8,14 +8,19 @@ class RabbitMQService {
 
   RabbitMQService._(this._client, this._exchange);
 
-  static Future<RabbitMQService> connect({String? url, String exchangeName = 'events'}) async {
-    final dot = DotEnv(includePlatformEnvironment: true)..load();
-    final rabbitUrl = url ?? dot['RABBITMQ_URL'] ?? '';
+  static Future<RabbitMQService> connect({
+    String? url,
+    String exchangeName = 'events',
+  }) async {
+    final env = DotEnv(includePlatformEnvironment: true)..load();
+    final rabbitUrl = url ?? env['RABBITMQ_URL'] ?? '';
+
     ConnectionSettings settings;
     if (rabbitUrl.isNotEmpty && rabbitUrl.startsWith('amqp')) {
       final uri = Uri.parse(rabbitUrl);
-      final username = uri.userInfo.isNotEmpty ? uri.userInfo.split(':').first : null;
-      final password = uri.userInfo.isNotEmpty && uri.userInfo.split(':').length > 1 ? uri.userInfo.split(':')[1] : null;
+      final parts = uri.userInfo.split(':');
+      final username = parts.isNotEmpty ? parts.first : null;
+      final password = parts.length > 1 ? parts[1] : null;
       if (username != null && password != null) {
         settings = ConnectionSettings(
           host: uri.host,
@@ -34,9 +39,12 @@ class RabbitMQService {
         port: 5672,
       );
     }
+
     final client = Client(settings: settings);
     final channel = await client.channel();
-    final exchange = await channel.exchange(exchangeName, ExchangeType.TOPIC, durable: true);
+    final exchange =
+        await channel.exchange(exchangeName, ExchangeType.TOPIC, durable: true);
+
     return RabbitMQService._(client, exchange);
   }
 

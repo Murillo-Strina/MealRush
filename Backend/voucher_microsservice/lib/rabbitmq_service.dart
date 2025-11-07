@@ -11,7 +11,6 @@ class RabbitMQService {
   RabbitMQService._(this._client, this._exchange);
 
   static Future<RabbitMQService> connect({String? url, String exchangeName = 'events'}) async {
-    // url format amqp://user:pass@host:port
     final dot = DotEnv(includePlatformEnvironment: true)..load();
     final rabbitUrl = url ?? dot['RABBITMQ_URL'] ?? '';
 
