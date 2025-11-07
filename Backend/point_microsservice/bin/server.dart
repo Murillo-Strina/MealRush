@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dotenv/dotenv.dart';
 import 'package:mysql_client/mysql_client.dart';
 import 'package:point_microsservice/point_service.dart';
@@ -9,17 +8,11 @@ import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 final _router = Router();
-
-Future<Response> _rootHandler(Request req) async {
-  return Response.ok('Hello, World!\n');
-}
-
-Response _echoHandler(Request request) {
-  final message = request.params['message'];
-  return Response.ok('$message\n');
-}
-
 late final PointService pointService;
+
+Future<Response> _root(Request req) async {
+  return Response.ok('points service\n');
+}
 
 void main(List<String> args) async {
   final dot = DotEnv(includePlatformEnvironment: true)..load();
@@ -29,10 +22,9 @@ void main(List<String> args) async {
   final dbUser = dot['DB_USER'] ?? 'root';
   final dbPassword = dot['DB_PASSWORD'] ?? '';
   final dbName = dot['DB_NAME'] ?? 'mealrush';
-
   final useSSL = (dot['DB_SSL'] ?? 'true').toLowerCase() == 'true';
 
-  final dbPool = MySQLConnectionPool(
+  final pool = MySQLConnectionPool(
     host: dbHost,
     port: dbPort,
     userName: dbUser,
@@ -42,121 +34,85 @@ void main(List<String> args) async {
     secure: useSSL,
   );
 
-  try {
-    await dbPool.execute('SELECT 1;');
-  } catch (e) {
-    stderr.writeln('Erro ao conectar ao MySQL: $e');
-    exit(1);
-  }
-
   RabbitMQService? rabbit;
   try {
     rabbit = await RabbitMQService.connect();
-  } catch (e) {
-    print('Aviso: não foi possível conectar ao RabbitMQ: $e');
+  } catch (_) {
     rabbit = null;
   }
 
-  pointService = PointService(dbPool, rabbit);
+  pointService = PointService(pool, rabbit);
 
-  _router.get('/', _rootHandler);
-  _router.get('/echo/<message>', _echoHandler);
+  _router.get('/', _root);
+
+  _router.get('/points/<userId>', (Request req, String userId) async {
+    final uid = int.tryParse(userId);
+    if (uid == null) return Response.badRequest(body: 'invalid userId');
+    try {
+      final data = await pointService.getPointsByUserId(uid);
+      return Response.ok(data['points'].toString());
+    } catch (e) {
+      return Response.internalServerError(body: e.toString());
+    }
+  });
 
   _router.post('/points/<userId>/add/<points>', (
-    Request request,
+    Request req,
     String userId,
     String points,
   ) async {
     final uid = int.tryParse(userId);
     final pts = int.tryParse(points);
-    if (uid == null || pts == null) {
-      return Response.badRequest(body: 'Parâmetros inválidos\n');
-    }
+    if (uid == null || pts == null) return Response.badRequest(body: 'invalid params');
     try {
       await pointService.addPoints(uid, pts);
-      return Response.ok('Pontos adicionados com sucesso\n');
+      return Response.ok('ok');
     } catch (e) {
-      return Response.internalServerError(
-        body: 'Erro ao adicionar pontos: $e\n',
-      );
+      return Response.internalServerError(body: e.toString());
     }
   });
 
   _router.post('/points/<userId>/remove/<points>', (
-    Request request,
+    Request req,
     String userId,
     String points,
   ) async {
     final uid = int.tryParse(userId);
     final pts = int.tryParse(points);
-    if (uid == null || pts == null) {
-      return Response.badRequest(body: 'Parâmetros inválidos\n');
-    }
+    if (uid == null || pts == null) return Response.badRequest(body: 'invalid params');
     try {
       await pointService.removePoints(uid, pts);
-      return Response.ok('Pontos removidos com sucesso\n');
+      return Response.ok('ok');
     } catch (e) {
-      return Response.internalServerError(body: 'Erro ao remover pontos: $e\n');
+      return Response.internalServerError(body: e.toString());
     }
   });
 
-  _router.get('/points/<userId>', (Request request, String userId) async {
+  _router.post('/points/<userId>/reset', (Request req, String userId) async {
     final uid = int.tryParse(userId);
-    if (uid == null) {
-      return Response.badRequest(body: 'Parâmetros inválidos\n');
-    }
-    try {
-      final pointsData = await pointService.getPointsByUserId(uid);
-      return Response.ok('Pontos: ${pointsData['points']}\n');
-    } catch (e) {
-      return Response.internalServerError(body: 'Erro ao obter pontos: $e\n');
-    }
-  });
-
-  _router.post('/points/<userId>/reset', (
-    Request request,
-    String userId,
-  ) async {
-    final uid = int.tryParse(userId);
-    if (uid == null) {
-      return Response.badRequest(body: 'Parâmetros inválidos\n');
-    }
+    if (uid == null) return Response.badRequest(body: 'invalid userId');
     try {
       await pointService.resetPoints(uid);
-      return Response.ok('Pontos resetados com sucesso\n');
+      return Response.ok('ok');
     } catch (e) {
-      return Response.internalServerError(body: 'Erro ao resetar pontos: $e\n');
+      return Response.internalServerError(body: e.toString());
     }
   });
 
-  _router.delete('/points/<userId>', (Request request, String userId) async {
+  _router.delete('/points/<userId>', (Request req, String userId) async {
     final uid = int.tryParse(userId);
-    if (uid == null) {
-      return Response.badRequest(body: 'Parâmetros inválidos\n');
-    }
+    if (uid == null) return Response.badRequest(body: 'invalid userId');
     try {
       await pointService.deleteUserPoints(uid);
-      return Response.ok('Pontos do usuário deletados com sucesso\n');
+      return Response.ok('ok');
     } catch (e) {
-      return Response.internalServerError(
-        body: 'Erro ao deletar pontos do usuário: $e\n',
-      );
+      return Response.internalServerError(body: e.toString());
     }
   });
 
+  final handler = Pipeline().addMiddleware(logRequests()).addHandler(_router.call);
   final ip = InternetAddress.anyIPv4;
-  final handler = Pipeline()
-      .addMiddleware(logRequests())
-      .addHandler(_router.call);
-
   final port = int.parse(Platform.environment['PORT'] ?? '8082');
   final server = await serve(handler, ip, port);
-  print('Server listening on port ${server.port}');
-
-  ProcessSignal.sigint.watch().listen((_) async {
-    print('Encerrando...');
-    await dbPool.close();
-    await server.close(force: true);
-    exit(0);
-  });
+  print('points service running on ${server.port}');
 }

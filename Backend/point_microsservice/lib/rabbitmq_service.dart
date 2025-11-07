@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:convert';
-
 import 'package:dart_amqp/dart_amqp.dart';
 import 'package:dotenv/dotenv.dart';
 
@@ -13,7 +11,6 @@ class RabbitMQService {
   static Future<RabbitMQService> connect({String? url, String exchangeName = 'events'}) async {
     final dot = DotEnv(includePlatformEnvironment: true)..load();
     final rabbitUrl = url ?? dot['RABBITMQ_URL'] ?? '';
-
     ConnectionSettings settings;
     if (rabbitUrl.isNotEmpty && rabbitUrl.startsWith('amqp')) {
       final uri = Uri.parse(rabbitUrl);
@@ -26,12 +23,17 @@ class RabbitMQService {
           authProvider: PlainAuthenticator(username, password),
         );
       } else {
-        settings = ConnectionSettings(host: uri.host, port: uri.hasPort ? uri.port : 5672);
+        settings = ConnectionSettings(
+          host: uri.host,
+          port: uri.hasPort ? uri.port : 5672,
+        );
       }
     } else {
-      settings = ConnectionSettings(host: 'rabbitmq', port: 5672);
+      settings = ConnectionSettings(
+        host: 'rabbitmq',
+        port: 5672,
+      );
     }
-
     final client = Client(settings: settings);
     final channel = await client.channel();
     final exchange = await channel.exchange(exchangeName, ExchangeType.TOPIC, durable: true);
