@@ -7,7 +7,7 @@ COPY food-microsservice/package*.json ../food-microsservice/
 COPY machine-microsservice/package*.json ../machine-microsservice/
 COPY event-bus/package*.json ../event-bus/
 
-RUN npm ci --omit=dev && cd ../food-microsservice && npm ci --omit=dev && cd ../machine-microsservice && npm ci --omit=dev && cd ../event-bus && npm ci --omit=dev
+RUN npm ci && cd ../food-microsservice && npm ci && cd ../machine-microsservice && npm ci && cd ../event-bus && npm ci
 
 COPY content-microsservice/ ./
 

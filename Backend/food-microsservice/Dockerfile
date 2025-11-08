@@ -5,7 +5,7 @@ WORKDIR /app
 COPY food-microsservice/package*.json ./
 COPY event-bus/package*.json ../event-bus/
 
-RUN npm ci --omit=dev && cd ../event-bus && npm ci --omit=dev
+RUN npm ci && cd ../event-bus && npm ci
 
 COPY food-microsservice/ ./
 
