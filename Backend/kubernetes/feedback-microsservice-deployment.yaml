@@ -21,7 +21,7 @@ spec:
             - containerPort: 3015
           envFrom:
             - secretRef:
-                name: feedback-env
+                name: auth-users-env
           resources:
             limits:
               memory: 256Mi

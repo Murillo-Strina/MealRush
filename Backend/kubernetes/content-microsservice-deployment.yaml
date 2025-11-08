@@ -21,7 +21,7 @@ spec:
             - containerPort: 3025
           envFrom:
             - secretRef:
-                name: content-env
+                name: auth-users-env
           resources:
             limits:
               memory: 256Mi
