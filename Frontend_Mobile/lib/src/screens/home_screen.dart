@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _loadingPoints = true;
   String? _pointsError;
 
-  static const int _foodCost = 10;
+  static const int _foodCost = 900;
   static const int _couponBonus = 250;
   static const List<String> _couponCodes = [
     'MEALRUSH250',
