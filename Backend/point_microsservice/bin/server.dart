@@ -1,13 +1,12 @@
 import 'dart:io';
 import 'package:dotenv/dotenv.dart';
 import 'package:mysql_client/mysql_client.dart';
+import 'package:point_microsservice/point_controller.dart';
+import 'package:point_microsservice/point_service.dart';
+import 'package:point_microsservice/rabbitmq_service.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
-
-import 'point_service.dart';
-import 'point_controller.dart';
-import 'rabbitmq_service.dart';
 
 void main() async {
   final env = DotEnv(includePlatformEnvironment: true)..load();
