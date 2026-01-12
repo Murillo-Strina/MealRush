@@ -1,0 +1,682 @@
+{
+  "info": {
+    "_postman_id": "d1b118ff-38a9-4d91-93d3-2913175c4e9d",
+    "name": "MealRush",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth-mss",
+      "item": [
+        {
+          "name": "Add Login",
+          "id": "f0eedcf4-ccec-4f89-abc7-4f28416626ed",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"mealrush@kubernetes.com\",\r\n    \"password\": \"123!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:31275/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "31275",
+              "path": [
+                "register"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "29e028d2-380f-44f3-adbe-cb87f28b50cb"
+    },
+    {
+      "name": "Machine-mss",
+      "item": [
+        {
+          "name": "Create Machine",
+          "id": "c889c074-3911-4f86-a80a-af14bc9e8ee9",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"institutionId\": \"8\",\r\n    \"stock\": \"30\",\r\n    \"status\": \"1\",\r\n    \"lastMaintenance\": \"2025-05-28\",\r\n    \"lastFill\": \"2025-05-28\",\r\n    \"rent\": \"400\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3010/machines",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3010",
+              "path": [
+                "machines"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all Machines",
+          "id": "f303f619-6708-4006-b421-da271d60767b",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:31346/machines",
+              "host": [
+                "localhost"
+              ],
+              "port": "31346",
+              "path": [
+                "machines"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Machine",
+          "id": "59ba1e62-a9db-46cb-a48b-0739c47fdeeb",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"amount\": \"30\",\r\n  \"status\": \"1\",\r\n  \"lastMaintenance\": \"2025-05-27\",\r\n  \"lastFill\": \"2025-05-27\",\r\n  \"rent\": \"299\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3010/machines/18/institution/8",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3010",
+              "path": [
+                "machines",
+                "18",
+                "institution",
+                "8"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Machine",
+          "id": "a656bdd9-79aa-4df2-9193-6de59fd75176",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3010/machines/17/institution/6",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3010",
+              "path": [
+                "machines",
+                "17",
+                "institution",
+                "6"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "dd9cf613-e35c-4902-9ddb-9ba9941fd331"
+    },
+    {
+      "name": "Food-mss",
+      "item": [
+        {
+          "name": "Create Food",
+          "id": "10f05b54-328b-40af-a36b-c93358208982",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Lasagna com salsicha\" ,\r\n    \"calories\":\"360\",\r\n    \"carbs\":\"62\",\r\n    \"proteins\":\"20\",\r\n    \"fats\":\"11\",\r\n    \"weight\":\"350\",\r\n    \"imageUrl\":\"https://i.postimg.cc/1V90hwgP/massa-vegana.jpg\",\r\n    \"sellprice\": \"28\",\r\n    \"buyprice\": \"14\"\r\n    }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/foods",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "foods"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Foods",
+          "id": "76ee65f0-fda8-4a09-a04c-436f2e36c4eb",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:32585/foods",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "32585",
+              "path": [
+                "foods"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "a5a85fed-08d6-4cd0-8a87-0ae7656f055e"
+    },
+    {
+      "name": "Institution-mss",
+      "item": [
+        {
+          "name": "Create Institution",
+          "id": "f1b26606-384b-4b86-9cf3-94c1bda6df5d",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"FMABC\",\r\n    \"registration_number\": \"99999999999997\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3005/institutions",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3005",
+              "path": [
+                "institutions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Institutions",
+          "id": "7ae8b0eb-dd62-4256-a03e-131683764e4b",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:30315/institutions",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "30315",
+              "path": [
+                "institutions"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "78451cd9-82ea-4f28-92a2-779b473bb048"
+    },
+    {
+      "name": "Feedback-mss",
+      "item": [
+        {
+          "name": "Creat Feedback",
+          "id": "2226c80a-f4dc-40b2-8211-a5c9a8a67aaa",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"comment\": \"Serviço horrível. Comida gelada\",\r\n    \"occurrency_date\": \"2025-05-28\",\r\n    \"institutionId\": \"1\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3015/feedbacks",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3015",
+              "path": [
+                "feedbacks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Feedbacks",
+          "id": "16fc0290-f29b-4516-bc31-c2ab8df306f1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:32669/feedbacks",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "32669",
+              "path": [
+                "feedbacks"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "710b178b-871e-43d0-ba3a-11b999292142"
+    },
+    {
+      "name": "Content-mss",
+      "item": [
+        {
+          "name": "Create Content",
+          "id": "46319527-af48-4cc8-b854-124365eb66a6",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"qtdItens\": 10,\r\n  \"sales\": 15,\r\n  \"machineId\": 33,\r\n  \"foodName\": \"Arroz com Feijão e Carne\",\r\n  \"sellprice\": 30.00,\r\n  \"buyprice\": 14.00\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3025/contents",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3025",
+              "path": [
+                "contents"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Content",
+          "id": "40b27e24-5bc5-42ae-b4c3-abcfd690ceb4",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:30864/contents",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "30864",
+              "path": [
+                "contents"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Content",
+          "id": "1090d9a0-1b4c-4bb2-8c96-cbec73af79b4",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"qtdItens\": 8,\r\n  \"sales\": 20,\r\n  \"foodName\": \"Arroz com Frango e Batata\",\r\n  \"sellprice\": 28.00,\r\n  \"buyprice\": 14.00\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3025/contents/14/machine/36/institution/11",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3025",
+              "path": [
+                "contents",
+                "14",
+                "machine",
+                "36",
+                "institution",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Content",
+          "id": "2962d7a9-1623-464b-a730-4767409e9ae5",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"qtdItens\": 25,\r\n  \"sales\": 8,\r\n  \"machineId\": 36,\r\n  \"institutionId\": 11,\r\n  \"foodName\": \"Arroz com Feijão e Carne\",\r\n  \"sellprice\": 30.00,\r\n  \"buyprice\": 14.00\r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:3025/contents/30",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3025",
+              "path": [
+                "contents",
+                "30"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Contents By Machine",
+          "id": "f843bfa7-a233-49bb-864a-af7e80b89bec",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"qtdItens\": 25,\r\n  \"sales\": 8,\r\n  \"machineId\": 36,\r\n  \"institutionId\": 11,\r\n  \"foodName\": \"Arroz com Feijão e Carne\",\r\n  \"sellprice\": 30.00,\r\n  \"buyprice\": 14.00\r\n}\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:3025/contents/machine/33",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3025",
+              "path": [
+                "contents",
+                "machine",
+                "33"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "d065ab21-5321-4eff-91fe-a525c2628968"
+    },
+    {
+      "name": "Auth-users-mss",
+      "item": [
+        {
+          "name": "Get Users",
+          "id": "e966fd3a-4eb9-4f10-a515-ba35817a0196",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Register",
+          "id": "c0c5c083-fcc4-42d5-a6de-d75657eb5276",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"Test\",\r\n    \"password\": \"123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:30852/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "30852",
+              "path": [
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "id": "a5074bbf-2b9f-4890-9c4d-70eb89c8a49e",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"Test\",\r\n    \"password\": \"123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:30852/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "30852",
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "3a1e4436-3091-44e9-a5e3-1e16e814ae7a"
+    },
+    {
+      "name": "Point-mss",
+      "item": [
+        {
+          "name": "Add points",
+          "id": "8256ed65-a58f-4dac-a00e-de940432c0f8",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:31108/points/2/add/50",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "31108",
+              "path": [
+                "points",
+                "2",
+                "add",
+                "50"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Points",
+          "id": "dda13931-e143-4d9c-86f4-90c7b161a907",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:31108/points/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "31108",
+              "path": [
+                "points",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove points",
+          "id": "bb552567-f3d6-4269-b870-3c918624354b",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:30800/points/2/remove/10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "30800",
+              "path": [
+                "points",
+                "2",
+                "remove",
+                "10"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "061ce0fa-84b7-448d-b605-0f14ab78deb3"
+    },
+    {
+      "name": "Voucher-mss",
+      "item": [
+        {
+          "name": "Create Voucher",
+          "id": "a3f7baa0-8530-4eef-b195-5fab9dd1cc5e",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": 1,\r\n  \"foodId\": 10,\r\n  \"cost\": 25\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:32557/vouchers",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "32557",
+              "path": [
+                "vouchers"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "2c8f84c9-9e8e-4074-85e0-44a8853ee1fa"
+    }
+  ]
+}
